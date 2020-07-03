@@ -7,6 +7,9 @@
  * INCLUDE
  **************************************************************************************/
 
+#include <string>
+#include <algorithm>
+
 #include <catch.hpp>
 
 #include <Parser.h>
@@ -19,8 +22,81 @@ TEST_CASE("No GPRMC message received", "[GPRMC-01]")
 {
   nmea::Parser parser;
 
-  REQUIRE(parser.longitude() == Approx(52.2637009));
-  REQUIRE(parser.latitude()  == Approx(20.9860468));
-  REQUIRE(parser.speed()     == Approx(0.0));
-  REQUIRE(parser.course()    == Approx(0.0));
+  REQUIRE     (parser.latitude()  == Approx(20.9860468));
+  REQUIRE     (parser.longitude() == Approx(52.2637009));
+  REQUIRE_THAT(parser.speed(),  Catch::Matchers::WithinULP(0.0f, 10));
+  REQUIRE_THAT(parser.course(), Catch::Matchers::WithinULP(0.0f, 10));
+}
+
+SCENARIO("Valid GPRMC message received", "[GPRMC-02]")
+{
+  nmea::Parser parser;
+
+  WHEN("north/east")
+  {
+    std::string const GPRMC = "$GPRMC,062101.714,A,5001.869,N,01912.114,E,955535.7,116.2,290520,000.0,W*45\r\n";
+
+    std::for_each(std::begin(GPRMC),
+                  std::end(GPRMC),
+                  [&parser](char const c)
+                  {
+                    parser.encode(c);
+                  });
+
+    REQUIRE     (parser.latitude()  == Approx(50.03114442));
+    REQUIRE     (parser.longitude() == Approx(19.20189679));
+    REQUIRE_THAT(parser.speed(),       Catch::Matchers::WithinULP(0.0f, 10));
+    REQUIRE_THAT(parser.course(),      Catch::Matchers::WithinULP(0.0f, 10));
+  }
+
+  WHEN("north/west")
+  {
+    std::string const GPRMC = "$GPRMC,122311.239,A,4056.748,N,11212.614,W,,,290620,000.0,W*63\r\n";
+
+    std::for_each(std::begin(GPRMC),
+                  std::end(GPRMC),
+                  [&parser](char const c)
+                  {
+                    parser.encode(c);
+                  });
+
+    REQUIRE     (parser.latitude()  == Approx(40.9458060446613));
+    REQUIRE     (parser.longitude() == Approx(-112.210235595703));
+    REQUIRE_THAT(parser.speed(),       Catch::Matchers::WithinULP(0.0f, 10));
+    REQUIRE_THAT(parser.course(),      Catch::Matchers::WithinULP(0.0f, 10));
+  }
+
+  WHEN("south/west")
+  {
+    std::string const GPRMC = "$GPRMC,122311.239,A,2727.069,S,05859.190,W,,,290620,000.0,W*76\r\n";
+
+    std::for_each(std::begin(GPRMC),
+                  std::end(GPRMC),
+                  [&parser](char const c)
+                  {
+                    parser.encode(c);
+                  });
+
+    REQUIRE     (parser.latitude()  == Approx(-27.4511422937699));
+    REQUIRE     (parser.longitude() == Approx(-58.986502289772));
+    REQUIRE_THAT(parser.speed(),       Catch::Matchers::WithinULP(0.0f, 10));
+    REQUIRE_THAT(parser.course(),      Catch::Matchers::WithinULP(0.0f, 10));
+  }
+
+  WHEN("south/east")
+  {
+    std::string const GPRMC = "$GPRMC,122311.239,A,0610.522,S,10649.632,E,,,290620,000.0,W*6D\r\n";
+
+    std::for_each(std::begin(GPRMC),
+                  std::end(GPRMC),
+                  [&parser](char const c)
+                  {
+                    parser.encode(c);
+                  });
+
+    REQUIRE     (parser.latitude()  == Approx(-6.17536097471491));
+    REQUIRE     (parser.longitude() == Approx(106.827192306519));
+    REQUIRE_THAT(parser.speed(),       Catch::Matchers::WithinULP(0.0f, 10));
+    REQUIRE_THAT(parser.course(),      Catch::Matchers::WithinULP(0.0f, 10));
+  }
 }

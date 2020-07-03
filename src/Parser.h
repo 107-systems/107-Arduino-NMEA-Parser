@@ -34,33 +34,53 @@ public:
   void encode(char const c);
 
 
-  inline float longitude() const { return _position.longitude; }
   inline float latitude () const { return _position.latitude; }
+  inline float longitude() const { return _position.longitude; }
   inline float speed    () const { return _position.speed; }
   inline float course   () const { return _position.course; }
 
 
+  enum class Error { None, RMC };
+
+  inline void  clearerr()       { _error = Error::None; }
+  inline Error error   () const { return _error; }
+
+
 private:
 
-  static size_t constexpr NMEA_PARSE_BUFFER_SIZE = 82;
+  static size_t constexpr NMEA_PARSE_BUFFER_SIZE = 82 + 1; /* Leave space for the '\0' terminator */
 
   typedef struct
   {
     char buf[NMEA_PARSE_BUFFER_SIZE];
     size_t elems_in_buf;
-  } NMEAParseBuffer;
+  } ParserBuffer;
 
   typedef struct
   {
-    float longitude;
     float latitude;
+    float longitude;
     float speed;
     float course; 
   } PositionData;
-  
 
-  NMEAParseBuffer _parse_buf;
+  enum class ParserState
+  {
+    Synching, Synced
+  };
+  
+  Error _error;
+  ParserState _parser_state;
+  ParserBuffer _parser_buf;
   PositionData _position;
+
+  bool isParseBufferFull();
+  void addToParserBuffer(char const c);
+  void flushParserBuffer();
+  bool isCompleteNmeaMessageInParserBuffer();
+  void terminateParserBuffer();
+  bool isGPRMC();
+  void parseGPRMC();
 
 };
 

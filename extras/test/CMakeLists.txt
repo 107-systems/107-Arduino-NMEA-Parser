@@ -8,7 +8,7 @@ project(testNmeaParser)
 
 ##########################################################################
 
-include_directories(../../src/nmea)
+include_directories(../../src)
 include_directories(external/catch/v2.12.1/include)
 
 ##########################################################################
@@ -24,7 +24,8 @@ set(TEST_TARGET testNmeaParser)
 set(TEST_SRCS
   src/test_main.cpp
   src/test_GPRMC.cpp
-  ../../src/nmea/Parser.cpp
+  ../../src/GPRMC.cpp
+  ../../src/Parser.cpp
 )
 
 ##########################################################################
