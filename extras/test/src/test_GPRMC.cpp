@@ -100,3 +100,19 @@ SCENARIO("Valid GPRMC message received", "[GPRMC-02]")
     REQUIRE_THAT(parser.course(),      Catch::Matchers::WithinULP(0.0f, 10));
   }
 }
+
+TEST_CASE("Valid GPRMC with speed over ground > 0 received", "[GPRMC-03]")
+{
+  nmea::Parser parser;
+
+  std::string const GPRMC = ("$GPRMC,052856.105,A,5230.874,N,01321.056,E,085.7,206.4,080720,000.0,W*78\r\n");
+
+  std::for_each(std::begin(GPRMC),
+                std::end(GPRMC),
+                [&parser](char const c)
+                {
+                  parser.encode(c);
+                });
+
+  REQUIRE(parser.speed() == Approx(44.088f)); /* 85.7 kts ~= 44.088 m/s */
+}

@@ -20,10 +20,16 @@ namespace nmea
 {
 
 /**************************************************************************************
+ * CONSTEXPR
+ **************************************************************************************/
+
+constexpr float kts_to_m_per_s(float const v) { return (v / 1.9438444924574f); }
+
+/**************************************************************************************
  * PUBLIC MEMBER FUNCTIONS
  **************************************************************************************/
 
-bool GPRMC::parse(char const * gprmc, uint32_t & /* timestamp_fix_utc */, float & latitude, float & longitude, float & /* speed */, float & /* course */)
+bool GPRMC::parse(char const * gprmc, uint32_t & /* timestamp_fix_utc */, float & latitude, float & longitude, float & speed, float & /* course */)
 {
   ParserState state = ParserState::MessadeId;
   
@@ -42,7 +48,7 @@ bool GPRMC::parse(char const * gprmc, uint32_t & /* timestamp_fix_utc */, float 
     case ParserState::LatitudeNS:        next_state = handle_LatitudeNS       (token, latitude);  break;
     case ParserState::LongitudeVal:      next_state = handle_LongitudeVal     (token, longitude); break;
     case ParserState::LongitudeEW:       next_state = handle_LongitudeEW      (token, longitude); break;
-    case ParserState::SpeedOverGround:   next_state = handle_SpeedOverGround  (token);            break;
+    case ParserState::SpeedOverGround:   next_state = handle_SpeedOverGround  (token, speed);     break;
     case ParserState::TrackAngle:        next_state = handle_TrackAngle       (token);            break;
     case ParserState::Checksum:          next_state = handle_Checksum         (token);            break;
     case ParserState::Done:              return true;                                             break;
@@ -132,8 +138,16 @@ GPRMC::ParserState GPRMC::handle_LongitudeEW(char const * token, float & longitu
   return ParserState::Error;
 }
 
-GPRMC::ParserState GPRMC::handle_SpeedOverGround(char const * /* token */)
+GPRMC::ParserState GPRMC::handle_SpeedOverGround(char const * token, float & speed)
 {
+  char const     speed_kts_str[] = {token[0], token[1], token[2], '\0'};
+  char const sub_speed_kts_str[] = {token[4], '\0'};
+
+  float speed_kts  = atoi(speed_kts_str);
+  speed_kts       += static_cast<float>(atoi(sub_speed_kts_str)) / 10.0f;
+
+  speed = kts_to_m_per_s(speed_kts);
+
   return ParserState::TrackAngle;
 }
 
