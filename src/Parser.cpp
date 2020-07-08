@@ -129,19 +129,9 @@ bool Parser::isGPRMC()
 void Parser::parseGPRMC()
 {
   uint32_t timestamp_fix_utc;
-  float latitude = 0.0f, longitude = 0.0f, speed = 0.0f, course = 0.0f;
 
-  if (GPRMC::parse(_parser_buf.buf, timestamp_fix_utc, latitude, longitude, speed, course))
-  {
-    _position.latitude = latitude;
-    _position.longitude = longitude;
-    _position.speed = speed;
-    _position.course = course;
-  }
-  else
-  {
+  if (!GPRMC::parse(_parser_buf.buf, timestamp_fix_utc, _position.latitude, _position.longitude, _position.speed, _position.course))
     _error = Error::RMC;
-  }
 }
 
 /**************************************************************************************
