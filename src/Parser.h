@@ -40,7 +40,7 @@ public:
   inline float course   () const { return _position.course; }
 
 
-  enum class Error { None, RMC };
+  enum class Error { None, Checksum, RMC };
 
   inline void  clearerr()       { _error = Error::None; }
   inline Error error   () const { return _error; }

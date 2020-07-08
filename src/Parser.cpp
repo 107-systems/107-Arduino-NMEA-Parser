@@ -13,6 +13,8 @@
 
 #include "GPRMC.h"
 
+#include "util/Checksum.h"
+#include <iostream>
 /**************************************************************************************
  * NAMESPACE
  **************************************************************************************/
@@ -61,11 +63,19 @@ void Parser::encode(char const c)
 
   /* At this point a complete NMEA message is stored
    * in the parser buffer and a 0 termination is added
-   * to allow the usage of string library functions
-   * on the buffer.
+   * to allow the usage of string library functions on
+   * the buffer.
    */
   terminateParserBuffer();
 
+  /* Verify if the checksum of the NMEA message is correct. */
+  if (!util::isChecksumOk(_parser_buf.buf)) {
+    _error = Error::Checksum;
+    flushParserBuffer();
+    return;
+  }
+
+  /* Parse the various NMEA messages. */
   if (isGPRMC()) parseGPRMC();
 
   /* The NMEA message has been fully processed and all
@@ -108,8 +118,7 @@ bool Parser::isCompleteNmeaMessageInParserBuffer()
 
 void Parser::terminateParserBuffer()
 {
-  _parser_buf.elems_in_buf -= 2;
-  _parser_buf.buf[_parser_buf.elems_in_buf] = '\0';
+  addToParserBuffer('\0');
 }
 
 bool Parser::isGPRMC()
@@ -120,7 +129,7 @@ bool Parser::isGPRMC()
 void Parser::parseGPRMC()
 {
   uint32_t timestamp_fix_utc;
-  float latitude, longitude, speed, course;
+  float latitude = 0.0f, longitude = 0.0f, speed = 0.0f, course = 0.0f;
 
   if (GPRMC::parse(_parser_buf.buf, timestamp_fix_utc, latitude, longitude, speed, course))
   {
