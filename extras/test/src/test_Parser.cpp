@@ -72,7 +72,18 @@ TEST_CASE("NMEA message with data corruption (checksum mismatch) received", "[Pa
   REQUIRE(parser.error() == nmea::Parser::Error::Checksum);
 }
 
-TEST_CASE("Multiple NMEA messages received", "[Parser-04]")
+TEST_CASE("Invalid GPRMC message received", "[Parser-04]")
+{
+  nmea::Parser parser;
+
+  std::string const GPRMC = "$GPRMC,052852.105,A,5230.868,Y,01320.958,E,077.0,023.5,080720,000.0,W*6E\r\n";
+
+  REQUIRE(parser.error() == nmea::Parser::Error::None);
+  encode(parser, GPRMC);
+  REQUIRE(parser.error() == nmea::Parser::Error::RMC);
+}
+
+TEST_CASE("Multiple NMEA messages received", "[Parser-05]")
 {
   nmea::Parser parser;
 
