@@ -61,7 +61,18 @@ TEST_CASE("Decoding starts mid-message", "[Parser-02]")
   REQUIRE(parser.last_fix_utc_ms() == 105);
 }
 
-TEST_CASE("Multiple NMEA messages received", "[Parser-03]")
+TEST_CASE("NMEA message with data corruption (checksum mismatch) received", "[Parser-03]")
+{
+  nmea::Parser parser;
+
+  std::string const GPRMC = "$GPXXX,052852.105,A,5230.868,N,01320.958,E,077.0,023.5,080720,000.0,W*79\r\n";
+
+  REQUIRE(parser.error() == nmea::Parser::Error::None);
+  encode(parser, GPRMC);
+  REQUIRE(parser.error() == nmea::Parser::Error::Checksum);
+}
+
+TEST_CASE("Multiple NMEA messages received", "[Parser-04]")
 {
   nmea::Parser parser;
 
