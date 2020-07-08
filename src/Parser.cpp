@@ -30,7 +30,7 @@ Parser::Parser()
 : _error{Error::None}
 , _parser_state{ParserState::Synching}
 , _parser_buf{{0}, 0}
-, _position{20.9860468, 52.2637009, 0.0, 0.0}
+, _position{20.9860468, 52.2637009, 0.0, 0.0, 0, 0}
 {
 
 }
@@ -76,7 +76,7 @@ void Parser::encode(char const c)
   }
 
   /* Parse the various NMEA messages. */
-  if (isGPRMC()) parseGPRMC();
+  if (GPRMC::isGPRMC(_parser_buf.buf)) parseGPRMC();
 
   /* The NMEA message has been fully processed and all
    * values updates so its time to flush the parser
@@ -121,27 +121,10 @@ void Parser::terminateParserBuffer()
   addToParserBuffer('\0');
 }
 
-bool Parser::isGPRMC()
-{
-  return (strncmp(_parser_buf.buf, "$GPRMC", 6) == 0);
-}
-
 void Parser::parseGPRMC()
 {
-  uint32_t timestamp_fix_utc;
-  float latitude = 0.0f, longitude = 0.0f, speed = 0.0f, course = 0.0f;
-
-  if (GPRMC::parse(_parser_buf.buf, timestamp_fix_utc, latitude, longitude, speed, course))
-  {
-    _position.latitude = latitude;
-    _position.longitude = longitude;
-    _position.speed = speed;
-    _position.course = course;
-  }
-  else
-  {
+  if (!GPRMC::parse(_parser_buf.buf, _position.last_fix_utc_s, _position.last_fix_utc_ms, _position.latitude, _position.longitude, _position.speed, _position.course))
     _error = Error::RMC;
-  }
 }
 
 /**************************************************************************************
