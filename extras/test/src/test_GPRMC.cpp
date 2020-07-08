@@ -43,10 +43,8 @@ SCENARIO("Valid GPRMC message received", "[GPRMC-02]")
                     parser.encode(c);
                   });
 
-    REQUIRE     (parser.latitude()  == Approx(50.03114442));
-    REQUIRE     (parser.longitude() == Approx(19.20189679));
-    REQUIRE_THAT(parser.speed(),       Catch::Matchers::WithinULP(0.0f, 10));
-    REQUIRE_THAT(parser.course(),      Catch::Matchers::WithinULP(0.0f, 10));
+    REQUIRE(parser.latitude()  == Approx(50.03114442));
+    REQUIRE(parser.longitude() == Approx(19.20189679));
   }
 
   WHEN("north/west")
@@ -60,10 +58,8 @@ SCENARIO("Valid GPRMC message received", "[GPRMC-02]")
                     parser.encode(c);
                   });
 
-    REQUIRE     (parser.latitude()  == Approx(40.9458060446613));
-    REQUIRE     (parser.longitude() == Approx(-112.210235595703));
-    REQUIRE_THAT(parser.speed(),       Catch::Matchers::WithinULP(0.0f, 10));
-    REQUIRE_THAT(parser.course(),      Catch::Matchers::WithinULP(0.0f, 10));
+    REQUIRE(parser.latitude()  == Approx(40.9458060446613));
+    REQUIRE(parser.longitude() == Approx(-112.210235595703));
   }
 
   WHEN("south/west")
@@ -77,10 +73,8 @@ SCENARIO("Valid GPRMC message received", "[GPRMC-02]")
                     parser.encode(c);
                   });
 
-    REQUIRE     (parser.latitude()  == Approx(-27.4511422937699));
-    REQUIRE     (parser.longitude() == Approx(-58.986502289772));
-    REQUIRE_THAT(parser.speed(),       Catch::Matchers::WithinULP(0.0f, 10));
-    REQUIRE_THAT(parser.course(),      Catch::Matchers::WithinULP(0.0f, 10));
+    REQUIRE(parser.latitude()  == Approx(-27.4511422937699));
+    REQUIRE(parser.longitude() == Approx(-58.986502289772));
   }
 
   WHEN("south/east")
@@ -94,10 +88,8 @@ SCENARIO("Valid GPRMC message received", "[GPRMC-02]")
                     parser.encode(c);
                   });
 
-    REQUIRE     (parser.latitude()  == Approx(-6.17536097471491));
-    REQUIRE     (parser.longitude() == Approx(106.827192306519));
-    REQUIRE_THAT(parser.speed(),       Catch::Matchers::WithinULP(0.0f, 10));
-    REQUIRE_THAT(parser.course(),      Catch::Matchers::WithinULP(0.0f, 10));
+    REQUIRE(parser.latitude()  == Approx(-6.17536097471491));
+    REQUIRE(parser.longitude() == Approx(106.827192306519));
   }
 }
 
