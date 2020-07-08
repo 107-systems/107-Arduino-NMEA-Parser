@@ -30,7 +30,7 @@ Parser::Parser()
 : _error{Error::None}
 , _parser_state{ParserState::Synching}
 , _parser_buf{{0}, 0}
-, _position{20.9860468, 52.2637009, 0.0, 0.0}
+, _position{20.9860468, 52.2637009, 0.0, 0.0, 0, 0}
 {
 
 }
@@ -123,9 +123,7 @@ void Parser::terminateParserBuffer()
 
 void Parser::parseGPRMC()
 {
-  uint32_t timestamp_fix_utc;
-
-  if (!GPRMC::parse(_parser_buf.buf, timestamp_fix_utc, _position.latitude, _position.longitude, _position.speed, _position.course))
+  if (!GPRMC::parse(_parser_buf.buf, _position.last_fix_utc_s, _position.last_fix_utc_ms, _position.latitude, _position.longitude, _position.speed, _position.course))
     _error = Error::RMC;
 }
 

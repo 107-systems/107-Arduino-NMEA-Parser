@@ -41,9 +41,11 @@ TEST_CASE("No GPRMC message received", "[GPRMC-01]")
   REQUIRE     (parser.longitude() == Approx(52.2637009));
   REQUIRE_THAT(parser.speed(),  Catch::Matchers::WithinULP(0.0f, 10));
   REQUIRE_THAT(parser.course(), Catch::Matchers::WithinULP(0.0f, 10));
+  REQUIRE     (parser.last_fix_utc_s()  == 0);
+  REQUIRE     (parser.last_fix_utc_ms() == 0);
 }
 
-SCENARIO("Valid GPRMC message received", "[GPRMC-02]")
+SCENARIO("Extracting latitude/longiture from valid GPRMC message", "[GPRMC-02]")
 {
   nmea::Parser parser;
 
@@ -88,7 +90,7 @@ SCENARIO("Valid GPRMC message received", "[GPRMC-02]")
   }
 }
 
-TEST_CASE("Valid GPRMC with speed over ground > 0 received", "[GPRMC-03]")
+TEST_CASE("Extracting speed over ground from valid GPRMC message", "[GPRMC-03]")
 {
   nmea::Parser parser;
 
@@ -99,7 +101,7 @@ TEST_CASE("Valid GPRMC with speed over ground > 0 received", "[GPRMC-03]")
   REQUIRE(parser.speed() == Approx(44.088f)); /* 85.7 kts ~= 44.088 m/s */
 }
 
-TEST_CASE("Valid GPRMC with track angle != 0 received", "[GPRMC-04]")
+TEST_CASE("Extracting track angle from valid GPRMC message", "[GPRMC-04]")
 {
   nmea::Parser parser;
 
@@ -110,7 +112,21 @@ TEST_CASE("Valid GPRMC with track angle != 0 received", "[GPRMC-04]")
   REQUIRE(parser.course() == Approx(206.4f));
 }
 
-TEST_CASE("Multiple valid GPRMC messages received", "[GPRMC-05]")
+TEST_CASE("Extracting position time from valid GPRMC message", "[GPRMC-05]")
+{
+  nmea::Parser parser;
+
+  std::string const GPRMC = ("$GPRMC,052856.105,A,5230.874,N,01321.056,E,085.7,206.4,080720,000.0,W*78\r\n");
+
+  encode(parser, GPRMC);
+
+  /* 052856.105 -> 05:28:56.105 -> */
+
+  REQUIRE(parser.last_fix_utc_s () == 5*3600 + 28*60 + 56);
+  REQUIRE(parser.last_fix_utc_ms() == 105);
+}
+
+TEST_CASE("Multiple valid GPRMC messages received", "[GPRMC-06]")
 {
   nmea::Parser parser;
 
