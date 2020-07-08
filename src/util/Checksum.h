@@ -24,7 +24,7 @@ namespace util
  * message starting with '$' and ending after the trailing \r\n, e.g.
  * "$GPRMC,......*CA\r\n\0".
  */
-bool isChecksumOk(char const * nmea_str);
+bool isChecksumOk(char const * const nmea_str);
 
 /**************************************************************************************
  * NAMESPACE
