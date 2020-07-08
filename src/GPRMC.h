@@ -64,7 +64,7 @@ private:
   static ParserState handle_LongitudeVal     (char const * token, float & longitude);
   static ParserState handle_LongitudeEW      (char const * token, float & longitude);
   static ParserState handle_SpeedOverGround  (char const * token, float & speed);
-  static ParserState handle_TrackAngle       (char const * token);
+  static ParserState handle_TrackAngle       (char const * token, float & course);
   static ParserState handle_Checksum         (char const * token);
 
 };
