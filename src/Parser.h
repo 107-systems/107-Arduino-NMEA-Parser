@@ -79,7 +79,6 @@ private:
   void flushParserBuffer();
   bool isCompleteNmeaMessageInParserBuffer();
   void terminateParserBuffer();
-  bool isGPRMC();
   void parseGPRMC();
 
 };

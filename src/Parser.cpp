@@ -76,7 +76,7 @@ void Parser::encode(char const c)
   }
 
   /* Parse the various NMEA messages. */
-  if (isGPRMC()) parseGPRMC();
+  if (GPRMC::isGPRMC(_parser_buf.buf)) parseGPRMC();
 
   /* The NMEA message has been fully processed and all
    * values updates so its time to flush the parser
@@ -119,11 +119,6 @@ bool Parser::isCompleteNmeaMessageInParserBuffer()
 void Parser::terminateParserBuffer()
 {
   addToParserBuffer('\0');
-}
-
-bool Parser::isGPRMC()
-{
-  return (strncmp(_parser_buf.buf, "$GPRMC", 6) == 0);
 }
 
 void Parser::parseGPRMC()

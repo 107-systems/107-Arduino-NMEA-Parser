@@ -29,6 +29,11 @@ constexpr float kts_to_m_per_s(float const v) { return (v / 1.9438444924574f); }
  * PUBLIC MEMBER FUNCTIONS
  **************************************************************************************/
 
+bool GPRMC::isGPRMC(char const * nmea)
+{
+  return (strncmp(nmea, "$GPRMC", 6) == 0);
+}
+
 bool GPRMC::parse(char const * gprmc, uint32_t & /* timestamp_fix_utc */, float & latitude, float & longitude, float & speed, float & course)
 {
   ParserState state = ParserState::MessadeId;
@@ -67,7 +72,7 @@ bool GPRMC::parse(char const * gprmc, uint32_t & /* timestamp_fix_utc */, float 
 
 GPRMC::ParserState GPRMC::handle_MessadeId(char const * token)
 {
-  if(!strncmp(token, "$GPRMC", 6))
+  if(isGPRMC(token))
     return ParserState::UTCPositionFix;
   else
     return ParserState::Error;

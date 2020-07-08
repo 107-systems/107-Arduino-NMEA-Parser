@@ -28,6 +28,8 @@ class GPRMC
 
 public:
 
+  static bool isGPRMC(char const * nmea);
+
   static bool parse(char const * gprmc, 
                     uint32_t & timestamp_fix_utc,
                     float & latitude,
