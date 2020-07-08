@@ -97,3 +97,14 @@ TEST_CASE("Valid GPRMC with speed over ground > 0 received", "[GPRMC-03]")
 
   REQUIRE(parser.speed() == Approx(44.088f)); /* 85.7 kts ~= 44.088 m/s */
 }
+
+TEST_CASE("Valid GPRMC with track angle != 0 received", "[GPRMC-04]")
+{
+  nmea::Parser parser;
+
+  std::string const GPRMC = ("$GPRMC,052856.105,A,5230.874,N,01321.056,E,085.7,206.4,080720,000.0,W*78\r\n");
+
+  encode(parser, GPRMC);
+
+  REQUIRE(parser.course() == Approx(206.4f));
+}

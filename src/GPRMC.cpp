@@ -29,7 +29,7 @@ constexpr float kts_to_m_per_s(float const v) { return (v / 1.9438444924574f); }
  * PUBLIC MEMBER FUNCTIONS
  **************************************************************************************/
 
-bool GPRMC::parse(char const * gprmc, uint32_t & /* timestamp_fix_utc */, float & latitude, float & longitude, float & speed, float & /* course */)
+bool GPRMC::parse(char const * gprmc, uint32_t & /* timestamp_fix_utc */, float & latitude, float & longitude, float & speed, float & course)
 {
   ParserState state = ParserState::MessadeId;
   
@@ -49,7 +49,7 @@ bool GPRMC::parse(char const * gprmc, uint32_t & /* timestamp_fix_utc */, float 
     case ParserState::LongitudeVal:      next_state = handle_LongitudeVal     (token, longitude); break;
     case ParserState::LongitudeEW:       next_state = handle_LongitudeEW      (token, longitude); break;
     case ParserState::SpeedOverGround:   next_state = handle_SpeedOverGround  (token, speed);     break;
-    case ParserState::TrackAngle:        next_state = handle_TrackAngle       (token);            break;
+    case ParserState::TrackAngle:        next_state = handle_TrackAngle       (token, course);    break;
     case ParserState::Checksum:          next_state = handle_Checksum         (token);            break;
     case ParserState::Done:              return true;                                             break;
     case ParserState::Error:             return false;                                            break;
@@ -151,8 +151,14 @@ GPRMC::ParserState GPRMC::handle_SpeedOverGround(char const * token, float & spe
   return ParserState::TrackAngle;
 }
 
-GPRMC::ParserState GPRMC::handle_TrackAngle(char const * /* token */)
+GPRMC::ParserState GPRMC::handle_TrackAngle(char const * token, float & course)
 {
+  char const     course_deg_str[] = {token[0], token[1], token[2], '\0'};
+  char const sub_course_deg_str[] = {token[4], '\0'};
+
+  course  = atoi(course_deg_str);
+  course += static_cast<float>(atoi(sub_course_deg_str)) / 10.0f;
+
   return ParserState::Checksum;
 }
 
