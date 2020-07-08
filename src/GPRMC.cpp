@@ -97,8 +97,11 @@ GPRMC::ParserState GPRMC::handle_Status(char const * token)
 {
   if(!strncmp(token, "A", 1))
     return ParserState::LatitudeVal;
-  else
-    return ParserState::Error;  
+
+  if(!strncmp(token, "V", 1))
+    return ParserState::Done;
+
+  return ParserState::Error;
 }
 
 GPRMC::ParserState GPRMC::handle_LatitudeVal(char const * token, float & latitude)
