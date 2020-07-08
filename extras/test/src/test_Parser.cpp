@@ -45,7 +45,23 @@ TEST_CASE("No NMEA message received", "[Parser-01]")
   REQUIRE     (parser.last_fix_utc_ms() == 0);
 }
 
-TEST_CASE("Multiple NMEA messages received", "[Parser-02]")
+TEST_CASE("Decoding starts mid-message", "[Parser-02]")
+{
+  nmea::Parser parser;
+
+  std::string const GPRMC = "077.0,023.5,080720,000.0,W*79\r\n$GPRMC,052852.105,A,5230.868,N,01320.958,E,077.0,023.5,080720,000.0,W*79\r\n";
+
+  encode(parser, GPRMC);
+
+  REQUIRE(parser.latitude()        == Approx(52.514467));
+  REQUIRE(parser.longitude()       == Approx(13.349300));
+  REQUIRE(parser.speed()           == Approx(39.6122));
+  REQUIRE(parser.course()          == Approx(23.5));
+  REQUIRE(parser.last_fix_utc_s()  == 5*3600 + 28*60 + 52);
+  REQUIRE(parser.last_fix_utc_ms() == 105);
+}
+
+TEST_CASE("Multiple NMEA messages received", "[Parser-03]")
 {
   nmea::Parser parser;
 
