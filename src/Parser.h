@@ -81,7 +81,7 @@ private:
   {
     Synching, Synced
   };
-  
+
   Error _error;
   ParserState _parser_state;
   ParserBuffer _parser_buf;

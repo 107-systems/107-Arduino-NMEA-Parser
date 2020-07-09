@@ -2,7 +2,7 @@
  * This example demonstrates how to use the 107-Arduino-NMEA library
  * to parse the incoming NMEA messages and make use of the extracted
  * information.
- * 
+ *
  * Hardware:
  *   - Arduino MKR Family Board, e.g. MKR VIDOR 4000
  *   - Adafruit Mini GPS PA1010D Module

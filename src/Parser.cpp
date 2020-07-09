@@ -42,8 +42,8 @@ Parser::Parser(OnPositionUpdate on_position_update)
 
 void Parser::encode(char const c)
 {
-  /* Wait for the first '$' to be received which 
-   * indicates the start of a NMEA message. 
+  /* Wait for the first '$' to be received which
+   * indicates the start of a NMEA message.
    */
   if (_parser_state == ParserState::Synching) {
     if (c == '$')
@@ -51,10 +51,10 @@ void Parser::encode(char const c)
     else
       return;
   }
-  
+
   if (!isParseBufferFull())
     addToParserBuffer(c);
-    
+
   if (!isCompleteNmeaMessageInParserBuffer()) {
     if (isParseBufferFull()) {
       flushParserBuffer();
