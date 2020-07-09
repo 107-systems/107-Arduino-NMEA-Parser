@@ -39,10 +39,9 @@ TEST_CASE("No NMEA message received", "[Parser-01]")
 
   REQUIRE     (parser.latitude()  == Approx(20.9860468));
   REQUIRE     (parser.longitude() == Approx(52.2637009));
-  REQUIRE_THAT(parser.speed(),  Catch::Matchers::WithinULP(0.0f, 10));
-  REQUIRE_THAT(parser.course(), Catch::Matchers::WithinULP(0.0f, 10));
-  REQUIRE     (parser.last_fix_utc_s()  == 0);
-  REQUIRE     (parser.last_fix_utc_ms() == 0);
+  REQUIRE_THAT(parser.speed(),          Catch::Matchers::WithinULP(0.0f, 10));
+  REQUIRE_THAT(parser.course(),         Catch::Matchers::WithinULP(0.0f, 10));
+  REQUIRE_THAT(parser.last_fix_utc_s(), Catch::Matchers::WithinULP(0.0f, 10));
 }
 
 TEST_CASE("Decoding starts mid-message", "[Parser-02]")
@@ -57,8 +56,7 @@ TEST_CASE("Decoding starts mid-message", "[Parser-02]")
   REQUIRE(parser.longitude()       == Approx(13.349300));
   REQUIRE(parser.speed()           == Approx(39.6122));
   REQUIRE(parser.course()          == Approx(23.5));
-  REQUIRE(parser.last_fix_utc_s()  == 5*3600 + 28*60 + 52);
-  REQUIRE(parser.last_fix_utc_ms() == 105);
+  REQUIRE(parser.last_fix_utc_s()  == Approx(5*3600 + 28*60 + 52 + 0.105f));
 }
 
 TEST_CASE("NMEA message with data corruption (checksum mismatch) received", "[Parser-03]")
