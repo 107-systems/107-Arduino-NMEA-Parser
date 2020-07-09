@@ -37,7 +37,7 @@ bool GPRMC::isGPRMC(char const * nmea)
 bool GPRMC::parse(char const * gprmc, float & last_fix_utc_s, float & latitude, float & longitude, float & speed, float & course)
 {
   ParserState state = ParserState::MessadeId;
-  
+
   for (char * token = strtok(const_cast<char *>(gprmc), ",");
        token != nullptr;
        token = strtok(nullptr, ","))
@@ -126,7 +126,7 @@ GPRMC::ParserState GPRMC::handle_LatitudeNS(char const * token, float & latitude
     latitude *= (-1.0f);
     return ParserState::LongitudeVal;
   }
-  
+
   return ParserState::Error;
 }
 

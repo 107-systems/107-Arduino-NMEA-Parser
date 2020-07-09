@@ -26,11 +26,12 @@ namespace nmea
  * CTOR/DTOR
  **************************************************************************************/
 
-Parser::Parser()
+Parser::Parser(OnPositionUpdate on_position_update)
 : _error{Error::None}
 , _parser_state{ParserState::Synching}
 , _parser_buf{{0}, 0}
 , _position{20.9860468, 52.2637009, 0.0, 0.0, 0.0}
+, _on_position_update{on_position_update}
 {
 
 }
@@ -41,8 +42,8 @@ Parser::Parser()
 
 void Parser::encode(char const c)
 {
-  /* Wait for the first '$' to be received which 
-   * indicates the start of a NMEA message. 
+  /* Wait for the first '$' to be received which
+   * indicates the start of a NMEA message.
    */
   if (_parser_state == ParserState::Synching) {
     if (c == '$')
@@ -50,10 +51,10 @@ void Parser::encode(char const c)
     else
       return;
   }
-  
+
   if (!isParseBufferFull())
     addToParserBuffer(c);
-    
+
   if (!isCompleteNmeaMessageInParserBuffer()) {
     if (isParseBufferFull()) {
       flushParserBuffer();
@@ -125,6 +126,10 @@ void Parser::parseGPRMC()
 {
   if (!GPRMC::parse(_parser_buf.buf, _position.last_fix_utc_s, _position.latitude, _position.longitude, _position.speed, _position.course))
     _error = Error::RMC;
+  else {
+    if (_on_position_update)
+      _on_position_update(_position.last_fix_utc_s, _position.latitude, _position.longitude, _position.speed, _position.course);
+  }
 }
 
 /**************************************************************************************

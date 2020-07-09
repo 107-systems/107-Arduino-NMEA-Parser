@@ -13,12 +13,22 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#undef max
+#undef min
+#include <functional>
+
 /**************************************************************************************
  * NAMESPACE
  **************************************************************************************/
 
 namespace nmea
 {
+
+/**************************************************************************************
+ * TYPEDEF
+ **************************************************************************************/
+
+typedef std::function<void(float const, float const, float const, float const, float const)> OnPositionUpdate;
 
 /**************************************************************************************
  * CLASS DECLARATION
@@ -29,7 +39,7 @@ class Parser
 
 public:
 
-  Parser();
+  Parser(OnPositionUpdate on_position_update);
 
 
   void encode(char const c);
@@ -71,11 +81,12 @@ private:
   {
     Synching, Synced
   };
-  
+
   Error _error;
   ParserState _parser_state;
   ParserBuffer _parser_buf;
   PositionData _position;
+  OnPositionUpdate _on_position_update;
 
   bool isParseBufferFull();
   void addToParserBuffer(char const c);

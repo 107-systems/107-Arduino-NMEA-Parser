@@ -35,7 +35,7 @@ void encode(nmea::Parser & parser, std::string const & nmea)
 
 TEST_CASE("No NMEA message received", "[Parser-01]")
 {
-  nmea::Parser parser;
+  nmea::Parser parser(nullptr);
 
   REQUIRE     (parser.latitude()  == Approx(20.9860468));
   REQUIRE     (parser.longitude() == Approx(52.2637009));
@@ -46,7 +46,7 @@ TEST_CASE("No NMEA message received", "[Parser-01]")
 
 TEST_CASE("Decoding starts mid-message", "[Parser-02]")
 {
-  nmea::Parser parser;
+  nmea::Parser parser(nullptr);
 
   std::string const GPRMC = "077.0,023.5,080720,000.0,W*79\r\n$GPRMC,052852.105,A,5230.868,N,01320.958,E,077.0,023.5,080720,000.0,W*79\r\n";
 
@@ -61,7 +61,7 @@ TEST_CASE("Decoding starts mid-message", "[Parser-02]")
 
 TEST_CASE("NMEA message with data corruption (checksum mismatch) received", "[Parser-03]")
 {
-  nmea::Parser parser;
+  nmea::Parser parser(nullptr);
 
   std::string const GPRMC = "$GPXXX,052852.105,A,5230.868,N,01320.958,E,077.0,023.5,080720,000.0,W*79\r\n";
 
@@ -72,7 +72,7 @@ TEST_CASE("NMEA message with data corruption (checksum mismatch) received", "[Pa
 
 TEST_CASE("Invalid GPRMC message received", "[Parser-04]")
 {
-  nmea::Parser parser;
+  nmea::Parser parser(nullptr);
 
   std::string const GPRMC = "$GPRMC,052852.105,A,5230.868,Y,01320.958,E,077.0,023.5,080720,000.0,W*6E\r\n";
 
@@ -83,7 +83,7 @@ TEST_CASE("Invalid GPRMC message received", "[Parser-04]")
 
 TEST_CASE("Multiple NMEA messages received", "[Parser-05]")
 {
-  nmea::Parser parser;
+  nmea::Parser parser(nullptr);
 
   std::vector<std::string> const GPRMC =
   {
