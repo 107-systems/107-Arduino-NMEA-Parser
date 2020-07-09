@@ -35,12 +35,11 @@ public:
   void encode(char const c);
 
 
-  inline float    latitude       () const { return _position.latitude; }
-  inline float    longitude      () const { return _position.longitude; }
-  inline float    speed          () const { return _position.speed; }
-  inline float    course         () const { return _position.course; }
-  inline uint32_t last_fix_utc_s () const { return _position.last_fix_utc_s; }
-  inline uint16_t last_fix_utc_ms() const { return _position.last_fix_utc_ms; }
+  inline float latitude       () const { return _position.latitude; }
+  inline float longitude      () const { return _position.longitude; }
+  inline float speed          () const { return _position.speed; }
+  inline float course         () const { return _position.course; }
+  inline float last_fix_utc_s () const { return _position.last_fix_utc_s; }
 
 
   enum class Error { None, Checksum, RMC };
@@ -61,12 +60,11 @@ private:
 
   typedef struct
   {
-    float    latitude;
-    float    longitude;
-    float    speed;
-    float    course;
-    uint32_t last_fix_utc_s;
-    uint16_t last_fix_utc_ms;
+    float latitude;
+    float longitude;
+    float speed;
+    float course;
+    float last_fix_utc_s;
   } PositionData;
 
   enum class ParserState

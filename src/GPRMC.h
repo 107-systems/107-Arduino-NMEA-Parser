@@ -31,8 +31,7 @@ public:
   static bool isGPRMC(char const * nmea);
 
   static bool parse(char const * gprmc, 
-                    uint32_t & last_fix_utc_s,
-                    uint16_t & last_fix_utc_ms,
+                    float & last_fix_utc_s,
                     float & latitude,
                     float & longitude,
                     float & speed,
@@ -60,7 +59,7 @@ private:
   };
 
   static ParserState handle_MessadeId        (char const * token);
-  static ParserState handle_UTCPositionFix   (char const * token, uint32_t & last_fix_utc_s, uint16_t & last_fix_utc_ms);
+  static ParserState handle_UTCPositionFix   (char const * token, float & last_fix_utc_s);
   static ParserState handle_Status           (char const * token);
   static ParserState handle_LatitudeVal      (char const * token, float & latitude);
   static ParserState handle_LatitudeNS       (char const * token, float & latitude);

@@ -34,7 +34,7 @@ bool GPRMC::isGPRMC(char const * nmea)
   return (strncmp(nmea, "$GPRMC", 6) == 0);
 }
 
-bool GPRMC::parse(char const * gprmc, uint32_t & last_fix_utc_s, uint16_t & last_fix_utc_ms, float & latitude, float & longitude, float & speed, float & course)
+bool GPRMC::parse(char const * gprmc, float & last_fix_utc_s, float & latitude, float & longitude, float & speed, float & course)
 {
   ParserState state = ParserState::MessadeId;
   
@@ -46,18 +46,18 @@ bool GPRMC::parse(char const * gprmc, uint32_t & last_fix_utc_s, uint16_t & last
 
     switch(state)
     {
-    case ParserState::MessadeId:         next_state = handle_MessadeId        (token);                                  break;
-    case ParserState::UTCPositionFix:    next_state = handle_UTCPositionFix   (token, last_fix_utc_s, last_fix_utc_ms); break;
-    case ParserState::Status:            next_state = handle_Status           (token);                                  break;
-    case ParserState::LatitudeVal:       next_state = handle_LatitudeVal      (token, latitude);                        break;
-    case ParserState::LatitudeNS:        next_state = handle_LatitudeNS       (token, latitude);                        break;
-    case ParserState::LongitudeVal:      next_state = handle_LongitudeVal     (token, longitude);                       break;
-    case ParserState::LongitudeEW:       next_state = handle_LongitudeEW      (token, longitude);                       break;
-    case ParserState::SpeedOverGround:   next_state = handle_SpeedOverGround  (token, speed);                           break;
-    case ParserState::TrackAngle:        next_state = handle_TrackAngle       (token, course);                          break;
-    case ParserState::Checksum:          next_state = handle_Checksum         (token);                                  break;
-    case ParserState::Done:              return true;                                                                   break;
-    case ParserState::Error:             return false;                                                                  break;
+    case ParserState::MessadeId:         next_state = handle_MessadeId        (token);                 break;
+    case ParserState::UTCPositionFix:    next_state = handle_UTCPositionFix   (token, last_fix_utc_s); break;
+    case ParserState::Status:            next_state = handle_Status           (token);                 break;
+    case ParserState::LatitudeVal:       next_state = handle_LatitudeVal      (token, latitude);       break;
+    case ParserState::LatitudeNS:        next_state = handle_LatitudeNS       (token, latitude);       break;
+    case ParserState::LongitudeVal:      next_state = handle_LongitudeVal     (token, longitude);      break;
+    case ParserState::LongitudeEW:       next_state = handle_LongitudeEW      (token, longitude);      break;
+    case ParserState::SpeedOverGround:   next_state = handle_SpeedOverGround  (token, speed);          break;
+    case ParserState::TrackAngle:        next_state = handle_TrackAngle       (token, course);         break;
+    case ParserState::Checksum:          next_state = handle_Checksum         (token);                 break;
+    case ParserState::Done:              return true;                                                  break;
+    case ParserState::Error:             return false;                                                 break;
     };
 
     state = next_state;
@@ -78,7 +78,7 @@ GPRMC::ParserState GPRMC::handle_MessadeId(char const * token)
     return ParserState::Error;
 }
 
-GPRMC::ParserState GPRMC::handle_UTCPositionFix(char const * token, uint32_t & last_fix_utc_s, uint16_t & last_fix_utc_ms)
+GPRMC::ParserState GPRMC::handle_UTCPositionFix(char const * token, float & last_fix_utc_s)
 {
   char const hour_str       [] = {token[0], token[1], '\0'};
   char const minute_str     [] = {token[2], token[3], '\0'};
@@ -88,7 +88,7 @@ GPRMC::ParserState GPRMC::handle_UTCPositionFix(char const * token, uint32_t & l
   last_fix_utc_s  = atoi(second_str);
   last_fix_utc_s += atoi(minute_str) * 60;
   last_fix_utc_s += atoi(hour_str) * 3600;
-  last_fix_utc_ms = atoi(millisecond_str);
+  last_fix_utc_s += static_cast<float>(atoi(millisecond_str)) / 1000.f;
 
   return ParserState::Status;
 }
