@@ -1,0 +1,26 @@
+#######################################
+# Syntax Coloring Map for 107-Arduino-NMEA-Parser
+#######################################
+
+#######################################
+# Class (KEYWORD1)
+#######################################
+
+ArduinoNmeaParser	KEYWORD1
+Error	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+encode	KEYWORD2
+clearerr	KEYWORD2
+error	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+None	LITERAL1
+Checksum	LITERAL1
+RMC	LITERAL1
