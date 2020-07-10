@@ -39,6 +39,8 @@ add_compile_options(-Wall -Wextra -Wpedantic -Werror)
 set(CMAKE_C_FLAGS   ${CMAKE_C_FLAGS}   "--coverage")
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "--coverage")
 
+add_compile_definitions(HOST)
+
 ##########################################################################
 
 add_executable(

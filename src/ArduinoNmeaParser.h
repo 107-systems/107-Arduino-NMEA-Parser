@@ -38,12 +38,13 @@ public:
   void encode(char const c);
 
 
+#ifdef HOST
   inline float latitude       () const { return _position.latitude; }
   inline float longitude      () const { return _position.longitude; }
   inline float speed          () const { return _position.speed; }
   inline float course         () const { return _position.course; }
   inline float last_fix_utc_s () const { return _position.last_fix_utc_s; }
-
+#endif
 
   enum class Error { None, Checksum, RMC };
 
