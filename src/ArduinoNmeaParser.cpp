@@ -11,9 +11,8 @@
 
 #include <string.h>
 
-#include "GPRMC.h"
-
-#include "util/Checksum.h"
+#include "nmea/GPRMC.h"
+#include "nmea/Checksum.h"
 
 /**************************************************************************************
  * CTOR/DTOR
@@ -63,7 +62,7 @@ void ArduinoNmeaParser::encode(char const c)
   terminateParserBuffer();
 
   /* Verify if the checksum of the NMEA message is correct. */
-  if (!nmea::util::isChecksumOk(_parser_buf.buf)) {
+  if (!nmea::isChecksumOk(_parser_buf.buf)) {
     _error = Error::Checksum;
     flushParserBuffer();
     return;

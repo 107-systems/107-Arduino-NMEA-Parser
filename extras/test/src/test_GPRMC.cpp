@@ -13,7 +13,7 @@
 
 #include <catch.hpp>
 
-#include <GPRMC.h>
+#include <nmea/GPRMC.h>
 
 /**************************************************************************************
  * GLOBAL VARIABLES

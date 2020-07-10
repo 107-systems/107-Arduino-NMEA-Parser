@@ -27,8 +27,8 @@ set(TEST_SRCS
   src/test_GPRMC.cpp
   src/test_main.cpp
 
-  ../../src/util/Checksum.cpp
-  ../../src/GPRMC.cpp
+  ../../src/nmea/Checksum.cpp
+  ../../src/nmea/GPRMC.cpp
   ../../src/ArduinoNmeaParser.cpp
 )
 
