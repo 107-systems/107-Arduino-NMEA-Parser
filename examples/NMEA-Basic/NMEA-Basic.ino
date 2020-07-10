@@ -18,7 +18,7 @@
  * INCLUDE
  **************************************************************************************/
 
-#include <Parser.h>
+#include <ArduinoNmeaParser.h>
 
 /**************************************************************************************
  * FUNCTION DECLARATION
@@ -30,7 +30,7 @@ void onPositionUpdate(float const last_fix_utc_s, float const latitude, float co
  * GLOBAL VARIABLES
  **************************************************************************************/
 
-nmea::Parser parser(onPositionUpdate);
+ArduinoNmeaParser parser(onPositionUpdate);
 
 /**************************************************************************************
  * SETUP/LOOP

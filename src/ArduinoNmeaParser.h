@@ -18,13 +18,6 @@
 #include <functional>
 
 /**************************************************************************************
- * NAMESPACE
- **************************************************************************************/
-
-namespace nmea
-{
-
-/**************************************************************************************
  * TYPEDEF
  **************************************************************************************/
 
@@ -34,12 +27,12 @@ typedef std::function<void(float const, float const, float const, float const, f
  * CLASS DECLARATION
  **************************************************************************************/
 
-class Parser
+class ArduinoNmeaParser
 {
 
 public:
 
-  Parser(OnPositionUpdate on_position_update);
+  ArduinoNmeaParser(OnPositionUpdate on_position_update);
 
 
   void encode(char const c);
@@ -96,11 +89,5 @@ private:
   void parseGPRMC();
 
 };
-
-/**************************************************************************************
- * NAMESPACE
- **************************************************************************************/
-
-} /* nmea */
 
 #endif /* ARDUINO_MTK3333_NMEA_PARSER_H_ */

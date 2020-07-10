@@ -22,14 +22,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(TEST_TARGET testNmeaParser)
 
 set(TEST_SRCS
+  src/test_ArduinoNmeaParser.cpp
   src/test_Checksum.cpp
   src/test_GPRMC.cpp
   src/test_main.cpp
-  src/test_Parser.cpp
 
   ../../src/util/Checksum.cpp
   ../../src/GPRMC.cpp
-  ../../src/Parser.cpp
+  ../../src/ArduinoNmeaParser.cpp
 )
 
 ##########################################################################

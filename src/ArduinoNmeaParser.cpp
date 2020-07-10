@@ -7,26 +7,19 @@
  * INCLUDE
  **************************************************************************************/
 
-#include "Parser.h"
+#include "ArduinoNmeaParser.h"
 
 #include <string.h>
 
 #include "GPRMC.h"
 
 #include "util/Checksum.h"
-#include <iostream>
-/**************************************************************************************
- * NAMESPACE
- **************************************************************************************/
-
-namespace nmea
-{
 
 /**************************************************************************************
  * CTOR/DTOR
  **************************************************************************************/
 
-Parser::Parser(OnPositionUpdate on_position_update)
+ArduinoNmeaParser::ArduinoNmeaParser(OnPositionUpdate on_position_update)
 : _error{Error::None}
 , _parser_state{ParserState::Synching}
 , _parser_buf{{0}, 0}
@@ -40,7 +33,7 @@ Parser::Parser(OnPositionUpdate on_position_update)
  * PUBLIC MEMBER FUNCTIONS
  **************************************************************************************/
 
-void Parser::encode(char const c)
+void ArduinoNmeaParser::encode(char const c)
 {
   /* Wait for the first '$' to be received which
    * indicates the start of a NMEA message.
@@ -70,14 +63,14 @@ void Parser::encode(char const c)
   terminateParserBuffer();
 
   /* Verify if the checksum of the NMEA message is correct. */
-  if (!util::isChecksumOk(_parser_buf.buf)) {
+  if (!nmea::util::isChecksumOk(_parser_buf.buf)) {
     _error = Error::Checksum;
     flushParserBuffer();
     return;
   }
 
   /* Parse the various NMEA messages. */
-  if (GPRMC::isGPRMC(_parser_buf.buf)) parseGPRMC();
+  if (nmea::GPRMC::isGPRMC(_parser_buf.buf)) parseGPRMC();
 
   /* The NMEA message has been fully processed and all
    * values updates so its time to flush the parser
@@ -90,23 +83,23 @@ void Parser::encode(char const c)
  * PRIVATE MEMBER FUNCTIONS
  **************************************************************************************/
 
-bool Parser::isParseBufferFull()
+bool ArduinoNmeaParser::isParseBufferFull()
 {
   return (_parser_buf.elems_in_buf >= (NMEA_PARSE_BUFFER_SIZE - 1));
 }
 
-void Parser::addToParserBuffer(char const c)
+void ArduinoNmeaParser::addToParserBuffer(char const c)
 {
   _parser_buf.buf[_parser_buf.elems_in_buf] = c;
   _parser_buf.elems_in_buf++;
 }
 
-void Parser::flushParserBuffer()
+void ArduinoNmeaParser::flushParserBuffer()
 {
   _parser_buf.elems_in_buf = 0;
 }
 
-bool Parser::isCompleteNmeaMessageInParserBuffer()
+bool ArduinoNmeaParser::isCompleteNmeaMessageInParserBuffer()
 {
   if (_parser_buf.elems_in_buf < 8) /* $GPxxx\r\n = 8 */
     return false;
@@ -117,23 +110,17 @@ bool Parser::isCompleteNmeaMessageInParserBuffer()
   return ((prev_last == '\r') && (last == '\n'));
 }
 
-void Parser::terminateParserBuffer()
+void ArduinoNmeaParser::terminateParserBuffer()
 {
   addToParserBuffer('\0');
 }
 
-void Parser::parseGPRMC()
+void ArduinoNmeaParser::parseGPRMC()
 {
-  if (!GPRMC::parse(_parser_buf.buf, _position.last_fix_utc_s, _position.latitude, _position.longitude, _position.speed, _position.course))
+  if (!nmea::GPRMC::parse(_parser_buf.buf, _position.last_fix_utc_s, _position.latitude, _position.longitude, _position.speed, _position.course))
     _error = Error::RMC;
   else {
     if (_on_position_update)
       _on_position_update(_position.last_fix_utc_s, _position.latitude, _position.longitude, _position.speed, _position.course);
   }
 }
-
-/**************************************************************************************
- * NAMESPACE
- **************************************************************************************/
-
-} /* nmea */
