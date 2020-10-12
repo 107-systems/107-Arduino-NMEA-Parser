@@ -97,16 +97,7 @@ GPRMC::ParserState GPRMC::handle_MessadeId(char const * token)
 GPRMC::ParserState GPRMC::handle_UTCPositionFix(char const * token, float & last_fix_utc_s)
 {
   if (strlen(token))
-  {
-    char const hour_str       [] = {token[0], token[1], '\0'};
-    char const minute_str     [] = {token[2], token[3], '\0'};
-    char second_str[10] = {'\0'};
-    strncpy(second_str, token + 4, sizeof(second_str));
-
-    last_fix_utc_s  = atoi(second_str);
-    last_fix_utc_s += atoi(minute_str) * 60;
-    last_fix_utc_s += atof(hour_str) * 3600.0f;
-  }
+    last_fix_utc_s = parseUTCPositionFix(token);
   else
     last_fix_utc_s = NAN;
 
@@ -242,6 +233,20 @@ GPRMC::ParserState GPRMC::handle_MagneticVariationEastWest(char const * token, f
 GPRMC::ParserState GPRMC::handle_Checksum(char const * /* token */)
 {
   return ParserState::Done;
+}
+
+float GPRMC::parseUTCPositionFix(char const * token)
+{
+  char const hour_str       [] = {token[0], token[1], '\0'};
+  char const minute_str     [] = {token[2], token[3], '\0'};
+  char second_str[10] = {'\0'};
+  strncpy(second_str, token + 4, sizeof(second_str));
+
+  float last_fix_utc_s  = atoi(second_str);
+        last_fix_utc_s += atoi(minute_str) * 60;
+        last_fix_utc_s += atof(hour_str) * 3600.0f;
+
+  return last_fix_utc_s;
 }
 
 float GPRMC::parseLatitude(char const * token)

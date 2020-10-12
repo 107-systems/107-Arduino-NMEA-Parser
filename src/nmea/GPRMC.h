@@ -81,8 +81,9 @@ private:
   static ParserState handle_MagneticVariationEastWest(char const * token, float & magnetic_variation);
   static ParserState handle_Checksum                 (char const * token);
 
-  static float parseLatitude (char const * token);
-  static float parseLongitude(char const * token);
+  static float parseUTCPositionFix(char const * token);
+  static float parseLatitude      (char const * token);
+  static float parseLongitude     (char const * token);
 };
 
 /**************************************************************************************
