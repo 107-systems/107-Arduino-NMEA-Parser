@@ -108,7 +108,15 @@ TEST_CASE("Extracting date from valid GPRMC message", "[GPRMC-05]")
   REQUIRE(year  == 2020);
 }
 
-TEST_CASE("Extracted status indicates void ('V') position data", "[GPRMC-06]")
+TEST_CASE("Extracting magnetic variation from valid GPRMC message", "[GPRMC-06]")
+{
+  std::string const GPRMC = ("$GPRMC,052856.105,A,5230.874,N,01321.056,E,085.7,206.4,080720,000.0,W*78\r\n");
+
+  REQUIRE(nmea::GPRMC::parse(GPRMC.c_str(), last_fix_utc_s, latitude, longitude, speed, course, magnetic_variation, day, month, year) == true);
+  REQUIRE(magnetic_variation == Approx(0.0));
+}
+
+TEST_CASE("Extracted status indicates void ('V') position data", "[GPRMC-07]")
 {
   std::string const GPRMC = ("$GPRMC,052856.105,V,5230.874,N,01321.056,E,085.7,206.4,080720,000.0,W*78\r\n");
 

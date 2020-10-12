@@ -117,10 +117,16 @@ TEST_CASE("Multiple NMEA messages received", "[Parser-05]")
     23.5f, 69.2f, 99.8f, 138.7f
   };
 
+  std::vector<float> const MAGNETIC_VARIATION_EXPECTED =
+  {
+    0.0f, 0.0f, 0.0f, 0.0f
+  };
+
   auto latitude  = LATITUDE_EXPECTED.begin();
   auto longitude = LONGITUDE_EXPECTED.begin();
   auto speed     = SPEED_EXPECTED.begin();
   auto course    = COURSE_EXPECTED.begin();
+  auto mag_var   = MAGNETIC_VARIATION_EXPECTED.begin();
 
   std::for_each(std::begin(GPRMC),
                 std::end(GPRMC),
@@ -128,15 +134,17 @@ TEST_CASE("Multiple NMEA messages received", "[Parser-05]")
                 {
                   encode(parser, gprmc);
 
-                  REQUIRE(parser.latitude () == Approx(*latitude));
-                  REQUIRE(parser.longitude() == Approx(*longitude));
-                  REQUIRE(parser.speed    () == Approx(*speed));
-                  REQUIRE(parser.course   () == Approx(*course));
+                  REQUIRE(parser.latitude          () == Approx(*latitude));
+                  REQUIRE(parser.longitude         () == Approx(*longitude));
+                  REQUIRE(parser.speed             () == Approx(*speed));
+                  REQUIRE(parser.course            () == Approx(*course));
+                  REQUIRE(parser.magnetic_variation() == Approx(*mag_var));
 
                   latitude  = std::next(latitude);
                   longitude = std::next(longitude);
                   speed     = std::next(speed);
                   course    = std::next(course);
+                  mag_var   = std::next(mag_var);
                 });
 
   REQUIRE(parser.error() == ArduinoNmeaParser::Error::None);
