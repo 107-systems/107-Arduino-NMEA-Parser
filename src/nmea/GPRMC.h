@@ -84,6 +84,7 @@ private:
   static float parseUTCPositionFix(char const * token);
   static float parseLatitude      (char const * token);
   static float parseLongitude     (char const * token);
+  static void  parseDate          (char const * token, int & day, int & month, int & year);
 };
 
 /**************************************************************************************

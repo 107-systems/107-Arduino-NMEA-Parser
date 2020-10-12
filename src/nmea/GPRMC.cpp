@@ -193,15 +193,7 @@ GPRMC::ParserState GPRMC::handle_TrackAngle(char const * token, float & course)
 GPRMC::ParserState GPRMC::handle_Date(char const * token, int & day, int & month, int & year)
 {
   if (strlen(token))
-  {
-    char const day_str  [] = {token[0], token[1], '\0'};
-    char const month_str[] = {token[2], token[3], '\0'};
-    char const year_str [] = {token[4], token[5], '\0'};
-
-    day   = atoi(day_str);
-    month = atoi(month_str);
-    year  = 2000 + atoi(year_str);
-  }
+    parseDate(token, day, month, year);
   else
   {
     day = -1;
@@ -271,6 +263,17 @@ float GPRMC::parseLongitude(char const * token)
         longitude += atof(min_str) / 60.0f;
 
   return longitude;
+}
+
+void GPRMC::parseDate(char const * token, int & day, int & month, int & year)
+{
+  char const day_str  [] = {token[0], token[1], '\0'};
+  char const month_str[] = {token[2], token[3], '\0'};
+  char const year_str [] = {token[4], token[5], '\0'};
+
+  day   = atoi(day_str);
+  month = atoi(month_str);
+  year  = 2000 + atoi(year_str);
 }
 
 /**************************************************************************************
