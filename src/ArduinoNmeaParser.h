@@ -21,7 +21,7 @@
  * TYPEDEF
  **************************************************************************************/
 
-typedef std::function<void(float const, float const, float const, float const, float const, float const)> OnPositionUpdate;
+typedef std::function<void(float const, float const, float const, float const, float const)> OnPositionUpdate;
 
 /**************************************************************************************
  * CLASS DECLARATION
@@ -44,11 +44,11 @@ public:
   inline float speed             () const { return _position.speed; }
   inline float course            () const { return _position.course; }
   inline float last_fix_utc_s    () const { return _position.last_fix_utc_s; }
+#endif
   inline float magnetic_variation() const { return _position.magnetic_variation; }
   inline int   day               () const { return _position.date.day; }
   inline int   month             () const { return _position.date.month; }
   inline int   year              () const { return _position.date.year; }
-#endif
 
   enum class Error { None, Checksum, RMC };
 

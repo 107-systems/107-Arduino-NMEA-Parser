@@ -130,6 +130,6 @@ void ArduinoNmeaParser::parseGPRMC()
     _error = Error::RMC;
   else {
     if (_on_position_update)
-      _on_position_update(_position.last_fix_utc_s, _position.latitude, _position.longitude, _position.speed, _position.course, _position.magnetic_variation);
+      _on_position_update(_position.last_fix_utc_s, _position.latitude, _position.longitude, _position.speed, _position.course);
   }
 }

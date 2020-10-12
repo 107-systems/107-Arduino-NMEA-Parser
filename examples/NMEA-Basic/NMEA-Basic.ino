@@ -24,7 +24,7 @@
  * FUNCTION DECLARATION
  **************************************************************************************/
 
-void onPositionUpdate(float const last_fix_utc_s, float const latitude, float const longitude, float const speed, float const course, float const magnetic_variation);
+void onPositionUpdate(float const last_fix_utc_s, float const latitude, float const longitude, float const speed, float const course);
 
 /**************************************************************************************
  * GLOBAL VARIABLES
@@ -53,9 +53,9 @@ void loop()
  * FUNCTION DEFINITION
  **************************************************************************************/
 
-void onPositionUpdate(float const last_fix_utc_s, float const latitude, float const longitude, float const speed, float const course, float const magnetic_variation)
+void onPositionUpdate(float const last_fix_utc_s, float const latitude, float const longitude, float const speed, float const course)
 {
-  char msg[100] = {0};
-  snprintf(msg, 64, "[%f] %f LON | %f LAT | %d m/s | %d ° | %d °", last_fix_utc_s, latitude, longitude, speed, course, magnetic_variation);
+  char msg[64] = {0};
+  snprintf(msg, 64, "[%f] %f LON | %f LAT | %d m/s | %d °", last_fix_utc_s, latitude, longitude, speed, course);
   Serial.println(msg);
 }
