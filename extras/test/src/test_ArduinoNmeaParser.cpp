@@ -43,6 +43,9 @@ TEST_CASE("No NMEA message received", "[Parser-01]")
   REQUIRE(std::isnan(parser.course())             == true);
   REQUIRE(std::isnan(parser.last_fix_utc_s())     == true);
   REQUIRE(std::isnan(parser.magnetic_variation()) == true);
+  REQUIRE(parser.day  () == -1);
+  REQUIRE(parser.month() == -1);
+  REQUIRE(parser.year () == -1);
 }
 
 TEST_CASE("Decoding starts mid-message", "[Parser-02]")

@@ -23,7 +23,7 @@ ArduinoNmeaParser::ArduinoNmeaParser(OnPositionUpdate on_position_update)
 : _error{Error::None}
 , _parser_state{ParserState::Synching}
 , _parser_buf{{0}, 0}
-, _position{20.9860468, 52.2637009, NAN, NAN, NAN, NAN}
+, _position{20.9860468, 52.2637009, NAN, NAN, NAN, NAN, {-1, -1, -1}}
 , _on_position_update{on_position_update}
 {
 
