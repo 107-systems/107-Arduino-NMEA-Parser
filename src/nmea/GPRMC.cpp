@@ -40,9 +40,9 @@ bool GPRMC::parse(char const * gprmc, float & last_fix_utc_s, float & latitude, 
 {
   ParserState state = ParserState::MessadeId;
 
-  for (char * token = strtok(const_cast<char *>(gprmc), ",");
+  for (char * token = strsep((char **)&gprmc, ",");
        token != nullptr;
-       token = strtok(nullptr, ","))
+       token = strsep((char **)&gprmc, ","))
   {
     /* All GPS receivers should at least implement the the fields: UTC Position Fix,
      * Status, Latitude, Longitude, Speed over ground, Track Angle. All other fields
