@@ -95,21 +95,29 @@ GPRMC::ParserState GPRMC::handle_MessadeId(char const * token)
 
 GPRMC::ParserState GPRMC::handle_UTCPositionFix(char const * token, float & last_fix_utc_s)
 {
-  char const hour_str       [] = {token[0], token[1], '\0'};
-  char const minute_str     [] = {token[2], token[3], '\0'};
-  char const second_str     [] = {token[4], token[5], '\0'};
-  char const millisecond_str[] = {token[7], token[8], token[9], '\0'};
+  if (strlen(token))
+  {
+    char const hour_str       [] = {token[0], token[1], '\0'};
+    char const minute_str     [] = {token[2], token[3], '\0'};
+    char const second_str     [] = {token[4], token[5], '\0'};
+    char const millisecond_str[] = {token[7], token[8], token[9], '\0'};
 
-  last_fix_utc_s  = atoi(second_str);
-  last_fix_utc_s += atoi(minute_str) * 60;
-  last_fix_utc_s += atoi(hour_str) * 3600;
-  last_fix_utc_s += static_cast<float>(atoi(millisecond_str)) / 1000.f;
+    last_fix_utc_s  = atoi(second_str);
+    last_fix_utc_s += atoi(minute_str) * 60;
+    last_fix_utc_s += atoi(hour_str) * 3600;
+    last_fix_utc_s += static_cast<float>(atoi(millisecond_str)) / 1000.f;
+  }
+  else
+    last_fix_utc_s = NAN;
 
   return ParserState::Status;
 }
 
 GPRMC::ParserState GPRMC::handle_Status(char const * token)
 {
+  if (strlen(token) == 0)
+    return ParserState::Error;
+
   if(!strncmp(token, "A", 1))
     return ParserState::LatitudeVal;
 
@@ -121,26 +129,34 @@ GPRMC::ParserState GPRMC::handle_Status(char const * token)
 
 GPRMC::ParserState GPRMC::handle_LatitudeVal(char const * token, float & latitude)
 {
-  char const deg_str[] = {token[0], token[1], '\0'};
-  char const min_str[] = {token[2], token[3], '\0'};
-  char sub_min_str[10] = {0};
-  strncpy(sub_min_str, strrchr(token, '.') + 1, sizeof(sub_min_str));
+  if (strlen(token))
+  {
+    char const deg_str[] = {token[0], token[1], '\0'};
+    char const min_str[] = {token[2], token[3], '\0'};
+    char sub_min_str[10] = {0};
+    strncpy(sub_min_str, strrchr(token, '.') + 1, sizeof(sub_min_str));
 
-  latitude  = atoi(deg_str);
-  latitude += static_cast<float>(atoi(min_str)) / 60;
-  latitude += static_cast<float>(atoi(sub_min_str)) / (60 * 1000);
+    latitude  = atoi(deg_str);
+    latitude += static_cast<float>(atoi(min_str)) / 60;
+    latitude += static_cast<float>(atoi(sub_min_str)) / (60 * 1000);
+  }
+  else
+    latitude = NAN;
 
   return ParserState::LatitudeNS;
 }
 
 GPRMC::ParserState GPRMC::handle_LatitudeNS(char const * token, float & latitude)
 {
-  if(!strncmp(token, "N", 1))
-    return ParserState::LongitudeVal;
+  if (strlen(token))
+  {
+    if(!strncmp(token, "N", 1))
+      return ParserState::LongitudeVal;
 
-  if(!strncmp(token, "S", 1)) {
-    latitude *= (-1.0f);
-    return ParserState::LongitudeVal;
+    if(!strncmp(token, "S", 1)) {
+      latitude *= (-1.0f);
+      return ParserState::LongitudeVal;
+    }
   }
 
   return ParserState::Error;
@@ -148,26 +164,34 @@ GPRMC::ParserState GPRMC::handle_LatitudeNS(char const * token, float & latitude
 
 GPRMC::ParserState GPRMC::handle_LongitudeVal(char const * token, float & longitude)
 {
-  char const deg_str[] = {token[0], token[1], token[2], '\0'};
-  char const min_str[] = {token[3], token[4], '\0'};
-  char sub_min_str[10] = {0};
-  strncpy(sub_min_str, strrchr(token, '.') + 1, sizeof(sub_min_str));
+  if (strlen(token))
+  {
+    char const deg_str[] = {token[0], token[1], token[2], '\0'};
+    char const min_str[] = {token[3], token[4], '\0'};
+    char sub_min_str[10] = {0};
+    strncpy(sub_min_str, strrchr(token, '.') + 1, sizeof(sub_min_str));
 
-  longitude  = atoi(deg_str);
-  longitude += static_cast<float>(atoi(min_str)) / 60;
-  longitude += static_cast<float>(atoi(sub_min_str)) / (60 * 1000);
+    longitude  = atoi(deg_str);
+    longitude += static_cast<float>(atoi(min_str)) / 60;
+    longitude += static_cast<float>(atoi(sub_min_str)) / (60 * 1000);
+  }
+  else
+    longitude = NAN;
 
   return ParserState::LongitudeEW;
 }
 
 GPRMC::ParserState GPRMC::handle_LongitudeEW(char const * token, float & longitude)
 {
-  if(!strncmp(token, "E", 1))
-    return ParserState::SpeedOverGround;
+  if (strlen(token))
+  {
+    if(!strncmp(token, "E", 1))
+      return ParserState::SpeedOverGround;
 
-  if(!strncmp(token, "W", 1)) {
-    longitude *= (-1.0f);
-    return ParserState::SpeedOverGround;
+    if(!strncmp(token, "W", 1)) {
+      longitude *= (-1.0f);
+      return ParserState::SpeedOverGround;
+    }
   }
 
   return ParserState::Error;
@@ -175,15 +199,21 @@ GPRMC::ParserState GPRMC::handle_LongitudeEW(char const * token, float & longitu
 
 GPRMC::ParserState GPRMC::handle_SpeedOverGround(char const * token, float & speed)
 {
-  float const speed_kts = atof(token);
-  speed = kts_to_m_per_s(speed_kts);
+  if (strlen(token))
+    speed = kts_to_m_per_s(atof(token));
+  else
+    speed = NAN;
 
   return ParserState::TrackAngle;
 }
 
 GPRMC::ParserState GPRMC::handle_TrackAngle(char const * token, float & course)
 {
-  course = atof(token);
+  if (strlen(token))
+    course = atof(token);
+  else
+    course = NAN;
+
   return ParserState::Date;
 }
 

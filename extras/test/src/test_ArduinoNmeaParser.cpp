@@ -37,11 +37,12 @@ TEST_CASE("No NMEA message received", "[Parser-01]")
 {
   ArduinoNmeaParser parser(nullptr);
 
-  REQUIRE     (parser.latitude()  == Approx(20.9860468));
-  REQUIRE     (parser.longitude() == Approx(52.2637009));
-  REQUIRE_THAT(parser.speed(),          Catch::Matchers::WithinULP(0.0f, 10));
-  REQUIRE_THAT(parser.course(),         Catch::Matchers::WithinULP(0.0f, 10));
-  REQUIRE_THAT(parser.last_fix_utc_s(), Catch::Matchers::WithinULP(0.0f, 10));
+  REQUIRE(parser.latitude()  == Approx(20.9860468));
+  REQUIRE(parser.longitude() == Approx(52.2637009));
+  REQUIRE(std::isnan(parser.speed())              == true);
+  REQUIRE(std::isnan(parser.course())             == true);
+  REQUIRE(std::isnan(parser.last_fix_utc_s())     == true);
+  REQUIRE(std::isnan(parser.magnetic_variation()) == true);
 }
 
 TEST_CASE("Decoding starts mid-message", "[Parser-02]")
