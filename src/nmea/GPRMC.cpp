@@ -130,14 +130,7 @@ GPRMC::ParserState GPRMC::handle_Status(char const * token)
 GPRMC::ParserState GPRMC::handle_LatitudeVal(char const * token, float & latitude)
 {
   if (strlen(token))
-  {
-    char const deg_str[] = {token[0], token[1], '\0'};
-    char min_str[10] = {0};
-    strncpy(min_str, token + 2, sizeof(min_str));
-
-    latitude  = atoi(deg_str);
-    latitude += atof(min_str) / 60.0f;
-  }
+    latitude = parseLatitude(token);
   else
     latitude = NAN;
 
@@ -256,6 +249,18 @@ GPRMC::ParserState GPRMC::handle_MagneticVariationEastWest(char const * token, f
 GPRMC::ParserState GPRMC::handle_Checksum(char const * /* token */)
 {
   return ParserState::Done;
+}
+
+float GPRMC::parseLatitude(char const * token)
+{
+  char const deg_str[] = {token[0], token[1], '\0'};
+  char min_str[10] = {0};
+  strncpy(min_str, token + 2, sizeof(min_str));
+
+  float latitude  = atoi(deg_str);
+        latitude += atof(min_str) / 60.0f;
+
+  return latitude;
 }
 
 /**************************************************************************************
