@@ -100,13 +100,12 @@ GPRMC::ParserState GPRMC::handle_UTCPositionFix(char const * token, float & last
   {
     char const hour_str       [] = {token[0], token[1], '\0'};
     char const minute_str     [] = {token[2], token[3], '\0'};
-    char const second_str     [] = {token[4], token[5], '\0'};
-    char const millisecond_str[] = {token[7], token[8], token[9], '\0'};
+    char second_str[10] = {'\0'};
+    strncpy(second_str, token + 4, sizeof(second_str));
 
     last_fix_utc_s  = atoi(second_str);
     last_fix_utc_s += atoi(minute_str) * 60;
-    last_fix_utc_s += atoi(hour_str) * 3600;
-    last_fix_utc_s += static_cast<float>(atoi(millisecond_str)) / 1000.f;
+    last_fix_utc_s += atof(hour_str) * 3600.0f;
   }
   else
     last_fix_utc_s = NAN;
