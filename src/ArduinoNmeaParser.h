@@ -21,7 +21,7 @@
  * TYPEDEF
  **************************************************************************************/
 
-typedef std::function<void(float const, float const, float const, float const, float const)> OnPositionUpdate;
+typedef std::function<void(float const, float const, float const, float const, float const)> OnRMCUpdate;
 
 /**************************************************************************************
  * CLASS DECLARATION
@@ -32,23 +32,23 @@ class ArduinoNmeaParser
 
 public:
 
-  ArduinoNmeaParser(OnPositionUpdate on_position_update);
+  ArduinoNmeaParser(OnRMCUpdate on_rmc_update);
 
 
   void encode(char const c);
 
 
 #ifdef HOST
-  inline float latitude          () const { return _position.latitude; }
-  inline float longitude         () const { return _position.longitude; }
-  inline float speed             () const { return _position.speed; }
-  inline float course            () const { return _position.course; }
-  inline float last_fix_utc_s    () const { return _position.last_fix_utc_s; }
+  inline float latitude          () const { return _rmc.latitude; }
+  inline float longitude         () const { return _rmc.longitude; }
+  inline float speed             () const { return _rmc.speed; }
+  inline float course            () const { return _rmc.course; }
+  inline float last_fix_utc_s    () const { return _rmc.last_fix_utc_s; }
 #endif
-  inline float magnetic_variation() const { return _position.magnetic_variation; }
-  inline int   day               () const { return _position.date.day; }
-  inline int   month             () const { return _position.date.month; }
-  inline int   year              () const { return _position.date.year; }
+  inline float magnetic_variation() const { return _rmc.magnetic_variation; }
+  inline int   day               () const { return _rmc.date.day; }
+  inline int   month             () const { return _rmc.date.month; }
+  inline int   year              () const { return _rmc.date.year; }
 
   enum class Error { None, Checksum, RMC };
 
@@ -82,7 +82,7 @@ private:
     float last_fix_utc_s;
     float magnetic_variation;
     Date  date;
-  } PositionData;
+  } RMCData;
 
   enum class ParserState
   {
@@ -92,8 +92,8 @@ private:
   Error _error;
   ParserState _parser_state;
   ParserBuffer _parser_buf;
-  PositionData _position;
-  OnPositionUpdate _on_position_update;
+  RMCData _rmc;
+  OnRMCUpdate _on_rmc_update;
 
   bool isParseBufferFull();
   void addToParserBuffer(char const c);

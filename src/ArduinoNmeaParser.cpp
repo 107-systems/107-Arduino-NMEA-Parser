@@ -19,12 +19,12 @@
  * CTOR/DTOR
  **************************************************************************************/
 
-ArduinoNmeaParser::ArduinoNmeaParser(OnPositionUpdate on_position_update)
+ArduinoNmeaParser::ArduinoNmeaParser(OnRMCUpdate on_rmc_update)
 : _error{Error::None}
 , _parser_state{ParserState::Synching}
 , _parser_buf{{0}, 0}
-, _position{20.9860468, 52.2637009, NAN, NAN, NAN, NAN, {-1, -1, -1}}
-, _on_position_update{on_position_update}
+, _rmc{20.9860468, 52.2637009, NAN, NAN, NAN, NAN, {-1, -1, -1}}
+, _on_rmc_update{on_rmc_update}
 {
 
 }
@@ -118,18 +118,18 @@ void ArduinoNmeaParser::terminateParserBuffer()
 void ArduinoNmeaParser::parseGPRMC()
 {
   if (!nmea::GPRMC::parse(_parser_buf.buf,
-                          _position.last_fix_utc_s,
-                          _position.latitude,
-                          _position.longitude,
-                          _position.speed,
-                          _position.course,
-                          _position.magnetic_variation,
-                          _position.date.day,
-                          _position.date.month,
-                          _position.date.year))
+                          _rmc.last_fix_utc_s,
+                          _rmc.latitude,
+                          _rmc.longitude,
+                          _rmc.speed,
+                          _rmc.course,
+                          _rmc.magnetic_variation,
+                          _rmc.date.day,
+                          _rmc.date.month,
+                          _rmc.date.year))
     _error = Error::RMC;
   else {
-    if (_on_position_update)
-      _on_position_update(_position.last_fix_utc_s, _position.latitude, _position.longitude, _position.speed, _position.course);
+    if (_on_rmc_update)
+      _on_rmc_update(_rmc.last_fix_utc_s, _rmc.latitude, _rmc.longitude, _rmc.speed, _rmc.course);
   }
 }

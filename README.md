@@ -17,14 +17,14 @@ Arduino library for interfacing with the PA1010D GPS module (MTK3333 chipset) an
 ```C++
 #include <ArduinoNmeaParser.h>
 /* ... */
-void onPositionUpdate(float const last_fix_utc_s, float const latitude, float const longitude, float const speed, float const course)
+void OnRMCUpdate(float const last_fix_utc_s, float const latitude, float const longitude, float const speed, float const course)
 {
   char msg[64] = {0};
   snprintf(msg, 64, "[%f] %f LON | %f LAT | %d m/s | %d °", last_fix_utc_s, latitude, longitude, speed, course);
   Serial.println(msg);
 }
 /* ... */
-ArduinoNmeaParser parser(onPositionUpdate);
+ArduinoNmeaParser parser(OnRMCUpdate);
 /* ... */
 void setup() {
   Serial.begin(9600);
