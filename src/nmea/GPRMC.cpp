@@ -156,14 +156,7 @@ GPRMC::ParserState GPRMC::handle_LatitudeNS(char const * token, float & latitude
 GPRMC::ParserState GPRMC::handle_LongitudeVal(char const * token, float & longitude)
 {
   if (strlen(token))
-  {
-    char const deg_str[] = {token[0], token[1], token[2], '\0'};
-    char min_str[10] = {0};
-    strncpy(min_str, token + 3, sizeof(min_str));
-
-    longitude  = atoi(deg_str);
-    longitude += atof(min_str) / 60.0f;
-  }
+    longitude = parseLongitude(token);
   else
     longitude = NAN;
 
@@ -261,6 +254,18 @@ float GPRMC::parseLatitude(char const * token)
         latitude += atof(min_str) / 60.0f;
 
   return latitude;
+}
+
+float GPRMC::parseLongitude(char const * token)
+{
+  char const deg_str[] = {token[0], token[1], token[2], '\0'};
+  char min_str[10] = {0};
+  strncpy(min_str, token + 3, sizeof(min_str));
+
+  float longitude  = atoi(deg_str);
+        longitude += atof(min_str) / 60.0f;
+
+  return longitude;
 }
 
 /**************************************************************************************
