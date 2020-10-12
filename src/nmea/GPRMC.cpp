@@ -174,12 +174,7 @@ GPRMC::ParserState GPRMC::handle_LongitudeEW(char const * token, float & longitu
 
 GPRMC::ParserState GPRMC::handle_SpeedOverGround(char const * token, float & speed)
 {
-  char const     speed_kts_str[] = {token[0], token[1], token[2], '\0'};
-  char const sub_speed_kts_str[] = {token[4], '\0'};
-
-  float speed_kts  = atoi(speed_kts_str);
-  speed_kts       += static_cast<float>(atoi(sub_speed_kts_str)) / 10.0f;
-
+  float const speed_kts = atof(token);
   speed = kts_to_m_per_s(speed_kts);
 
   return ParserState::TrackAngle;
@@ -187,12 +182,7 @@ GPRMC::ParserState GPRMC::handle_SpeedOverGround(char const * token, float & spe
 
 GPRMC::ParserState GPRMC::handle_TrackAngle(char const * token, float & course)
 {
-  char const     course_deg_str[] = {token[0], token[1], token[2], '\0'};
-  char const sub_course_deg_str[] = {token[4], '\0'};
-
-  course  = atoi(course_deg_str);
-  course += static_cast<float>(atoi(sub_course_deg_str)) / 10.0f;
-
+  course = atof(token);
   return ParserState::Date;
 }
 
