@@ -9,6 +9,8 @@
 
 #include "GPRMC.h"
 
+#include "Checksum.h"
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -42,22 +44,34 @@ bool GPRMC::parse(char const * gprmc, float & last_fix_utc_s, float & latitude, 
        token != nullptr;
        token = strtok(nullptr, ","))
   {
+    /* All GPS receivers should at least implement the the fields: UTC Position Fix,
+     * Status, Latitude, Longitude, Speed over ground, Track Angle. All other fields
+     * are optional. Therefore we are checking in the following if statement if the
+     * current token is a checksum token. If that's the case we are directly jumping
+     * to ParserState::Checksum.
+     */
+    if (isChecksumToken(token))
+      state = ParserState::Checksum;
+
     ParserState next_state = state;
 
     switch(state)
     {
-    case ParserState::MessadeId:         next_state = handle_MessadeId        (token);                 break;
-    case ParserState::UTCPositionFix:    next_state = handle_UTCPositionFix   (token, last_fix_utc_s); break;
-    case ParserState::Status:            next_state = handle_Status           (token);                 break;
-    case ParserState::LatitudeVal:       next_state = handle_LatitudeVal      (token, latitude);       break;
-    case ParserState::LatitudeNS:        next_state = handle_LatitudeNS       (token, latitude);       break;
-    case ParserState::LongitudeVal:      next_state = handle_LongitudeVal     (token, longitude);      break;
-    case ParserState::LongitudeEW:       next_state = handle_LongitudeEW      (token, longitude);      break;
-    case ParserState::SpeedOverGround:   next_state = handle_SpeedOverGround  (token, speed);          break;
-    case ParserState::TrackAngle:        next_state = handle_TrackAngle       (token, course);         break;
-    case ParserState::Checksum:          next_state = handle_Checksum         (token);                 break;
-    case ParserState::Done:              return true;                                                  break;
-    case ParserState::Error:             return false;                                                 break;
+    case ParserState::MessadeId:                  next_state = handle_MessadeId                (token);                 break;
+    case ParserState::UTCPositionFix:             next_state = handle_UTCPositionFix           (token, last_fix_utc_s); break;
+    case ParserState::Status:                     next_state = handle_Status                   (token);                 break;
+    case ParserState::LatitudeVal:                next_state = handle_LatitudeVal              (token, latitude);       break;
+    case ParserState::LatitudeNS:                 next_state = handle_LatitudeNS               (token, latitude);       break;
+    case ParserState::LongitudeVal:               next_state = handle_LongitudeVal             (token, longitude);      break;
+    case ParserState::LongitudeEW:                next_state = handle_LongitudeEW              (token, longitude);      break;
+    case ParserState::SpeedOverGround:            next_state = handle_SpeedOverGround          (token, speed);          break;
+    case ParserState::TrackAngle:                 next_state = handle_TrackAngle               (token, course);         break;
+    case ParserState::Date:                       next_state = handle_Date                     (token);                 break;
+    case ParserState::MagneticVariation:          next_state = handle_MagneticVariation        (token);                 break;
+    case ParserState::MagneticVariationEastWest:  next_state = handle_MagneticVariationEastWest(token);                 break;
+    case ParserState::Checksum:                   next_state = handle_Checksum                 (token);                 break;
+    case ParserState::Done:                       return true;                                                          break;
+    case ParserState::Error:                      return false;                                                         break;
     };
 
     state = next_state;
@@ -106,9 +120,10 @@ GPRMC::ParserState GPRMC::handle_Status(char const * token)
 
 GPRMC::ParserState GPRMC::handle_LatitudeVal(char const * token, float & latitude)
 {
-  char const     deg_str[] = {token[0], token[1], '\0'};
-  char const     min_str[] = {token[2], token[3], '\0'};
-  char const sub_min_str[] = {token[5], token[6], token[7], '\0'};
+  char const deg_str[] = {token[0], token[1], '\0'};
+  char const min_str[] = {token[2], token[3], '\0'};
+  char sub_min_str[10] = {0};
+  strncpy(sub_min_str, strrchr(token, '.') + 1, sizeof(sub_min_str));
 
   latitude  = atoi(deg_str);
   latitude += static_cast<float>(atoi(min_str)) / 60;
@@ -132,9 +147,10 @@ GPRMC::ParserState GPRMC::handle_LatitudeNS(char const * token, float & latitude
 
 GPRMC::ParserState GPRMC::handle_LongitudeVal(char const * token, float & longitude)
 {
-  char const     deg_str[] = {token[0], token[1], token[2], '\0'};
-  char const     min_str[] = {token[3], token[4], '\0'};
-  char const sub_min_str[] = {token[6], token[7], token[8], '\0'};
+  char const deg_str[] = {token[0], token[1], token[2], '\0'};
+  char const min_str[] = {token[3], token[4], '\0'};
+  char sub_min_str[10] = {0};
+  strncpy(sub_min_str, strrchr(token, '.') + 1, sizeof(sub_min_str));
 
   longitude  = atoi(deg_str);
   longitude += static_cast<float>(atoi(min_str)) / 60;
@@ -177,6 +193,24 @@ GPRMC::ParserState GPRMC::handle_TrackAngle(char const * token, float & course)
   course  = atoi(course_deg_str);
   course += static_cast<float>(atoi(sub_course_deg_str)) / 10.0f;
 
+  return ParserState::Date;
+}
+
+GPRMC::ParserState GPRMC::handle_Date(char const * /* token */)
+{
+  /* TODO */
+  return ParserState::MagneticVariation;
+}
+
+GPRMC::ParserState GPRMC::handle_MagneticVariation(char const * /* token */)
+{
+  /* TODO */
+  return ParserState::MagneticVariationEastWest;
+}
+
+GPRMC::ParserState GPRMC::handle_MagneticVariationEastWest(char const * /* token */)
+{
+  /* TODO */
   return ParserState::Checksum;
 }
 
