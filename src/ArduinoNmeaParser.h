@@ -21,7 +21,7 @@
  * TYPEDEF
  **************************************************************************************/
 
-typedef std::function<void(float const, float const, float const, float const, float const)> OnPositionUpdate;
+typedef std::function<void(float const, float const, float const, float const, float const, float const)> OnPositionUpdate;
 
 /**************************************************************************************
  * CLASS DECLARATION
@@ -39,11 +39,12 @@ public:
 
 
 #ifdef HOST
-  inline float latitude       () const { return _position.latitude; }
-  inline float longitude      () const { return _position.longitude; }
-  inline float speed          () const { return _position.speed; }
-  inline float course         () const { return _position.course; }
-  inline float last_fix_utc_s () const { return _position.last_fix_utc_s; }
+  inline float latitude          () const { return _position.latitude; }
+  inline float longitude         () const { return _position.longitude; }
+  inline float speed             () const { return _position.speed; }
+  inline float course            () const { return _position.course; }
+  inline float last_fix_utc_s    () const { return _position.last_fix_utc_s; }
+  inline float magnetic_variation() const { return _position.magnetic_variation; }
 #endif
 
   enum class Error { None, Checksum, RMC };
@@ -69,6 +70,7 @@ private:
     float speed;
     float course;
     float last_fix_utc_s;
+    float magnetic_variation;
   } PositionData;
 
   enum class ParserState
