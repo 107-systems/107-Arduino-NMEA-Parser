@@ -50,7 +50,27 @@ TEST_CASE("No NMEA message received", "[Parser-01]")
   REQUIRE(parser.year () == -1);
 }
 
-TEST_CASE("Decoding starts mid-message", "[Parser-02]")
+TEST_CASE("RMC message after startup, no satellites", "[Parser-02]")
+{
+  ArduinoNmeaParser parser(nullptr);
+
+  std::string const GPRMC = ("$GPRMC,,V,,,,,,,,,,N*53\r\n");
+
+  encode(parser, GPRMC);
+
+  REQUIRE(parser.error()                          == ArduinoNmeaParser::Error::None);
+  REQUIRE(parser.latitude()                       == Approx(20.9860468));
+  REQUIRE(parser.longitude()                      == Approx(52.2637009));
+  REQUIRE(std::isnan(parser.speed())              == true);
+  REQUIRE(std::isnan(parser.course())             == true);
+  REQUIRE(std::isnan(parser.last_fix_utc_s())     == true);
+  REQUIRE(std::isnan(parser.magnetic_variation()) == true);
+  REQUIRE(parser.day()                            == -1);
+  REQUIRE(parser.month()                          == -1);
+  REQUIRE(parser.year()                           == -1);
+}
+
+TEST_CASE("Decoding starts mid-message", "[Parser-03]")
 {
   ArduinoNmeaParser parser(nullptr);
 
@@ -65,7 +85,7 @@ TEST_CASE("Decoding starts mid-message", "[Parser-02]")
   REQUIRE(parser.last_fix_utc_s()  == Approx(5*3600 + 28*60 + 52 + 0.105f));
 }
 
-TEST_CASE("NMEA message with data corruption (checksum mismatch) received", "[Parser-03]")
+TEST_CASE("NMEA message with data corruption (checksum mismatch) received", "[Parser-04]")
 {
   ArduinoNmeaParser parser(nullptr);
 
@@ -76,7 +96,7 @@ TEST_CASE("NMEA message with data corruption (checksum mismatch) received", "[Pa
   REQUIRE(parser.error() == ArduinoNmeaParser::Error::Checksum);
 }
 
-TEST_CASE("Invalid GPRMC message received", "[Parser-04]")
+TEST_CASE("Invalid GPRMC message received", "[Parser-05]")
 {
   ArduinoNmeaParser parser(nullptr);
 
@@ -87,7 +107,7 @@ TEST_CASE("Invalid GPRMC message received", "[Parser-04]")
   REQUIRE(parser.error() == ArduinoNmeaParser::Error::RMC);
 }
 
-TEST_CASE("Multiple NMEA messages received", "[Parser-05]")
+TEST_CASE("Multiple NMEA messages received", "[Parser-06]")
 {
   ArduinoNmeaParser parser(nullptr);
 
