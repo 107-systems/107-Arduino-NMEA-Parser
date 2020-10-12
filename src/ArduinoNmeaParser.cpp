@@ -21,7 +21,7 @@
  * CTOR/DTOR
  **************************************************************************************/
 
-ArduinoNmeaParser::ArduinoNmeaParser(OnRMCUpdate on_rmc_update)
+ArduinoNmeaParser::ArduinoNmeaParser(OnRMCUpdateFunc on_rmc_update)
 : _error{Error::None}
 , _parser_state{ParserState::Synching}
 , _parser_buf{{0}, 0}

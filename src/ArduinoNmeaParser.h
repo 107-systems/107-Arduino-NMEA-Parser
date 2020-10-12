@@ -23,7 +23,7 @@
  * TYPEDEF
  **************************************************************************************/
 
-typedef std::function<void(float const, float const, float const, float const, float const)> OnRMCUpdate;
+typedef std::function<void(float const, float const, float const, float const, float const)> OnRMCUpdateFunc;
 
 /**************************************************************************************
  * CLASS DECLARATION
@@ -34,7 +34,7 @@ class ArduinoNmeaParser
 
 public:
 
-  ArduinoNmeaParser(OnRMCUpdate on_rmc_update);
+  ArduinoNmeaParser(OnRMCUpdateFunc on_rmc_update);
 
 
   void encode(char const c);
@@ -95,7 +95,7 @@ private:
   ParserState _parser_state;
   ParserBuffer _parser_buf;
   RMCData _rmc;
-  OnRMCUpdate _on_rmc_update;
+  OnRMCUpdateFunc _on_rmc_update;
 
   bool isParseBufferFull();
   void addToParserBuffer(char const c);
