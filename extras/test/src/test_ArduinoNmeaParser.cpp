@@ -137,46 +137,47 @@ TEST_CASE("Multiple NMEA messages received", "[Parser-07]")
     std::string("$GPRMC,052853.105,A,5230.888,N,01320.967,E,084.5,069.2,080720,000.0,W*7A\r\n"),
     std::string("$GPRMC,052854.105,A,5230.901,N,01321.000,E,085.8,099.8,080720,000.0,W*7D\r\n"),
     std::string("$GPRMC,052855.105,A,5230.894,N,01321.038,E,084.3,138.7,080720,000.0,W*75\r\n"),
+    std::string("$GPRMC,142600.00,A,4837.99474,N,01301.53452,E,27.920,247.03,121020,,,A*5A\r\n")
   };
 
   std::vector<float> const LATITUDE_EXPECTED =
   {
-    52.514467f, 52.514800f, 52.515017f, 52.514900f
+    52.514467f, 52.514800f, 52.515017f, 52.514900f, 48.633246f
   };
 
   std::vector<float> const LONGITUDE_EXPECTED =
   {
-    13.349300, 13.349450, 13.350000, 13.350633f
+    13.349300, 13.349450, 13.350000, 13.350633f, 13.025575f
   };
 
   std::vector<float> const SPEED_EXPECTED =
   {
-    39.6122f, 43.47056f, 44.139333f, 43.36767f
+    39.6122f, 43.47056f, 44.139333f, 43.36767f, 14.363289f
   };
 
   std::vector<float> const COURSE_EXPECTED =
   {
-    23.5f, 69.2f, 99.8f, 138.7f
+    23.5f, 69.2f, 99.8f, 138.7f, 247.03f
   };
 
   std::vector<float> const MAGNETIC_VARIATION_EXPECTED =
   {
-    0.0f, 0.0f, 0.0f, 0.0f
+    0.0f, 0.0f, 0.0f, 0.0f, NAN
   };
 
   std::vector<int> const DAY_EXPECTED =
   {
-    8, 8, 8, 8
+    8, 8, 8, 8, 12
   };
 
   std::vector<int> const MONTH_EXPECTED =
   {
-    7, 7, 7, 7
+    7, 7, 7, 7, 10
   };
 
   std::vector<int> const YEAR_EXPECTED =
   {
-    2020, 2020, 2020, 2020
+    2020, 2020, 2020, 2020, 2020
   };
 
 
@@ -195,11 +196,14 @@ TEST_CASE("Multiple NMEA messages received", "[Parser-07]")
                 {
                   encode(parser, gprmc);
 
+                  REQUIRE(parser.error             () == ArduinoNmeaParser::Error::None);
+
                   REQUIRE(parser.latitude          () == Approx(*latitude));
                   REQUIRE(parser.longitude         () == Approx(*longitude));
                   REQUIRE(parser.speed             () == Approx(*speed));
                   REQUIRE(parser.course            () == Approx(*course));
-                  REQUIRE(parser.magnetic_variation() == Approx(*mag_var));
+                  if (std::isnan(*mag_var)) REQUIRE(std::isnan(parser.magnetic_variation()) == true);
+                  else                      REQUIRE(parser.magnetic_variation() == Approx(*mag_var));
                   REQUIRE(parser.day               () == *day);
                   REQUIRE(parser.month             () == *month);
                   REQUIRE(parser.year              () == *year);

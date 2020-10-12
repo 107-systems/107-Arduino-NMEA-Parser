@@ -38,7 +38,6 @@ bool GPRMC::isGPRMC(char const * nmea)
 {
   return (strncmp(nmea, "$GPRMC", 6) == 0);
 }
-
 bool GPRMC::parse(char const * gprmc, float & last_fix_utc_s, float & latitude, float & longitude, float & speed, float & course, float & magnetic_variation, int & day, int & month, int & year)
 {
   ParserState state = ParserState::MessadeId;
@@ -134,13 +133,11 @@ GPRMC::ParserState GPRMC::handle_LatitudeVal(char const * token, float & latitud
   if (strlen(token))
   {
     char const deg_str[] = {token[0], token[1], '\0'};
-    char const min_str[] = {token[2], token[3], '\0'};
-    char sub_min_str[10] = {0};
-    strncpy(sub_min_str, strrchr(token, '.') + 1, sizeof(sub_min_str));
+    char min_str[10] = {0};
+    strncpy(min_str, token + 2, sizeof(min_str));
 
     latitude  = atoi(deg_str);
-    latitude += static_cast<float>(atoi(min_str)) / 60;
-    latitude += static_cast<float>(atoi(sub_min_str)) / (60 * 1000);
+    latitude += atof(min_str) / 60.0f;
   }
   else
     latitude = NAN;
@@ -169,13 +166,11 @@ GPRMC::ParserState GPRMC::handle_LongitudeVal(char const * token, float & longit
   if (strlen(token))
   {
     char const deg_str[] = {token[0], token[1], token[2], '\0'};
-    char const min_str[] = {token[3], token[4], '\0'};
-    char sub_min_str[10] = {0};
-    strncpy(sub_min_str, strrchr(token, '.') + 1, sizeof(sub_min_str));
+    char min_str[10] = {0};
+    strncpy(min_str, token + 3, sizeof(min_str));
 
     longitude  = atoi(deg_str);
-    longitude += static_cast<float>(atoi(min_str)) / 60;
-    longitude += static_cast<float>(atoi(sub_min_str)) / (60 * 1000);
+    longitude += atof(min_str) / 60.0f;
   }
   else
     longitude = NAN;
