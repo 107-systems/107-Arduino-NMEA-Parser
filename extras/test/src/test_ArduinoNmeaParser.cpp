@@ -122,11 +122,30 @@ TEST_CASE("Multiple NMEA messages received", "[Parser-05]")
     0.0f, 0.0f, 0.0f, 0.0f
   };
 
+  std::vector<int> const DAY_EXPECTED =
+  {
+    8, 8, 8, 8
+  };
+
+  std::vector<int> const MONTH_EXPECTED =
+  {
+    7, 7, 7, 7
+  };
+
+  std::vector<int> const YEAR_EXPECTED =
+  {
+    2020, 2020, 2020, 2020
+  };
+
+
   auto latitude  = LATITUDE_EXPECTED.begin();
   auto longitude = LONGITUDE_EXPECTED.begin();
   auto speed     = SPEED_EXPECTED.begin();
   auto course    = COURSE_EXPECTED.begin();
   auto mag_var   = MAGNETIC_VARIATION_EXPECTED.begin();
+  auto day       = DAY_EXPECTED.begin();
+  auto month     = MONTH_EXPECTED.begin();
+  auto year      = YEAR_EXPECTED.begin();
 
   std::for_each(std::begin(GPRMC),
                 std::end(GPRMC),
@@ -139,12 +158,18 @@ TEST_CASE("Multiple NMEA messages received", "[Parser-05]")
                   REQUIRE(parser.speed             () == Approx(*speed));
                   REQUIRE(parser.course            () == Approx(*course));
                   REQUIRE(parser.magnetic_variation() == Approx(*mag_var));
+                  REQUIRE(parser.day               () == *day);
+                  REQUIRE(parser.month             () == *month);
+                  REQUIRE(parser.year              () == *year);
 
                   latitude  = std::next(latitude);
                   longitude = std::next(longitude);
                   speed     = std::next(speed);
                   course    = std::next(course);
                   mag_var   = std::next(mag_var);
+                  day       = std::next(day);
+                  month     = std::next(month);
+                  year      = std::next(year);
                 });
 
   REQUIRE(parser.error() == ArduinoNmeaParser::Error::None);
