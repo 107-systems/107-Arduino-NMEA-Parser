@@ -23,6 +23,8 @@ namespace nmea
  */
 bool isChecksumOk(char const * const nmea_str);
 
+bool isChecksumToken(char const * token);
+
 /**************************************************************************************
  * NAMESPACE
  **************************************************************************************/
