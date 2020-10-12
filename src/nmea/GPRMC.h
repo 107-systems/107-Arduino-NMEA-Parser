@@ -36,7 +36,10 @@ public:
                     float & longitude,
                     float & speed,
                     float & course,
-                    float & magnetic_variation);
+                    float & magnetic_variation,
+                    int   & day,
+                    int   & month,
+                    int   & year);
 
 private:
 
@@ -71,7 +74,7 @@ private:
   static ParserState handle_LongitudeEW              (char const * token, float & longitude);
   static ParserState handle_SpeedOverGround          (char const * token, float & speed);
   static ParserState handle_TrackAngle               (char const * token, float & course);
-  static ParserState handle_Date                     (char const * token);
+  static ParserState handle_Date                     (char const * token, int & day, int & month, int & year);
   static ParserState handle_MagneticVariation        (char const * token, float & magnetic_variation);
   static ParserState handle_MagneticVariationEastWest(char const * token, float & magnetic_variation);
   static ParserState handle_Checksum                 (char const * token);

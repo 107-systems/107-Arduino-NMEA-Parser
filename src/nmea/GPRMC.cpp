@@ -37,7 +37,7 @@ bool GPRMC::isGPRMC(char const * nmea)
   return (strncmp(nmea, "$GPRMC", 6) == 0);
 }
 
-bool GPRMC::parse(char const * gprmc, float & last_fix_utc_s, float & latitude, float & longitude, float & speed, float & course, float & magnetic_variation)
+bool GPRMC::parse(char const * gprmc, float & last_fix_utc_s, float & latitude, float & longitude, float & speed, float & course, float & magnetic_variation, int & day, int & month, int & year)
 {
   ParserState state = ParserState::MessadeId;
 
@@ -67,7 +67,7 @@ bool GPRMC::parse(char const * gprmc, float & last_fix_utc_s, float & latitude, 
     case ParserState::LongitudeEW:                next_state = handle_LongitudeEW              (token, longitude);          break;
     case ParserState::SpeedOverGround:            next_state = handle_SpeedOverGround          (token, speed);              break;
     case ParserState::TrackAngle:                 next_state = handle_TrackAngle               (token, course);             break;
-    case ParserState::Date:                       next_state = handle_Date                     (token);                     break;
+    case ParserState::Date:                       next_state = handle_Date                     (token, day, month, year);   break;
     case ParserState::MagneticVariation:          next_state = handle_MagneticVariation        (token, magnetic_variation); break;
     case ParserState::MagneticVariationEastWest:  next_state = handle_MagneticVariationEastWest(token, magnetic_variation); break;
     case ParserState::Checksum:                   next_state = handle_Checksum                 (token);                     break;
@@ -217,9 +217,25 @@ GPRMC::ParserState GPRMC::handle_TrackAngle(char const * token, float & course)
   return ParserState::Date;
 }
 
-GPRMC::ParserState GPRMC::handle_Date(char const * /* token */)
+GPRMC::ParserState GPRMC::handle_Date(char const * token, int & day, int & month, int & year)
 {
-  /* TODO */
+  if (strlen(token))
+  {
+    char const day_str  [] = {token[0], token[1], '\0'};
+    char const month_str[] = {token[2], token[3], '\0'};
+    char const year_str [] = {token[4], token[5], '\0'};
+
+    day   = atoi(day_str);
+    month = atoi(month_str);
+    year  = 2000 + atoi(year_str);
+  }
+  else
+  {
+    day = -1;
+    month = -1;
+    year = -1;
+  }
+
   return ParserState::MagneticVariation;
 }
 
