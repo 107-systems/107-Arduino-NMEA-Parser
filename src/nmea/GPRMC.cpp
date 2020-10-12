@@ -9,7 +9,7 @@
 
 #include "GPRMC.h"
 
-#include "Checksum.h"
+#include "util/checksum.h"
 
 #include <math.h>
 #include <stdlib.h>
@@ -51,7 +51,7 @@ bool GPRMC::parse(char const * gprmc, float & last_fix_utc_s, float & latitude, 
      * current token is a checksum token. If that's the case we are directly jumping
      * to ParserState::Checksum.
      */
-    if (isChecksumToken(token))
+    if (util::isChecksumToken(token))
       state = ParserState::Checksum;
 
     ParserState next_state = state;

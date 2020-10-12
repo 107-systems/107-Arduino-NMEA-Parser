@@ -13,21 +13,21 @@
 namespace nmea
 {
 
+namespace util
+{
+
 /**************************************************************************************
  * FUNCTION DECLARATION
  **************************************************************************************/
 
-/* This function expects a zero-terminated string containing a full NMEA
- * message starting with '$' and ending after the trailing \r\n, e.g.
- * "$GPRMC,......*CA\r\n\0".
- */
-bool isChecksumOk(char const * const nmea_str);
-
+bool isChecksumOk   (char const * const nmea_str);
 bool isChecksumToken(char const * token);
 
 /**************************************************************************************
  * NAMESPACE
  **************************************************************************************/
+
+} /* util */
 
 } /* nmea */
 

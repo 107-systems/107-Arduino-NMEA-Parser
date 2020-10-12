@@ -7,7 +7,7 @@
  * INCLUDE
  **************************************************************************************/
 
-#include "Checksum.h"
+#include "checksum.h"
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -24,6 +24,9 @@
 namespace nmea
 {
 
+namespace util
+{
+
 /**************************************************************************************
  * INTERNAL FUNCTION DECLARATION
  **************************************************************************************/
@@ -35,6 +38,10 @@ uint8_t extractChecksum(char const * const nmea_str);
  * FUNCTION DEFINITION
  **************************************************************************************/
 
+/* This function expects a zero-terminated string containing a full NMEA
+ * message starting with '$' and ending after the trailing \r\n, e.g.
+ * "$GPRMC,......*CA\r\n\0".
+ */
 bool isChecksumOk(char const * const nmea_str)
 {
   return (calcChecksum(nmea_str) == extractChecksum(nmea_str));
@@ -90,5 +97,7 @@ uint8_t extractChecksum(char const * const nmea_str)
 /**************************************************************************************
  * NAMESPACE
  **************************************************************************************/
+
+} /* util */
 
 } /* nmea */
