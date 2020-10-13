@@ -25,7 +25,7 @@
  * TYPEDEF
  **************************************************************************************/
 
-typedef std::function<void(float const, float const, float const, float const, float const)> OnRMCUpdateFunc;
+typedef std::function<void(nmea::Time const &, float const, float const, float const, float const)> OnRMCUpdateFunc;
 
 /**************************************************************************************
  * CLASS DECLARATION
@@ -43,16 +43,16 @@ public:
 
 
 #ifdef HOST
-  inline float latitude          () const { return _rmc.latitude; }
-  inline float longitude         () const { return _rmc.longitude; }
-  inline float speed             () const { return _rmc.speed; }
-  inline float course            () const { return _rmc.course; }
-  inline float last_fix_utc_s    () const { return _rmc.last_fix_utc_s; }
+  inline float      latitude          () const { return _rmc.latitude; }
+  inline float      longitude         () const { return _rmc.longitude; }
+  inline float      speed             () const { return _rmc.speed; }
+  inline float      course            () const { return _rmc.course; }
+  inline nmea::Time time_utc          () const { return _rmc.time_utc; }
 #endif
-  inline float magnetic_variation() const { return _rmc.magnetic_variation; }
-  inline int   day               () const { return _rmc.date.day; }
-  inline int   month             () const { return _rmc.date.month; }
-  inline int   year              () const { return _rmc.date.year; }
+  inline float      magnetic_variation() const { return _rmc.magnetic_variation; }
+  inline int        day               () const { return _rmc.date.day; }
+  inline int        month             () const { return _rmc.date.month; }
+  inline int        year              () const { return _rmc.date.year; }
 
   enum class Error { None, Checksum, RMC };
 

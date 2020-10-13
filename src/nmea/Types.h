@@ -21,6 +21,14 @@ namespace nmea
 
 typedef struct
 {
+  int hour;
+  int minute;
+  int second;
+  int microsecond;
+} Time;
+
+typedef struct
+{
   int day;
   int month;
   int year;
@@ -33,7 +41,7 @@ typedef struct
   float speed;
   float course;
   float magnetic_variation;
-  float last_fix_utc_s;
+  Time time_utc;
   Date date;
 } RmcData;
 

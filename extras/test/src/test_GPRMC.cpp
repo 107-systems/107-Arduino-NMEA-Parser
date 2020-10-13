@@ -89,7 +89,10 @@ TEST_CASE("Extracting position time from valid GPRMC message", "[GPRMC-04]")
 
   REQUIRE(nmea::GPRMC::parse(GPRMC.c_str(), data) == true);
   /* 052856.105 -> 05:28:56.105 -> */
-  REQUIRE(data.last_fix_utc_s  == Approx(5*3600 + 28*60 + 56 + 0.105f));
+  REQUIRE(data.time_utc.hour        == 5);
+  REQUIRE(data.time_utc.minute      == 28);
+  REQUIRE(data.time_utc.second      == 56);
+  REQUIRE(data.time_utc.microsecond == 105);
 }
 
 TEST_CASE("Extracting date from valid GPRMC message", "[GPRMC-05]")
@@ -114,12 +117,16 @@ TEST_CASE("Extracted status indicates void ('V') position data", "[GPRMC-07]")
 {
   std::string const GPRMC = ("$GPRMC,052856.105,V,5230.874,N,01321.056,E,085.7,206.4,080720,000.0,W*78\r\n");
 
-  data.latitude = 1.0f; data.longitude = 2.0f; data.speed = 3.0f; data.course = 4.0f; data.last_fix_utc_s = 0;
+  data.latitude = 1.0f; data.longitude = 2.0f; data.speed = 3.0f; data.course = 4.0f;
+  data.time_utc.hour = -1; data.time_utc.minute = -1; data.time_utc.second = -1; data.time_utc.microsecond = -1;
 
   REQUIRE(nmea::GPRMC::parse(GPRMC.c_str(), data) == true);
-  REQUIRE(data.latitude        == 1.0f);
-  REQUIRE(data.longitude       == 2.0f);
-  REQUIRE(data.speed           == 3.0f);
-  REQUIRE(data.course          == 4.0f);
-  REQUIRE(data.last_fix_utc_s  == Approx(5*3600 + 28*60 + 56 + 0.105f));
+  REQUIRE(data.latitude             == 1.0f);
+  REQUIRE(data.longitude            == 2.0f);
+  REQUIRE(data.speed                == 3.0f);
+  REQUIRE(data.course               == 4.0f);
+  REQUIRE(data.time_utc.hour        == 5);
+  REQUIRE(data.time_utc.minute      == 28);
+  REQUIRE(data.time_utc.second      == 56);
+  REQUIRE(data.time_utc.microsecond == 105);
 }

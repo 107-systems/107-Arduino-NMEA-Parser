@@ -60,7 +60,7 @@ bool GPRMC::parse(char const * gprmc, RmcData & data)
     switch(state)
     {
     case ParserState::MessadeId:                  next_state = handle_MessadeId                (token);                          break;
-    case ParserState::UTCPositionFix:             next_state = handle_UTCPositionFix           (token, data.last_fix_utc_s);     break;
+    case ParserState::UTCPositionFix:             next_state = handle_UTCPositionFix           (token, data.time_utc);           break;
     case ParserState::Status:                     next_state = handle_Status                   (token);                          break;
     case ParserState::LatitudeVal:                next_state = handle_LatitudeVal              (token, data.latitude);           break;
     case ParserState::LatitudeNS:                 next_state = handle_LatitudeNS               (token, data.latitude);           break;
@@ -94,12 +94,17 @@ GPRMC::ParserState GPRMC::handle_MessadeId(char const * token)
     return ParserState::Error;
 }
 
-GPRMC::ParserState GPRMC::handle_UTCPositionFix(char const * token, float & last_fix_utc_s)
+GPRMC::ParserState GPRMC::handle_UTCPositionFix(char const * token, Time & time_utc)
 {
   if (strlen(token))
-    last_fix_utc_s = parseUTCPositionFix(token);
+    parseTime(token, time_utc);
   else
-    last_fix_utc_s = NAN;
+  {
+    time_utc.hour = -1;
+    time_utc.minute = -1;
+    time_utc.second = -1;
+    time_utc.microsecond = -1;
+  }
 
   return ParserState::Status;
 }
@@ -227,18 +232,17 @@ GPRMC::ParserState GPRMC::handle_Checksum(char const * /* token */)
   return ParserState::Done;
 }
 
-float GPRMC::parseUTCPositionFix(char const * token)
+void GPRMC::parseTime(char const * token, Time & time_utc)
 {
   char const hour_str       [] = {token[0], token[1], '\0'};
   char const minute_str     [] = {token[2], token[3], '\0'};
-  char second_str[10] = {'\0'};
-  strncpy(second_str, token + 4, sizeof(second_str));
+  char const second_str     [] = {token[4], token[5], '\0'};
+  char const microsecond_str[] = {token[7], token[8], token[9],'\0'};
 
-  float last_fix_utc_s  = atoi(second_str);
-        last_fix_utc_s += atoi(minute_str) * 60;
-        last_fix_utc_s += atof(hour_str) * 3600.0f;
-
-  return last_fix_utc_s;
+  time_utc.hour        = atoi(hour_str);
+  time_utc.minute      = atoi(minute_str);
+  time_utc.second      = atoi(second_str);
+  time_utc.microsecond = atoi(microsecond_str);
 }
 
 float GPRMC::parseLatitude(char const * token)

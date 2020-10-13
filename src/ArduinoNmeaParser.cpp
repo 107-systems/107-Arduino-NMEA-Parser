@@ -25,7 +25,7 @@ ArduinoNmeaParser::ArduinoNmeaParser(OnRMCUpdateFunc on_rmc_update)
 : _error{Error::None}
 , _parser_state{ParserState::Synching}
 , _parser_buf{{0}, 0}
-, _rmc{20.9860468, 52.2637009, NAN, NAN, NAN, NAN, {-1, -1, -1}}
+, _rmc{20.9860468, 52.2637009, NAN, NAN, NAN, {-1, -1, -1, -1}, {-1, -1, -1}}
 , _on_rmc_update{on_rmc_update}
 {
 
@@ -123,6 +123,6 @@ void ArduinoNmeaParser::parseGPRMC()
     _error = Error::RMC;
   else {
     if (_on_rmc_update)
-      _on_rmc_update(_rmc.last_fix_utc_s, _rmc.latitude, _rmc.longitude, _rmc.speed, _rmc.course);
+      _on_rmc_update(_rmc.time_utc, _rmc.latitude, _rmc.longitude, _rmc.speed, _rmc.course);
   }
 }

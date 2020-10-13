@@ -61,7 +61,7 @@ private:
   };
 
   static ParserState handle_MessadeId                (char const * token);
-  static ParserState handle_UTCPositionFix           (char const * token, float & last_fix_utc_s);
+  static ParserState handle_UTCPositionFix           (char const * token, Time & time_utc);
   static ParserState handle_Status                   (char const * token);
   static ParserState handle_LatitudeVal              (char const * token, float & latitude);
   static ParserState handle_LatitudeNS               (char const * token, float & latitude);
@@ -74,10 +74,10 @@ private:
   static ParserState handle_MagneticVariationEastWest(char const * token, float & magnetic_variation);
   static ParserState handle_Checksum                 (char const * token);
 
-  static float parseUTCPositionFix(char const * token);
-  static float parseLatitude      (char const * token);
-  static float parseLongitude     (char const * token);
-  static void  parseDate          (char const * token, Date & date);
+  static void  parseTime      (char const * token, Time & time_utc);
+  static float parseLatitude  (char const * token);
+  static float parseLongitude (char const * token);
+  static void  parseDate      (char const * token, Date & date);
 };
 
 /**************************************************************************************
