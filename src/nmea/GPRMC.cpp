@@ -38,7 +38,7 @@ bool GPRMC::isGPRMC(char const * nmea)
 {
   return (strncmp(nmea, "$GPRMC", 6) == 0);
 }
-bool GPRMC::parse(char const * gprmc, float & last_fix_utc_s, float & latitude, float & longitude, float & speed, float & course, float & magnetic_variation, int & day, int & month, int & year)
+bool GPRMC::parse(char const * gprmc, float & last_fix_utc_s, float & latitude, float & longitude, float & speed, float & course, float & magnetic_variation, Date & date)
 {
   ParserState state = ParserState::MessadeId;
 
@@ -68,7 +68,7 @@ bool GPRMC::parse(char const * gprmc, float & last_fix_utc_s, float & latitude, 
     case ParserState::LongitudeEW:                next_state = handle_LongitudeEW              (token, longitude);          break;
     case ParserState::SpeedOverGround:            next_state = handle_SpeedOverGround          (token, speed);              break;
     case ParserState::TrackAngle:                 next_state = handle_TrackAngle               (token, course);             break;
-    case ParserState::Date:                       next_state = handle_Date                     (token, day, month, year);   break;
+    case ParserState::Date:                       next_state = handle_Date                     (token, date);               break;
     case ParserState::MagneticVariation:          next_state = handle_MagneticVariation        (token, magnetic_variation); break;
     case ParserState::MagneticVariationEastWest:  next_state = handle_MagneticVariationEastWest(token, magnetic_variation); break;
     case ParserState::Checksum:                   next_state = handle_Checksum                 (token);                     break;
@@ -190,15 +190,15 @@ GPRMC::ParserState GPRMC::handle_TrackAngle(char const * token, float & course)
   return ParserState::Date;
 }
 
-GPRMC::ParserState GPRMC::handle_Date(char const * token, int & day, int & month, int & year)
+GPRMC::ParserState GPRMC::handle_Date(char const * token, Date & date)
 {
   if (strlen(token))
-    parseDate(token, day, month, year);
+    parseDate(token, date);
   else
   {
-    day = -1;
-    month = -1;
-    year = -1;
+    date.day = -1;
+    date.month = -1;
+    date.year = -1;
   }
 
   return ParserState::MagneticVariation;
@@ -265,15 +265,15 @@ float GPRMC::parseLongitude(char const * token)
   return longitude;
 }
 
-void GPRMC::parseDate(char const * token, int & day, int & month, int & year)
+void GPRMC::parseDate(char const * token, Date & date)
 {
   char const day_str  [] = {token[0], token[1], '\0'};
   char const month_str[] = {token[2], token[3], '\0'};
   char const year_str [] = {token[4], token[5], '\0'};
 
-  day   = atoi(day_str);
-  month = atoi(month_str);
-  year  = 2000 + atoi(year_str);
+  date.day   = atoi(day_str);
+  date.month = atoi(month_str);
+  date.year  = 2000 + atoi(year_str);
 }
 
 /**************************************************************************************

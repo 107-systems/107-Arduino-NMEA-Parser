@@ -19,6 +19,8 @@
 #undef min
 #include <functional>
 
+#include "nmea/Types.h"
+
 /**************************************************************************************
  * TYPEDEF
  **************************************************************************************/
@@ -70,20 +72,13 @@ private:
 
   typedef struct
   {
-    int day;
-    int month;
-    int year;
-  } Date;
-
-  typedef struct
-  {
     float latitude;
     float longitude;
     float speed;
     float course;
     float last_fix_utc_s;
     float magnetic_variation;
-    Date  date;
+    nmea::Date date;
   } RMCData;
 
   enum class ParserState

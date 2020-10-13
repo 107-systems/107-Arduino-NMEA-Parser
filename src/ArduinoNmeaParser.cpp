@@ -126,9 +126,7 @@ void ArduinoNmeaParser::parseGPRMC()
                           _rmc.speed,
                           _rmc.course,
                           _rmc.magnetic_variation,
-                          _rmc.date.day,
-                          _rmc.date.month,
-                          _rmc.date.year))
+                          _rmc.date))
     _error = Error::RMC;
   else {
     if (_on_rmc_update)
