@@ -42,17 +42,8 @@ public:
   void encode(char const c);
 
 
-#ifdef HOST
-  inline float      latitude          () const { return _rmc.latitude; }
-  inline float      longitude         () const { return _rmc.longitude; }
-  inline float      speed             () const { return _rmc.speed; }
-  inline float      course            () const { return _rmc.course; }
-  inline nmea::Time time_utc          () const { return _rmc.time_utc; }
-#endif
-  inline float      magnetic_variation() const { return _rmc.magnetic_variation; }
-  inline int        day               () const { return _rmc.date.day; }
-  inline int        month             () const { return _rmc.date.month; }
-  inline int        year              () const { return _rmc.date.year; }
+  inline const nmea::RmcData rmc() const { return _rmc; }
+
 
   enum class Error { None, Checksum, RMC };
 
