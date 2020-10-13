@@ -25,7 +25,7 @@ ArduinoNmeaParser::ArduinoNmeaParser(OnRMCUpdateFunc on_rmc_update)
 : _error{Error::None}
 , _parser_state{ParserState::Synching}
 , _parser_buf{{0}, 0}
-, _rmc{20.9860468, 52.2637009, NAN, NAN, NAN, {-1, -1, -1, -1}, {-1, -1, -1}}
+, _rmc{NAN, NAN, NAN, NAN, NAN, {-1, -1, -1, -1}, {-1, -1, -1}}
 , _on_rmc_update{on_rmc_update}
 {
 
