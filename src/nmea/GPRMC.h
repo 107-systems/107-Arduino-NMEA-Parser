@@ -14,6 +14,8 @@
 
 #include <stdint.h>
 
+#include "Types.h"
+
 /**************************************************************************************
  * NAMESPACE
  **************************************************************************************/
@@ -32,16 +34,7 @@ public:
 
   static bool isGPRMC(char const * nmea);
 
-  static bool parse(char const * gprmc,
-                    float & last_fix_utc_s,
-                    float & latitude,
-                    float & longitude,
-                    float & speed,
-                    float & course,
-                    float & magnetic_variation,
-                    int   & day,
-                    int   & month,
-                    int   & year);
+  static bool parse(char const * gprmc, RmcData & data);
 
 private:
 
@@ -76,7 +69,7 @@ private:
   static ParserState handle_LongitudeEW              (char const * token, float & longitude);
   static ParserState handle_SpeedOverGround          (char const * token, float & speed);
   static ParserState handle_TrackAngle               (char const * token, float & course);
-  static ParserState handle_Date                     (char const * token, int & day, int & month, int & year);
+  static ParserState handle_Date                     (char const * token, Date & date);
   static ParserState handle_MagneticVariation        (char const * token, float & magnetic_variation);
   static ParserState handle_MagneticVariationEastWest(char const * token, float & magnetic_variation);
   static ParserState handle_Checksum                 (char const * token);
@@ -84,7 +77,7 @@ private:
   static float parseUTCPositionFix(char const * token);
   static float parseLatitude      (char const * token);
   static float parseLongitude     (char const * token);
-  static void  parseDate          (char const * token, int & day, int & month, int & year);
+  static void  parseDate          (char const * token, Date & date);
 };
 
 /**************************************************************************************

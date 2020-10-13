@@ -19,6 +19,8 @@
 #undef min
 #include <functional>
 
+#include "nmea/Types.h"
+
 /**************************************************************************************
  * TYPEDEF
  **************************************************************************************/
@@ -68,24 +70,6 @@ private:
     size_t elems_in_buf;
   } ParserBuffer;
 
-  typedef struct
-  {
-    int day;
-    int month;
-    int year;
-  } Date;
-
-  typedef struct
-  {
-    float latitude;
-    float longitude;
-    float speed;
-    float course;
-    float last_fix_utc_s;
-    float magnetic_variation;
-    Date  date;
-  } RMCData;
-
   enum class ParserState
   {
     Synching, Synced
@@ -94,7 +78,7 @@ private:
   Error _error;
   ParserState _parser_state;
   ParserBuffer _parser_buf;
-  RMCData _rmc;
+  nmea::RmcData _rmc;
   OnRMCUpdateFunc _on_rmc_update;
 
   bool isParseBufferFull();

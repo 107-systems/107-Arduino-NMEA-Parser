@@ -119,16 +119,7 @@ void ArduinoNmeaParser::terminateParserBuffer()
 
 void ArduinoNmeaParser::parseGPRMC()
 {
-  if (!nmea::GPRMC::parse(_parser_buf.buf,
-                          _rmc.last_fix_utc_s,
-                          _rmc.latitude,
-                          _rmc.longitude,
-                          _rmc.speed,
-                          _rmc.course,
-                          _rmc.magnetic_variation,
-                          _rmc.date.day,
-                          _rmc.date.month,
-                          _rmc.date.year))
+  if (!nmea::GPRMC::parse(_parser_buf.buf, _rmc))
     _error = Error::RMC;
   else {
     if (_on_rmc_update)
