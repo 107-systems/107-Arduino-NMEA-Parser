@@ -39,8 +39,9 @@ TEST_CASE("No NMEA message received", "[Parser-01]")
 {
   ArduinoNmeaParser parser(nullptr);
 
-  REQUIRE(parser.longitude()                      == Approx(52.2637009));
-  REQUIRE(parser.latitude()                       == Approx(20.9860468));
+  REQUIRE(parser.error()                          == ArduinoNmeaParser::Error::None);
+  REQUIRE(std::isnan(parser.latitude())           == true);
+  REQUIRE(std::isnan(parser.longitude())          == true);
   REQUIRE(parser.time_utc().hour                  == -1);
   REQUIRE(parser.time_utc().minute                == -1);
   REQUIRE(parser.time_utc().second                == -1);
@@ -62,8 +63,8 @@ TEST_CASE("RMC message after startup, no satellites", "[Parser-02]")
   encode(parser, GPRMC);
 
   REQUIRE(parser.error()                          == ArduinoNmeaParser::Error::None);
-  REQUIRE(parser.latitude()                       == Approx(20.9860468));
-  REQUIRE(parser.longitude()                      == Approx(52.2637009));
+  REQUIRE(std::isnan(parser.latitude())           == true);
+  REQUIRE(std::isnan(parser.longitude())          == true);
   REQUIRE(parser.time_utc().hour                  == -1);
   REQUIRE(parser.time_utc().minute                == -1);
   REQUIRE(parser.time_utc().second                == -1);
@@ -85,8 +86,8 @@ TEST_CASE("RMC message after startup, time fix available", "[Parser-03]")
   encode(parser, GPRMC);
 
   REQUIRE(parser.error()                          == ArduinoNmeaParser::Error::None);
-  REQUIRE(parser.latitude()                       == Approx(20.9860468));
-  REQUIRE(parser.longitude()                      == Approx(52.2637009));
+  REQUIRE(std::isnan(parser.latitude())           == true);
+  REQUIRE(std::isnan(parser.longitude())          == true);
   REQUIRE(parser.time_utc().hour                  == 14);
   REQUIRE(parser.time_utc().minute                == 19);
   REQUIRE(parser.time_utc().second                == 28);
