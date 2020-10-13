@@ -11,11 +11,11 @@
 
 #include "GPRMC.h"
 
-#include "util/checksum.h"
-
 #include <math.h>
-#include <stdlib.h>
 #include <string.h>
+
+#include "util/gprmc.h"
+#include "util/checksum.h"
 
 /**************************************************************************************
  * NAMESPACE
@@ -97,7 +97,7 @@ GPRMC::ParserState GPRMC::handle_MessadeId(char const * token)
 GPRMC::ParserState GPRMC::handle_UTCPositionFix(char const * token, Time & time_utc)
 {
   if (strlen(token))
-    parseTime(token, time_utc);
+    util::gprmc_parseTime(token, time_utc);
   else
   {
     time_utc.hour = -1;
@@ -126,7 +126,7 @@ GPRMC::ParserState GPRMC::handle_Status(char const * token)
 GPRMC::ParserState GPRMC::handle_LatitudeVal(char const * token, float & latitude)
 {
   if (strlen(token))
-    latitude = parseLatitude(token);
+    latitude = util::gprmc_parseLatitude(token);
   else
     latitude = NAN;
 
@@ -152,7 +152,7 @@ GPRMC::ParserState GPRMC::handle_LatitudeNS(char const * token, float & latitude
 GPRMC::ParserState GPRMC::handle_LongitudeVal(char const * token, float & longitude)
 {
   if (strlen(token))
-    longitude = parseLongitude(token);
+    longitude = util::gprmc_parseLongitude(token);
   else
     longitude = NAN;
 
@@ -198,7 +198,7 @@ GPRMC::ParserState GPRMC::handle_TrackAngle(char const * token, float & course)
 GPRMC::ParserState GPRMC::handle_Date(char const * token, Date & date)
 {
   if (strlen(token))
-    parseDate(token, date);
+    util::gprmc_parseDate(token, date);
   else
   {
     date.day = -1;
@@ -230,54 +230,6 @@ GPRMC::ParserState GPRMC::handle_MagneticVariationEastWest(char const * token, f
 GPRMC::ParserState GPRMC::handle_Checksum(char const * /* token */)
 {
   return ParserState::Done;
-}
-
-void GPRMC::parseTime(char const * token, Time & time_utc)
-{
-  char const hour_str       [] = {token[0], token[1], '\0'};
-  char const minute_str     [] = {token[2], token[3], '\0'};
-  char const second_str     [] = {token[4], token[5], '\0'};
-  char const microsecond_str[] = {token[7], token[8], token[9],'\0'};
-
-  time_utc.hour        = atoi(hour_str);
-  time_utc.minute      = atoi(minute_str);
-  time_utc.second      = atoi(second_str);
-  time_utc.microsecond = atoi(microsecond_str);
-}
-
-float GPRMC::parseLatitude(char const * token)
-{
-  char const deg_str[] = {token[0], token[1], '\0'};
-  char min_str[10] = {0};
-  strncpy(min_str, token + 2, sizeof(min_str));
-
-  float latitude  = atoi(deg_str);
-        latitude += atof(min_str) / 60.0f;
-
-  return latitude;
-}
-
-float GPRMC::parseLongitude(char const * token)
-{
-  char const deg_str[] = {token[0], token[1], token[2], '\0'};
-  char min_str[10] = {0};
-  strncpy(min_str, token + 3, sizeof(min_str));
-
-  float longitude  = atoi(deg_str);
-        longitude += atof(min_str) / 60.0f;
-
-  return longitude;
-}
-
-void GPRMC::parseDate(char const * token, Date & date)
-{
-  char const day_str  [] = {token[0], token[1], '\0'};
-  char const month_str[] = {token[2], token[3], '\0'};
-  char const year_str [] = {token[4], token[5], '\0'};
-
-  date.day   = atoi(day_str);
-  date.month = atoi(month_str);
-  date.year  = 2000 + atoi(year_str);
 }
 
 /**************************************************************************************

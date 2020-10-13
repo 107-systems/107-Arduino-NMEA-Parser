@@ -73,11 +73,6 @@ private:
   static ParserState handle_MagneticVariation        (char const * token, float & magnetic_variation);
   static ParserState handle_MagneticVariationEastWest(char const * token, float & magnetic_variation);
   static ParserState handle_Checksum                 (char const * token);
-
-  static void  parseTime      (char const * token, Time & time_utc);
-  static float parseLatitude  (char const * token);
-  static float parseLongitude (char const * token);
-  static void  parseDate      (char const * token, Date & date);
 };
 
 /**************************************************************************************
