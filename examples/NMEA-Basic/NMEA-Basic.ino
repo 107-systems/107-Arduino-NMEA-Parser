@@ -24,7 +24,7 @@
  * FUNCTION DECLARATION
  **************************************************************************************/
 
-void onPositionUpdate(float const last_fix_utc_s, float const latitude, float const longitude, float const speed, float const course);
+void onPositionUpdate(nmea::Time const &, float const latitude, float const longitude, float const speed, float const course);
 
 /**************************************************************************************
  * GLOBAL VARIABLES
@@ -53,9 +53,25 @@ void loop()
  * FUNCTION DEFINITION
  **************************************************************************************/
 
-void onPositionUpdate(float const last_fix_utc_s, float const latitude, float const longitude, float const speed, float const course)
+void onPositionUpdate(nmea::Time const & time, float const latitude, float const longitude, float const speed, float const course)
 {
-  char msg[64] = {0};
-  snprintf(msg, 64, "[%f] %f LON | %f LAT | %f m/s | %f °", last_fix_utc_s, latitude, longitude, speed, course);
-  Serial.println(msg);
+  Serial.print(time.hour);
+  Serial.print(":");
+  Serial.print(time.minute);
+  Serial.print(":");
+  Serial.print(time.second);
+  Serial.print(".");
+  Serial.print(time.microsecond);
+
+  Serial.print(" : LON ");
+  Serial.print(longitude);
+  Serial.print(" ° | LAT ");
+  Serial.print(latitude);
+  Serial.print(" ° | VEL ");
+  Serial.print(speed);
+  Serial.print(" m/s | HEADING ");
+  Serial.print(course);
+  Serial.print(" °");
+
+  Serial.println();
 }
