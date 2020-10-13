@@ -1,13 +1,15 @@
 /**
- * @brief Arduino library for interfacing with the PA1010D GPS module (MTK3333 chipset).
- * @license LGPL 3.0
+ * This software is distributed under the terms of the LGPL 3.0 License.
+ * Copyright (c) 2020 LXRobotics.
+ * Author: Alexander Entinger <alexander.entinger@lxrobotics.com>
+ * Contributors: https://github.com/107-systems/107-Arduino-NMEA-Parser/graphs/contributors.
  */
 
 /**************************************************************************************
  * INCLUDE
  **************************************************************************************/
 
-#include "Checksum.h"
+#include "checksum.h"
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -24,6 +26,9 @@
 namespace nmea
 {
 
+namespace util
+{
+
 /**************************************************************************************
  * INTERNAL FUNCTION DECLARATION
  **************************************************************************************/
@@ -35,9 +40,18 @@ uint8_t extractChecksum(char const * const nmea_str);
  * FUNCTION DEFINITION
  **************************************************************************************/
 
+/* This function expects a zero-terminated string containing a full NMEA
+ * message starting with '$' and ending after the trailing \r\n, e.g.
+ * "$GPRMC,......*CA\r\n\0".
+ */
 bool isChecksumOk(char const * const nmea_str)
 {
   return (calcChecksum(nmea_str) == extractChecksum(nmea_str));
+}
+
+bool isChecksumToken(char const * token)
+{
+  return (strchr(token, '*') != nullptr);
 }
 
 /**************************************************************************************
@@ -85,5 +99,7 @@ uint8_t extractChecksum(char const * const nmea_str)
 /**************************************************************************************
  * NAMESPACE
  **************************************************************************************/
+
+} /* util */
 
 } /* nmea */

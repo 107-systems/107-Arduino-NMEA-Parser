@@ -1,6 +1,8 @@
 /**
- * @brief Arduino library for interfacing with the PA1010D GPS module (MTK3333 chipset).
- * @license LGPL 3.0
+ * This software is distributed under the terms of the LGPL 3.0 License.
+ * Copyright (c) 2020 LXRobotics.
+ * Author: Alexander Entinger <alexander.entinger@lxrobotics.com>
+ * Contributors: https://github.com/107-systems/107-Arduino-NMEA-Parser/graphs/contributors.
  */
 
 /**************************************************************************************
@@ -9,21 +11,22 @@
 
 #include "ArduinoNmeaParser.h"
 
+#include <math.h>
 #include <string.h>
 
 #include "nmea/GPRMC.h"
-#include "nmea/Checksum.h"
+#include "nmea/util/checksum.h"
 
 /**************************************************************************************
  * CTOR/DTOR
  **************************************************************************************/
 
-ArduinoNmeaParser::ArduinoNmeaParser(OnPositionUpdate on_position_update)
+ArduinoNmeaParser::ArduinoNmeaParser(OnRMCUpdateFunc on_rmc_update)
 : _error{Error::None}
 , _parser_state{ParserState::Synching}
 , _parser_buf{{0}, 0}
-, _position{20.9860468, 52.2637009, 0.0, 0.0, 0.0}
-, _on_position_update{on_position_update}
+, _rmc{20.9860468, 52.2637009, NAN, NAN, NAN, NAN, {-1, -1, -1}}
+, _on_rmc_update{on_rmc_update}
 {
 
 }
@@ -62,7 +65,7 @@ void ArduinoNmeaParser::encode(char const c)
   terminateParserBuffer();
 
   /* Verify if the checksum of the NMEA message is correct. */
-  if (!nmea::isChecksumOk(_parser_buf.buf)) {
+  if (!nmea::util::isChecksumOk(_parser_buf.buf)) {
     _error = Error::Checksum;
     flushParserBuffer();
     return;
@@ -116,10 +119,19 @@ void ArduinoNmeaParser::terminateParserBuffer()
 
 void ArduinoNmeaParser::parseGPRMC()
 {
-  if (!nmea::GPRMC::parse(_parser_buf.buf, _position.last_fix_utc_s, _position.latitude, _position.longitude, _position.speed, _position.course))
+  if (!nmea::GPRMC::parse(_parser_buf.buf,
+                          _rmc.last_fix_utc_s,
+                          _rmc.latitude,
+                          _rmc.longitude,
+                          _rmc.speed,
+                          _rmc.course,
+                          _rmc.magnetic_variation,
+                          _rmc.date.day,
+                          _rmc.date.month,
+                          _rmc.date.year))
     _error = Error::RMC;
   else {
-    if (_on_position_update)
-      _on_position_update(_position.last_fix_utc_s, _position.latitude, _position.longitude, _position.speed, _position.course);
+    if (_on_rmc_update)
+      _on_rmc_update(_rmc.last_fix_utc_s, _rmc.latitude, _rmc.longitude, _rmc.speed, _rmc.course);
   }
 }

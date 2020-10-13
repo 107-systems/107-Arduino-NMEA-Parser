@@ -1,6 +1,8 @@
 /**
- * @brief Arduino library for interfacing with the PA1010D GPS module (MTK3333 chipset).
- * @license LGPL 3.0
+ * This software is distributed under the terms of the LGPL 3.0 License.
+ * Copyright (c) 2020 LXRobotics.
+ * Author: Alexander Entinger <alexander.entinger@lxrobotics.com>
+ * Contributors: https://github.com/107-systems/107-Arduino-NMEA-Parser/graphs/contributors.
  */
 
 #ifndef ARDUINO_MTK3333_NMEA_GPRMC_PARSER_H_
@@ -35,7 +37,11 @@ public:
                     float & latitude,
                     float & longitude,
                     float & speed,
-                    float & course);
+                    float & course,
+                    float & magnetic_variation,
+                    int   & day,
+                    int   & month,
+                    int   & year);
 
 private:
 
@@ -53,22 +59,32 @@ private:
     LongitudeEW,
     SpeedOverGround,
     TrackAngle,
+    Date,
+    MagneticVariation,
+    MagneticVariationEastWest,
     Checksum,
     Done,
     Error
   };
 
-  static ParserState handle_MessadeId        (char const * token);
-  static ParserState handle_UTCPositionFix   (char const * token, float & last_fix_utc_s);
-  static ParserState handle_Status           (char const * token);
-  static ParserState handle_LatitudeVal      (char const * token, float & latitude);
-  static ParserState handle_LatitudeNS       (char const * token, float & latitude);
-  static ParserState handle_LongitudeVal     (char const * token, float & longitude);
-  static ParserState handle_LongitudeEW      (char const * token, float & longitude);
-  static ParserState handle_SpeedOverGround  (char const * token, float & speed);
-  static ParserState handle_TrackAngle       (char const * token, float & course);
-  static ParserState handle_Checksum         (char const * token);
+  static ParserState handle_MessadeId                (char const * token);
+  static ParserState handle_UTCPositionFix           (char const * token, float & last_fix_utc_s);
+  static ParserState handle_Status                   (char const * token);
+  static ParserState handle_LatitudeVal              (char const * token, float & latitude);
+  static ParserState handle_LatitudeNS               (char const * token, float & latitude);
+  static ParserState handle_LongitudeVal             (char const * token, float & longitude);
+  static ParserState handle_LongitudeEW              (char const * token, float & longitude);
+  static ParserState handle_SpeedOverGround          (char const * token, float & speed);
+  static ParserState handle_TrackAngle               (char const * token, float & course);
+  static ParserState handle_Date                     (char const * token, int & day, int & month, int & year);
+  static ParserState handle_MagneticVariation        (char const * token, float & magnetic_variation);
+  static ParserState handle_MagneticVariationEastWest(char const * token, float & magnetic_variation);
+  static ParserState handle_Checksum                 (char const * token);
 
+  static float parseUTCPositionFix(char const * token);
+  static float parseLatitude      (char const * token);
+  static float parseLongitude     (char const * token);
+  static void  parseDate          (char const * token, int & day, int & month, int & year);
 };
 
 /**************************************************************************************

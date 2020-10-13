@@ -1,6 +1,8 @@
 /**
- * @brief Arduino library for interfacing with the PA1010D GPS module (MTK3333 chipset).
- * @license LGPL 3.0
+ * This software is distributed under the terms of the LGPL 3.0 License.
+ * Copyright (c) 2020 LXRobotics.
+ * Author: Alexander Entinger <alexander.entinger@lxrobotics.com>
+ * Contributors: https://github.com/107-systems/107-Arduino-NMEA-Parser/graphs/contributors.
  */
 
 #ifndef ARDUINO_NMEA_UTIL_CHECKSUM_H_
@@ -13,19 +15,21 @@
 namespace nmea
 {
 
+namespace util
+{
+
 /**************************************************************************************
  * FUNCTION DECLARATION
  **************************************************************************************/
 
-/* This function expects a zero-terminated string containing a full NMEA
- * message starting with '$' and ending after the trailing \r\n, e.g.
- * "$GPRMC,......*CA\r\n\0".
- */
-bool isChecksumOk(char const * const nmea_str);
+bool isChecksumOk   (char const * const nmea_str);
+bool isChecksumToken(char const * token);
 
 /**************************************************************************************
  * NAMESPACE
  **************************************************************************************/
+
+} /* util */
 
 } /* nmea */
 

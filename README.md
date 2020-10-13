@@ -7,7 +7,7 @@
 [![General Formatting Checks](https://github.com/107-systems/107-Arduino-NMEA-Parser/workflows/General%20Formatting%20Checks/badge.svg)](https://github.com/107-systems/107-Arduino-NMEA-Parser/actions?workflow=General+Formatting+Checks)
 [![Spell Check](https://github.com/107-systems/107-Arduino-NMEA-Parser/workflows/Spell%20Check/badge.svg)](https://github.com/107-systems/107-Arduino-NMEA-Parser/actions?workflow=Spell+Check)
 
-Arduino library for interfacing with the PA1010D GPS module (MTK3333 chipset) and interpreting its NMEA messages.
+Arduino library for interfacing with any GPS module and interpreting its NMEA messages.
 
 <p align="center">
   <a href="https://github.com/107-systems/107-Arduino-Viper"><img src="extras/logo/viper-logo.jpg" width="40%"></a>
