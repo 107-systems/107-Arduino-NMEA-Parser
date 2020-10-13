@@ -21,12 +21,12 @@
  * CTOR/DTOR
  **************************************************************************************/
 
-ArduinoNmeaParser::ArduinoNmeaParser(OnRMCUpdateFunc on_rmc_update)
+ArduinoNmeaParser::ArduinoNmeaParser(OnGprmcUpdateFunc on_rmc_update)
 : _error{Error::None}
 , _parser_state{ParserState::Synching}
 , _parser_buf{{0}, 0}
 , _rmc{false, NAN, NAN, NAN, NAN, NAN, {-1, -1, -1, -1}, {-1, -1, -1}}
-, _on_rmc_update{on_rmc_update}
+, _on_gprmc_update{on_rmc_update}
 {
 
 }
@@ -122,7 +122,7 @@ void ArduinoNmeaParser::parseGPRMC()
   if (!nmea::GPRMC::parse(_parser_buf.buf, _rmc))
     _error = Error::RMC;
   else {
-    if (_on_rmc_update)
-      _on_rmc_update(_rmc);
+    if (_on_gprmc_update)
+      _on_gprmc_update(_rmc);
   }
 }

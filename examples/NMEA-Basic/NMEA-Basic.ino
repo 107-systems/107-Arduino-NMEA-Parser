@@ -24,13 +24,13 @@
  * FUNCTION DECLARATION
  **************************************************************************************/
 
-void onPositionUpdate(nmea::RmcData const);
+void onGprmcUpdate(nmea::RmcData const);
 
 /**************************************************************************************
  * GLOBAL VARIABLES
  **************************************************************************************/
 
-ArduinoNmeaParser parser(onPositionUpdate);
+ArduinoNmeaParser parser(onGprmcUpdate);
 
 /**************************************************************************************
  * SETUP/LOOP
@@ -53,7 +53,7 @@ void loop()
  * FUNCTION DEFINITION
  **************************************************************************************/
 
-void onPositionUpdate(nmea::RmcData const rmc)
+void onGprmcUpdate(nmea::RmcData const rmc)
 {
   Serial.print(rmc.time_utc.hour);
   Serial.print(":");
