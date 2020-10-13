@@ -38,7 +38,7 @@ bool GPRMC::isGPRMC(char const * nmea)
 {
   return (strncmp(nmea, "$GPRMC", 6) == 0);
 }
-bool GPRMC::parse(char const * gprmc, float & last_fix_utc_s, float & latitude, float & longitude, float & speed, float & course, float & magnetic_variation, Date & date)
+bool GPRMC::parse(char const * gprmc, RmcData & data)
 {
   ParserState state = ParserState::MessadeId;
 
@@ -59,21 +59,21 @@ bool GPRMC::parse(char const * gprmc, float & last_fix_utc_s, float & latitude, 
 
     switch(state)
     {
-    case ParserState::MessadeId:                  next_state = handle_MessadeId                (token);                     break;
-    case ParserState::UTCPositionFix:             next_state = handle_UTCPositionFix           (token, last_fix_utc_s);     break;
-    case ParserState::Status:                     next_state = handle_Status                   (token);                     break;
-    case ParserState::LatitudeVal:                next_state = handle_LatitudeVal              (token, latitude);           break;
-    case ParserState::LatitudeNS:                 next_state = handle_LatitudeNS               (token, latitude);           break;
-    case ParserState::LongitudeVal:               next_state = handle_LongitudeVal             (token, longitude);          break;
-    case ParserState::LongitudeEW:                next_state = handle_LongitudeEW              (token, longitude);          break;
-    case ParserState::SpeedOverGround:            next_state = handle_SpeedOverGround          (token, speed);              break;
-    case ParserState::TrackAngle:                 next_state = handle_TrackAngle               (token, course);             break;
-    case ParserState::Date:                       next_state = handle_Date                     (token, date);               break;
-    case ParserState::MagneticVariation:          next_state = handle_MagneticVariation        (token, magnetic_variation); break;
-    case ParserState::MagneticVariationEastWest:  next_state = handle_MagneticVariationEastWest(token, magnetic_variation); break;
-    case ParserState::Checksum:                   next_state = handle_Checksum                 (token);                     break;
-    case ParserState::Done:                       return true;                                                              break;
-    case ParserState::Error:                      return false;                                                             break;
+    case ParserState::MessadeId:                  next_state = handle_MessadeId                (token);                          break;
+    case ParserState::UTCPositionFix:             next_state = handle_UTCPositionFix           (token, data.last_fix_utc_s);     break;
+    case ParserState::Status:                     next_state = handle_Status                   (token);                          break;
+    case ParserState::LatitudeVal:                next_state = handle_LatitudeVal              (token, data.latitude);           break;
+    case ParserState::LatitudeNS:                 next_state = handle_LatitudeNS               (token, data.latitude);           break;
+    case ParserState::LongitudeVal:               next_state = handle_LongitudeVal             (token, data.longitude);          break;
+    case ParserState::LongitudeEW:                next_state = handle_LongitudeEW              (token, data.longitude);          break;
+    case ParserState::SpeedOverGround:            next_state = handle_SpeedOverGround          (token, data.speed);              break;
+    case ParserState::TrackAngle:                 next_state = handle_TrackAngle               (token, data.course);             break;
+    case ParserState::Date:                       next_state = handle_Date                     (token, data.date);               break;
+    case ParserState::MagneticVariation:          next_state = handle_MagneticVariation        (token, data.magnetic_variation); break;
+    case ParserState::MagneticVariationEastWest:  next_state = handle_MagneticVariationEastWest(token, data.magnetic_variation); break;
+    case ParserState::Checksum:                   next_state = handle_Checksum                 (token);                          break;
+    case ParserState::Done:                       return true;                                                                   break;
+    case ParserState::Error:                      return false;                                                                  break;
     };
 
     state = next_state;

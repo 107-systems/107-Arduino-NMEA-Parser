@@ -34,14 +34,7 @@ public:
 
   static bool isGPRMC(char const * nmea);
 
-  static bool parse(char const * gprmc,
-                    float & last_fix_utc_s,
-                    float & latitude,
-                    float & longitude,
-                    float & speed,
-                    float & course,
-                    float & magnetic_variation,
-                    Date  & date);
+  static bool parse(char const * gprmc, RmcData & data);
 
 private:
 
