@@ -1,10 +1,9 @@
 /**
- * This software is distributed under the terms of the LGPL 3.0 License.
+ * This software is distributed under the terms of the MIT License.
  * Copyright (c) 2020 LXRobotics.
  * Author: Alexander Entinger <alexander.entinger@lxrobotics.com>
  * Contributors: https://github.com/107-systems/107-Arduino-NMEA-Parser/graphs/contributors.
  */
-
 
 /**************************************************************************************
  * INCLUDES
