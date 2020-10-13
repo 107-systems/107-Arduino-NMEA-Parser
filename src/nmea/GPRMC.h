@@ -62,7 +62,7 @@ private:
 
   static ParserState handle_MessadeId                (char const * token);
   static ParserState handle_UTCPositionFix           (char const * token, Time & time_utc);
-  static ParserState handle_Status                   (char const * token);
+  static ParserState handle_Status                   (char const * token, bool & is_valid);
   static ParserState handle_LatitudeVal              (char const * token, float & latitude);
   static ParserState handle_LatitudeNS               (char const * token, float & latitude);
   static ParserState handle_LongitudeVal             (char const * token, float & longitude);

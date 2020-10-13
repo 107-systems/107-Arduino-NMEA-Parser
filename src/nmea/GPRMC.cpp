@@ -61,7 +61,7 @@ bool GPRMC::parse(char const * gprmc, RmcData & data)
     {
     case ParserState::MessadeId:                  next_state = handle_MessadeId                (token);                          break;
     case ParserState::UTCPositionFix:             next_state = handle_UTCPositionFix           (token, data.time_utc);           break;
-    case ParserState::Status:                     next_state = handle_Status                   (token);                          break;
+    case ParserState::Status:                     next_state = handle_Status                   (token, data.is_valid);           break;
     case ParserState::LatitudeVal:                next_state = handle_LatitudeVal              (token, data.latitude);           break;
     case ParserState::LatitudeNS:                 next_state = handle_LatitudeNS               (token, data.latitude);           break;
     case ParserState::LongitudeVal:               next_state = handle_LongitudeVal             (token, data.longitude);          break;
@@ -109,13 +109,17 @@ GPRMC::ParserState GPRMC::handle_UTCPositionFix(char const * token, Time & time_
   return ParserState::Status;
 }
 
-GPRMC::ParserState GPRMC::handle_Status(char const * token)
+GPRMC::ParserState GPRMC::handle_Status(char const * token, bool & is_valid)
 {
+  is_valid = false;
+
   if (strlen(token) == 0)
     return ParserState::Error;
 
-  if(!strncmp(token, "A", 1))
+  if(!strncmp(token, "A", 1)) {
+    is_valid = true;
     return ParserState::LatitudeVal;
+  }
 
   if(!strncmp(token, "V", 1))
     return ParserState::Done;
