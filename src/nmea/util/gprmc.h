@@ -5,8 +5,14 @@
  * Contributors: https://github.com/107-systems/107-Arduino-NMEA-Parser/graphs/contributors.
  */
 
-#ifndef ARDUINO_MTK3333_NMEA_TYPES_H_
-#define ARDUINO_MTK3333_NMEA_TYPES_H_
+#ifndef ARDUINO_NMEA_UTIL_RMC_H_
+#define ARDUINO_NMEA_UTIL_RMC_H_
+
+/**************************************************************************************
+ * INCLUDES
+ **************************************************************************************/
+
+#include "../Types.h"
 
 /**************************************************************************************
  * NAMESPACE
@@ -15,40 +21,24 @@
 namespace nmea
 {
 
+namespace util
+{
+
 /**************************************************************************************
- * TYPEDEF
+ * FUNCTION DECLARATION
  **************************************************************************************/
 
-typedef struct
-{
-  int hour;
-  int minute;
-  int second;
-  int microsecond;
-} Time;
-
-typedef struct
-{
-  int day;
-  int month;
-  int year;
-} Date;
-
-typedef struct
-{
-  float latitude;
-  float longitude;
-  float speed;
-  float course;
-  float magnetic_variation;
-  Time time_utc;
-  Date date;
-} RmcData;
+void  gprmc_parseTime      (char const * token, Time & time_utc);
+float gprmc_parseLatitude  (char const * token);
+float gprmc_parseLongitude (char const * token);
+void  gprmc_parseDate      (char const * token, Date & date);
 
 /**************************************************************************************
  * NAMESPACE
  **************************************************************************************/
 
+} /* util */
+
 } /* nmea */
 
-#endif /* ARDUINO_MTK3333_NMEA_TYPES_H_ */
+#endif /* ARDUINO_NMEA_UTIL_RMC_H_ */
