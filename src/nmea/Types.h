@@ -26,6 +26,17 @@ typedef struct
   int year;
 } Date;
 
+typedef struct
+{
+  float latitude;
+  float longitude;
+  float speed;
+  float course;
+  float magnetic_variation;
+  float last_fix_utc_s;
+  Date date;
+} RmcData;
+
 /**************************************************************************************
  * NAMESPACE
  **************************************************************************************/
