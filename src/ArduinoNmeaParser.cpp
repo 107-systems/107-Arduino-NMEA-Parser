@@ -123,6 +123,6 @@ void ArduinoNmeaParser::parseGPRMC()
     _error = Error::RMC;
   else {
     if (_on_rmc_update)
-      _on_rmc_update(_rmc.time_utc, _rmc.latitude, _rmc.longitude, _rmc.speed, _rmc.course);
+      _on_rmc_update(_rmc);
   }
 }

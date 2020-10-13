@@ -24,7 +24,7 @@
  * FUNCTION DECLARATION
  **************************************************************************************/
 
-void onPositionUpdate(nmea::Time const &, float const latitude, float const longitude, float const speed, float const course);
+void onPositionUpdate(nmea::RmcData const);
 
 /**************************************************************************************
  * GLOBAL VARIABLES
@@ -53,25 +53,28 @@ void loop()
  * FUNCTION DEFINITION
  **************************************************************************************/
 
-void onPositionUpdate(nmea::Time const & time, float const latitude, float const longitude, float const speed, float const course)
+void onPositionUpdate(nmea::RmcData const rmc)
 {
-  Serial.print(time.hour);
+  Serial.print(rmc.time_utc.hour);
   Serial.print(":");
-  Serial.print(time.minute);
+  Serial.print(rmc.time_utc.minute);
   Serial.print(":");
-  Serial.print(time.second);
+  Serial.print(rmc.time_utc.second);
   Serial.print(".");
-  Serial.print(time.microsecond);
+  Serial.print(rmc.time_utc.microsecond);
 
-  Serial.print(" : LON ");
-  Serial.print(longitude);
-  Serial.print(" ° | LAT ");
-  Serial.print(latitude);
-  Serial.print(" ° | VEL ");
-  Serial.print(speed);
-  Serial.print(" m/s | HEADING ");
-  Serial.print(course);
-  Serial.print(" °");
+  if (rmc.is_valid)
+  {
+    Serial.print(" : LON ");
+    Serial.print(rmc.longitude);
+    Serial.print(" ° | LAT ");
+    Serial.print(rmc.latitude);
+    Serial.print(" ° | VEL ");
+    Serial.print(rmc.speed);
+    Serial.print(" m/s | HEADING ");
+    Serial.print(rmc.course);
+    Serial.print(" °");
+  }
 
   Serial.println();
 }

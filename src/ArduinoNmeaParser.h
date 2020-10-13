@@ -25,7 +25,7 @@
  * TYPEDEF
  **************************************************************************************/
 
-typedef std::function<void(nmea::Time const &, float const, float const, float const, float const)> OnRMCUpdateFunc;
+typedef std::function<void(nmea::RmcData const)> OnRMCUpdateFunc;
 
 /**************************************************************************************
  * CLASS DECLARATION
