@@ -39,19 +39,19 @@ TEST_CASE("No NMEA message received", "[Parser-01]")
 {
   ArduinoNmeaParser parser(nullptr);
 
-  REQUIRE(parser.error()                          == ArduinoNmeaParser::Error::None);
-  REQUIRE(std::isnan(parser.latitude())           == true);
-  REQUIRE(std::isnan(parser.longitude())          == true);
-  REQUIRE(parser.time_utc().hour                  == -1);
-  REQUIRE(parser.time_utc().minute                == -1);
-  REQUIRE(parser.time_utc().second                == -1);
-  REQUIRE(parser.time_utc().microsecond           == -1);
-  REQUIRE(parser.day()                            == -1);
-  REQUIRE(parser.month()                          == -1);
-  REQUIRE(parser.year()                           == -1);
-  REQUIRE(std::isnan(parser.speed())              == true);
-  REQUIRE(std::isnan(parser.course())             == true);
-  REQUIRE(std::isnan(parser.magnetic_variation()) == true);
+  REQUIRE(parser.error()                              == ArduinoNmeaParser::Error::None);
+  REQUIRE(std::isnan(parser.rmc().latitude)           == true);
+  REQUIRE(std::isnan(parser.rmc().longitude)          == true);
+  REQUIRE(parser.rmc().time_utc.hour                  == -1);
+  REQUIRE(parser.rmc().time_utc.minute                == -1);
+  REQUIRE(parser.rmc().time_utc.second                == -1);
+  REQUIRE(parser.rmc().time_utc.microsecond           == -1);
+  REQUIRE(parser.rmc().date.day                       == -1);
+  REQUIRE(parser.rmc().date.month                     == -1);
+  REQUIRE(parser.rmc().date.year                      == -1);
+  REQUIRE(std::isnan(parser.rmc().speed)              == true);
+  REQUIRE(std::isnan(parser.rmc().course)             == true);
+  REQUIRE(std::isnan(parser.rmc().magnetic_variation) == true);
 }
 
 TEST_CASE("RMC message after startup, no satellites", "[Parser-02]")
@@ -62,19 +62,19 @@ TEST_CASE("RMC message after startup, no satellites", "[Parser-02]")
 
   encode(parser, GPRMC);
 
-  REQUIRE(parser.error()                          == ArduinoNmeaParser::Error::None);
-  REQUIRE(std::isnan(parser.latitude())           == true);
-  REQUIRE(std::isnan(parser.longitude())          == true);
-  REQUIRE(parser.time_utc().hour                  == -1);
-  REQUIRE(parser.time_utc().minute                == -1);
-  REQUIRE(parser.time_utc().second                == -1);
-  REQUIRE(parser.time_utc().microsecond           == -1);
-  REQUIRE(parser.day()                            == -1);
-  REQUIRE(parser.month()                          == -1);
-  REQUIRE(parser.year()                           == -1);
-  REQUIRE(std::isnan(parser.speed())              == true);
-  REQUIRE(std::isnan(parser.course())             == true);
-  REQUIRE(std::isnan(parser.magnetic_variation()) == true);
+  REQUIRE(parser.error()                              == ArduinoNmeaParser::Error::None);
+  REQUIRE(std::isnan(parser.rmc().latitude)           == true);
+  REQUIRE(std::isnan(parser.rmc().longitude)          == true);
+  REQUIRE(parser.rmc().time_utc.hour                  == -1);
+  REQUIRE(parser.rmc().time_utc.minute                == -1);
+  REQUIRE(parser.rmc().time_utc.second                == -1);
+  REQUIRE(parser.rmc().time_utc.microsecond           == -1);
+  REQUIRE(parser.rmc().date.day                       == -1);
+  REQUIRE(parser.rmc().date.month                     == -1);
+  REQUIRE(parser.rmc().date.year                      == -1);
+  REQUIRE(std::isnan(parser.rmc().speed)              == true);
+  REQUIRE(std::isnan(parser.rmc().course)             == true);
+  REQUIRE(std::isnan(parser.rmc().magnetic_variation) == true);
 }
 
 TEST_CASE("RMC message after startup, time fix available", "[Parser-03]")
@@ -85,19 +85,19 @@ TEST_CASE("RMC message after startup, time fix available", "[Parser-03]")
 
   encode(parser, GPRMC);
 
-  REQUIRE(parser.error()                          == ArduinoNmeaParser::Error::None);
-  REQUIRE(std::isnan(parser.latitude())           == true);
-  REQUIRE(std::isnan(parser.longitude())          == true);
-  REQUIRE(parser.time_utc().hour                  == 14);
-  REQUIRE(parser.time_utc().minute                == 19);
-  REQUIRE(parser.time_utc().second                == 28);
-  REQUIRE(parser.time_utc().microsecond           == 0);
-  REQUIRE(parser.day()                            == -1);
-  REQUIRE(parser.month()                          == -1);
-  REQUIRE(parser.year()                           == -1);
-  REQUIRE(std::isnan(parser.speed())              == true);
-  REQUIRE(std::isnan(parser.course())             == true);
-  REQUIRE(std::isnan(parser.magnetic_variation()) == true);
+  REQUIRE(parser.error()                              == ArduinoNmeaParser::Error::None);
+  REQUIRE(std::isnan(parser.rmc().latitude)           == true);
+  REQUIRE(std::isnan(parser.rmc().longitude)          == true);
+  REQUIRE(parser.rmc().time_utc.hour                  == 14);
+  REQUIRE(parser.rmc().time_utc.minute                == 19);
+  REQUIRE(parser.rmc().time_utc.second                == 28);
+  REQUIRE(parser.rmc().time_utc.microsecond           == 0);
+  REQUIRE(parser.rmc().date.day                       == -1);
+  REQUIRE(parser.rmc().date.month                     == -1);
+  REQUIRE(parser.rmc().date.year                      == -1);
+  REQUIRE(std::isnan(parser.rmc().speed)              == true);
+  REQUIRE(std::isnan(parser.rmc().course)             == true);
+  REQUIRE(std::isnan(parser.rmc().magnetic_variation) == true);
 }
 
 TEST_CASE("Decoding starts mid-message", "[Parser-04]")
@@ -108,14 +108,14 @@ TEST_CASE("Decoding starts mid-message", "[Parser-04]")
 
   encode(parser, GPRMC);
 
-  REQUIRE(parser.latitude()             == Approx(52.514467));
-  REQUIRE(parser.longitude()            == Approx(13.349300));
-  REQUIRE(parser.speed()                == Approx(39.6122));
-  REQUIRE(parser.course()               == Approx(23.5));
-  REQUIRE(parser.time_utc().hour        == 5);
-  REQUIRE(parser.time_utc().minute      == 28);
-  REQUIRE(parser.time_utc().second      == 52);
-  REQUIRE(parser.time_utc().microsecond == 105);
+  REQUIRE(parser.rmc().latitude             == Approx(52.514467));
+  REQUIRE(parser.rmc().longitude            == Approx(13.349300));
+  REQUIRE(parser.rmc().speed                == Approx(39.6122));
+  REQUIRE(parser.rmc().course               == Approx(23.5));
+  REQUIRE(parser.rmc().time_utc.hour        == 5);
+  REQUIRE(parser.rmc().time_utc.minute      == 28);
+  REQUIRE(parser.rmc().time_utc.second      == 52);
+  REQUIRE(parser.rmc().time_utc.microsecond == 105);
 }
 
 TEST_CASE("NMEA message with data corruption (checksum mismatch) received", "[Parser-05]")
@@ -209,17 +209,17 @@ TEST_CASE("Multiple NMEA messages received", "[Parser-07]")
                 {
                   encode(parser, gprmc);
 
-                  REQUIRE(parser.error             () == ArduinoNmeaParser::Error::None);
+                  REQUIRE(parser.error()          == ArduinoNmeaParser::Error::None);
+                  REQUIRE(parser.rmc().latitude   == Approx(*latitude));
+                  REQUIRE(parser.rmc().longitude  == Approx(*longitude));
+                  REQUIRE(parser.rmc().speed      == Approx(*speed));
+                  REQUIRE(parser.rmc().course     == Approx(*course));
+                  REQUIRE(parser.rmc().date.day   == *day);
+                  REQUIRE(parser.rmc().date.month == *month);
+                  REQUIRE(parser.rmc().date.year  == *year);
 
-                  REQUIRE(parser.latitude          () == Approx(*latitude));
-                  REQUIRE(parser.longitude         () == Approx(*longitude));
-                  REQUIRE(parser.speed             () == Approx(*speed));
-                  REQUIRE(parser.course            () == Approx(*course));
-                  if (std::isnan(*mag_var)) REQUIRE(std::isnan(parser.magnetic_variation()) == true);
-                  else                      REQUIRE(parser.magnetic_variation() == Approx(*mag_var));
-                  REQUIRE(parser.day               () == *day);
-                  REQUIRE(parser.month             () == *month);
-                  REQUIRE(parser.year              () == *year);
+                  if (std::isnan(*mag_var)) REQUIRE(std::isnan(parser.rmc().magnetic_variation) == true);
+                  else                      REQUIRE(parser.rmc().magnetic_variation == Approx(*mag_var));
 
                   latitude  = std::next(latitude);
                   longitude = std::next(longitude);
