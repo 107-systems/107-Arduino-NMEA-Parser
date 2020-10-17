@@ -17,14 +17,33 @@ Arduino library for interfacing with any GPS module and interpreting its NMEA me
 ```C++
 #include <ArduinoNmeaParser.h>
 /* ... */
-void onPositionUpdate(float const last_fix_utc_s, float const latitude, float const longitude, float const speed, float const course)
+void onGprmcUpdate(nmea::RmcData const rmc)
 {
-  char msg[64] = {0};
-  snprintf(msg, 64, "[%f] %f LON | %f LAT | %d m/s | %d °", last_fix_utc_s, latitude, longitude, speed, course);
-  Serial.println(msg);
+  Serial.print(rmc.time_utc.hour);
+  Serial.print(":");
+  Serial.print(rmc.time_utc.minute);
+  Serial.print(":");
+  Serial.print(rmc.time_utc.second);
+  Serial.print(".");
+  Serial.print(rmc.time_utc.microsecond);
+
+  if (rmc.is_valid)
+  {
+    Serial.print(" : LON ");
+    Serial.print(rmc.longitude);
+    Serial.print(" ° | LAT ");
+    Serial.print(rmc.latitude);
+    Serial.print(" ° | VEL ");
+    Serial.print(rmc.speed);
+    Serial.print(" m/s | HEADING ");
+    Serial.print(rmc.course);
+    Serial.print(" °");
+  }
+
+  Serial.println();
 }
 /* ... */
-ArduinoNmeaParser parser(onPositionUpdate);
+ArduinoNmeaParser parser(onGprmcUpdate);
 /* ... */
 void setup() {
   Serial.begin(9600);

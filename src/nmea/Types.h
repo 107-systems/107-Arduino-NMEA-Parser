@@ -36,6 +36,7 @@ typedef struct
 
 typedef struct
 {
+  bool  is_valid;
   float latitude;
   float longitude;
   float speed;
