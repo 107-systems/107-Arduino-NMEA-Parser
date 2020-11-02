@@ -32,8 +32,6 @@ class GxRMC
 
 public:
 
-  static bool isGPRMC(char const * nmea);
-
   static bool parse(char const * gprmc, RmcData & data);
 
 private:

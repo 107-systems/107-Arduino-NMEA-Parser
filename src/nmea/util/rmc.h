@@ -28,6 +28,8 @@ namespace util
  * FUNCTION DECLARATION
  **************************************************************************************/
 
+bool  rmc_isGPRMC       (char const * nmea);
+
 void  rmc_parseTime     (char const * token, Time & time_utc);
 float rmc_parseLatitude (char const * token);
 float rmc_parseLongitude(char const * token);

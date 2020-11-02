@@ -15,6 +15,7 @@
 #include <string.h>
 
 #include "nmea/GxRMC.h"
+#include "nmea/util/rmc.h"
 #include "nmea/util/checksum.h"
 
 /**************************************************************************************
@@ -72,7 +73,7 @@ void ArduinoNmeaParser::encode(char const c)
   }
 
   /* Parse the various NMEA messages. */
-  if (nmea::GxRMC::isGPRMC(_parser_buf.buf)) parseGPRMC();
+  if (nmea::util::rmc_isGPRMC(_parser_buf.buf)) parseGPRMC();
 
   /* The NMEA message has been fully processed and all
    * values updates so its time to flush the parser

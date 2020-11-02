@@ -28,6 +28,11 @@ namespace util
  * FUNCTION DEFINITION
  **************************************************************************************/
 
+bool rmc_isGPRMC(char const * nmea)
+{
+  return (strncmp(nmea, "$GPRMC", 6) == 0);
+}
+
 void rmc_parseTime(char const * token, Time & time_utc)
 {
   char const hour_str       [] = {token[0], token[1], '\0'};
