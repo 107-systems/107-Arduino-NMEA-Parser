@@ -55,6 +55,12 @@ void loop()
 
 void onGprmcUpdate(nmea::RmcData const rmc)
 {
+  if      (rmc.source == nmea::RmcSource::GPS)     Serial.print("GPS");
+  else if (rmc.source == nmea::RmcSource::GLONASS) Serial.print("GLONASS");
+  else if (rmc.source == nmea::RmcSource::Galileo) Serial.print("Galileo");
+  else if (rmc.source == nmea::RmcSource::GNSS)    Serial.print("GNSS");
+
+  Serial.print(" ");
   Serial.print(rmc.time_utc.hour);
   Serial.print(":");
   Serial.print(rmc.time_utc.minute);
