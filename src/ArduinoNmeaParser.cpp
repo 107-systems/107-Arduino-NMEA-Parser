@@ -73,7 +73,7 @@ void ArduinoNmeaParser::encode(char const c)
   }
 
   /* Parse the various NMEA messages. */
-  if (nmea::util::rmc_isGPRMC(_parser_buf.buf)) parseGPRMC();
+  if (nmea::util::rmc_isGxRMC(_parser_buf.buf)) parseGxRMC();
 
   /* The NMEA message has been fully processed and all
    * values updates so its time to flush the parser
@@ -118,7 +118,7 @@ void ArduinoNmeaParser::terminateParserBuffer()
   addToParserBuffer('\0');
 }
 
-void ArduinoNmeaParser::parseGPRMC()
+void ArduinoNmeaParser::parseGxRMC()
 {
   if (!nmea::GxRMC::parse(_parser_buf.buf, _rmc))
     _error = Error::RMC;
