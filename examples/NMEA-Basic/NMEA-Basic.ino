@@ -24,13 +24,13 @@
  * FUNCTION DECLARATION
  **************************************************************************************/
 
-void onGprmcUpdate(nmea::RmcData const);
+void onRmcUpdate(nmea::RmcData const);
 
 /**************************************************************************************
  * GLOBAL VARIABLES
  **************************************************************************************/
 
-ArduinoNmeaParser parser(onGprmcUpdate);
+ArduinoNmeaParser parser(onRmcUpdate);
 
 /**************************************************************************************
  * SETUP/LOOP
@@ -53,7 +53,7 @@ void loop()
  * FUNCTION DEFINITION
  **************************************************************************************/
 
-void onGprmcUpdate(nmea::RmcData const rmc)
+void onRmcUpdate(nmea::RmcData const rmc)
 {
   if      (rmc.source == nmea::RmcSource::GPS)     Serial.print("GPS");
   else if (rmc.source == nmea::RmcSource::GLONASS) Serial.print("GLONASS");

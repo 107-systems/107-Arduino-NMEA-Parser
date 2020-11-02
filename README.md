@@ -17,7 +17,7 @@ Arduino library for interfacing with any GPS, GLONASS, Galileo or GNSS module an
 ```C++
 #include <ArduinoNmeaParser.h>
 /* ... */
-void onGprmcUpdate(nmea::RmcData const rmc)
+void onRmcUpdate(nmea::RmcData const rmc)
 {
   Serial.print(rmc.time_utc.hour);
   Serial.print(":");
@@ -43,7 +43,7 @@ void onGprmcUpdate(nmea::RmcData const rmc)
   Serial.println();
 }
 /* ... */
-ArduinoNmeaParser parser(onGprmcUpdate);
+ArduinoNmeaParser parser(onRmcUpdate);
 /* ... */
 void setup() {
   Serial.begin(9600);
