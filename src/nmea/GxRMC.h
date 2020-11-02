@@ -27,7 +27,7 @@ namespace nmea
  * CLASS DECLARATION
  **************************************************************************************/
 
-class GPRMC
+class GxRMC
 {
 
 public:
@@ -38,8 +38,8 @@ public:
 
 private:
 
-  GPRMC() { }
-  GPRMC(GPRMC const &) { }
+  GxRMC() { }
+  GxRMC(GxRMC const &) { }
 
   enum class ParserState : int
   {

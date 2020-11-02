@@ -9,12 +9,12 @@
  * INCLUDE
  **************************************************************************************/
 
-#include "GPRMC.h"
+#include "GxRMC.h"
 
 #include <math.h>
 #include <string.h>
 
-#include "util/gprmc.h"
+#include "util/rmc.h"
 #include "util/checksum.h"
 
 /**************************************************************************************
@@ -34,11 +34,12 @@ constexpr float kts_to_m_per_s(float const v) { return (v / 1.9438444924574f); }
  * PUBLIC MEMBER FUNCTIONS
  **************************************************************************************/
 
-bool GPRMC::isGPRMC(char const * nmea)
+bool GxRMC::isGPRMC(char const * nmea)
 {
   return (strncmp(nmea, "$GPRMC", 6) == 0);
 }
-bool GPRMC::parse(char const * gprmc, RmcData & data)
+
+bool GxRMC::parse(char const * gprmc, RmcData & data)
 {
   ParserState state = ParserState::MessadeId;
 
@@ -86,7 +87,7 @@ bool GPRMC::parse(char const * gprmc, RmcData & data)
  * PRIVATE MEMBER FUNCTIONS
  **************************************************************************************/
 
-GPRMC::ParserState GPRMC::handle_MessadeId(char const * token)
+GxRMC::ParserState GxRMC::handle_MessadeId(char const * token)
 {
   if(isGPRMC(token))
     return ParserState::UTCPositionFix;
@@ -94,10 +95,10 @@ GPRMC::ParserState GPRMC::handle_MessadeId(char const * token)
     return ParserState::Error;
 }
 
-GPRMC::ParserState GPRMC::handle_UTCPositionFix(char const * token, Time & time_utc)
+GxRMC::ParserState GxRMC::handle_UTCPositionFix(char const * token, Time & time_utc)
 {
   if (strlen(token))
-    util::gprmc_parseTime(token, time_utc);
+    util::rmc_parseTime(token, time_utc);
   else
   {
     time_utc.hour = -1;
@@ -109,7 +110,7 @@ GPRMC::ParserState GPRMC::handle_UTCPositionFix(char const * token, Time & time_
   return ParserState::Status;
 }
 
-GPRMC::ParserState GPRMC::handle_Status(char const * token, bool & is_valid)
+GxRMC::ParserState GxRMC::handle_Status(char const * token, bool & is_valid)
 {
   is_valid = false;
 
@@ -127,17 +128,17 @@ GPRMC::ParserState GPRMC::handle_Status(char const * token, bool & is_valid)
   return ParserState::Error;
 }
 
-GPRMC::ParserState GPRMC::handle_LatitudeVal(char const * token, float & latitude)
+GxRMC::ParserState GxRMC::handle_LatitudeVal(char const * token, float & latitude)
 {
   if (strlen(token))
-    latitude = util::gprmc_parseLatitude(token);
+    latitude = util::rmc_parseLatitude(token);
   else
     latitude = NAN;
 
   return ParserState::LatitudeNS;
 }
 
-GPRMC::ParserState GPRMC::handle_LatitudeNS(char const * token, float & latitude)
+GxRMC::ParserState GxRMC::handle_LatitudeNS(char const * token, float & latitude)
 {
   if (strlen(token))
   {
@@ -153,17 +154,17 @@ GPRMC::ParserState GPRMC::handle_LatitudeNS(char const * token, float & latitude
   return ParserState::Error;
 }
 
-GPRMC::ParserState GPRMC::handle_LongitudeVal(char const * token, float & longitude)
+GxRMC::ParserState GxRMC::handle_LongitudeVal(char const * token, float & longitude)
 {
   if (strlen(token))
-    longitude = util::gprmc_parseLongitude(token);
+    longitude = util::rmc_parseLongitude(token);
   else
     longitude = NAN;
 
   return ParserState::LongitudeEW;
 }
 
-GPRMC::ParserState GPRMC::handle_LongitudeEW(char const * token, float & longitude)
+GxRMC::ParserState GxRMC::handle_LongitudeEW(char const * token, float & longitude)
 {
   if (strlen(token))
   {
@@ -179,7 +180,7 @@ GPRMC::ParserState GPRMC::handle_LongitudeEW(char const * token, float & longitu
   return ParserState::Error;
 }
 
-GPRMC::ParserState GPRMC::handle_SpeedOverGround(char const * token, float & speed)
+GxRMC::ParserState GxRMC::handle_SpeedOverGround(char const * token, float & speed)
 {
   if (strlen(token))
     speed = kts_to_m_per_s(atof(token));
@@ -189,7 +190,7 @@ GPRMC::ParserState GPRMC::handle_SpeedOverGround(char const * token, float & spe
   return ParserState::TrackAngle;
 }
 
-GPRMC::ParserState GPRMC::handle_TrackAngle(char const * token, float & course)
+GxRMC::ParserState GxRMC::handle_TrackAngle(char const * token, float & course)
 {
   if (strlen(token))
     course = atof(token);
@@ -199,10 +200,10 @@ GPRMC::ParserState GPRMC::handle_TrackAngle(char const * token, float & course)
   return ParserState::Date;
 }
 
-GPRMC::ParserState GPRMC::handle_Date(char const * token, Date & date)
+GxRMC::ParserState GxRMC::handle_Date(char const * token, Date & date)
 {
   if (strlen(token))
-    util::gprmc_parseDate(token, date);
+    util::rmc_parseDate(token, date);
   else
   {
     date.day = -1;
@@ -213,7 +214,7 @@ GPRMC::ParserState GPRMC::handle_Date(char const * token, Date & date)
   return ParserState::MagneticVariation;
 }
 
-GPRMC::ParserState GPRMC::handle_MagneticVariation(char const * token, float & magnetic_variation)
+GxRMC::ParserState GxRMC::handle_MagneticVariation(char const * token, float & magnetic_variation)
 {
   if (strlen(token) > 0)
     magnetic_variation = atof(token);
@@ -223,7 +224,7 @@ GPRMC::ParserState GPRMC::handle_MagneticVariation(char const * token, float & m
   return ParserState::MagneticVariationEastWest;
 }
 
-GPRMC::ParserState GPRMC::handle_MagneticVariationEastWest(char const * token, float & magnetic_variation)
+GxRMC::ParserState GxRMC::handle_MagneticVariationEastWest(char const * token, float & magnetic_variation)
 {
   if(!strncmp(token, "W", 1))
     magnetic_variation *= (-1.0f);
@@ -231,7 +232,7 @@ GPRMC::ParserState GPRMC::handle_MagneticVariationEastWest(char const * token, f
   return ParserState::Checksum;
 }
 
-GPRMC::ParserState GPRMC::handle_Checksum(char const * /* token */)
+GxRMC::ParserState GxRMC::handle_Checksum(char const * /* token */)
 {
   return ParserState::Done;
 }
