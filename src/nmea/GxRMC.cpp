@@ -55,7 +55,7 @@ bool GxRMC::parse(char const * gprmc, RmcData & data)
 
     switch(state)
     {
-    case ParserState::MessadeId:                  next_state = handle_MessadeId                (token);                          break;
+    case ParserState::MessadeId:                  next_state = handle_MessadeId                (token, data.source);             break;
     case ParserState::UTCPositionFix:             next_state = handle_UTCPositionFix           (token, data.time_utc);           break;
     case ParserState::Status:                     next_state = handle_Status                   (token, data.is_valid);           break;
     case ParserState::LatitudeVal:                next_state = handle_LatitudeVal              (token, data.latitude);           break;
@@ -82,12 +82,21 @@ bool GxRMC::parse(char const * gprmc, RmcData & data)
  * PRIVATE MEMBER FUNCTIONS
  **************************************************************************************/
 
-GxRMC::ParserState GxRMC::handle_MessadeId(char const * token)
+GxRMC::ParserState GxRMC::handle_MessadeId(char const * token, RmcSource & source)
 {
-  if(util::rmc_isGPRMC(token))
-    return ParserState::UTCPositionFix;
-  else
+  if (!util::rmc_isGxRMC(token))
     return ParserState::Error;
+
+  if (util::rmc_isGPRMC(token))
+    source = RmcSource::GPS;
+  else if (util::rmc_isGLRMC(token))
+    source = RmcSource::GLONASS;
+  else if (util::rmc_isGARMC(token))
+    source = RmcSource::Galileo;
+  else if (util::rmc_isGNRMC(token))
+    source = RmcSource::GNSS;
+
+  return ParserState::UTCPositionFix;
 }
 
 GxRMC::ParserState GxRMC::handle_UTCPositionFix(char const * token, Time & time_utc)

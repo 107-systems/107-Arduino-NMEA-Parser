@@ -41,6 +41,7 @@ TEST_CASE("No NMEA message received", "[Parser-01]")
 
   REQUIRE(parser.error()                              == ArduinoNmeaParser::Error::None);
   REQUIRE(parser.rmc().is_valid                       == false);
+  REQUIRE(parser.rmc().source                         == nmea::RmcSource::NoFix);
   REQUIRE(std::isnan(parser.rmc().latitude)           == true);
   REQUIRE(std::isnan(parser.rmc().longitude)          == true);
   REQUIRE(parser.rmc().time_utc.hour                  == -1);
@@ -65,6 +66,7 @@ TEST_CASE("RMC message after startup, no satellites", "[Parser-02]")
 
   REQUIRE(parser.error()                              == ArduinoNmeaParser::Error::None);
   REQUIRE(parser.rmc().is_valid                       == false);
+  REQUIRE(parser.rmc().source                         == nmea::RmcSource::GPS);
   REQUIRE(std::isnan(parser.rmc().latitude)           == true);
   REQUIRE(std::isnan(parser.rmc().longitude)          == true);
   REQUIRE(parser.rmc().time_utc.hour                  == -1);
@@ -89,6 +91,7 @@ TEST_CASE("RMC message after startup, time fix available", "[Parser-03]")
 
   REQUIRE(parser.error()                              == ArduinoNmeaParser::Error::None);
   REQUIRE(parser.rmc().is_valid                       == false);
+  REQUIRE(parser.rmc().source                         == nmea::RmcSource::GPS);
   REQUIRE(std::isnan(parser.rmc().latitude)           == true);
   REQUIRE(std::isnan(parser.rmc().longitude)          == true);
   REQUIRE(parser.rmc().time_utc.hour                  == 14);
@@ -112,6 +115,7 @@ TEST_CASE("Decoding starts mid-message", "[Parser-04]")
   encode(parser, GPRMC);
 
   REQUIRE(parser.rmc().is_valid             == true);
+  REQUIRE(parser.rmc().source               == nmea::RmcSource::GPS);
   REQUIRE(parser.rmc().latitude             == Approx(52.514467));
   REQUIRE(parser.rmc().longitude            == Approx(13.349300));
   REQUIRE(parser.rmc().speed                == Approx(39.6122));
@@ -157,6 +161,11 @@ TEST_CASE("Multiple NMEA messages received", "[Parser-07]")
     std::string("$GPRMC,142600.00,A,4837.99474,N,01301.53452,E,27.920,247.03,121020,,,A*5A\r\n")
   };
 
+  std::vector<nmea::RmcSource> const SOURCE_EXPECTED =
+  {
+    nmea::RmcSource::GPS, nmea::RmcSource::GPS, nmea::RmcSource::GPS, nmea::RmcSource::GPS, nmea::RmcSource::GPS
+  };
+
   std::vector<float> const LATITUDE_EXPECTED =
   {
     52.514467f, 52.514800f, 52.515017f, 52.514900f, 48.633246f
@@ -198,6 +207,7 @@ TEST_CASE("Multiple NMEA messages received", "[Parser-07]")
   };
 
 
+  auto source    = SOURCE_EXPECTED.begin();
   auto latitude  = LATITUDE_EXPECTED.begin();
   auto longitude = LONGITUDE_EXPECTED.begin();
   auto speed     = SPEED_EXPECTED.begin();
@@ -214,6 +224,7 @@ TEST_CASE("Multiple NMEA messages received", "[Parser-07]")
                   encode(parser, gprmc);
 
                   REQUIRE(parser.error()          == ArduinoNmeaParser::Error::None);
+                  REQUIRE(parser.rmc().source     == *source);
                   REQUIRE(parser.rmc().latitude   == Approx(*latitude));
                   REQUIRE(parser.rmc().longitude  == Approx(*longitude));
                   REQUIRE(parser.rmc().speed      == Approx(*speed));
@@ -225,6 +236,7 @@ TEST_CASE("Multiple NMEA messages received", "[Parser-07]")
                   if (std::isnan(*mag_var)) REQUIRE(std::isnan(parser.rmc().magnetic_variation) == true);
                   else                      REQUIRE(parser.rmc().magnetic_variation == Approx(*mag_var));
 
+                  source    = std::next(source);
                   latitude  = std::next(latitude);
                   longitude = std::next(longitude);
                   speed     = std::next(speed);

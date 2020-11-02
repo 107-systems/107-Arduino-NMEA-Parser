@@ -34,9 +34,15 @@ typedef struct
   int year;
 } Date;
 
+enum class RmcSource
+{
+  NoFix, GPS, Galileo, GLONASS, GNSS
+};
+
 typedef struct
 {
-  bool  is_valid;
+  bool is_valid;
+  RmcSource source;
   float latitude;
   float longitude;
   float speed;
