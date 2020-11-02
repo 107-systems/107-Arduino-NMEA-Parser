@@ -29,7 +29,10 @@ namespace util
  **************************************************************************************/
 
 bool  rmc_isGPRMC       (char const * nmea);
-
+bool  rmc_isGLRMC       (char const * nmea);
+bool  rmc_isGARMC       (char const * nmea);
+bool  rmc_isGNRMC       (char const * nmea);
+bool  rmc_isGxRMC       (char const * nmea);
 void  rmc_parseTime     (char const * token, Time & time_utc);
 float rmc_parseLatitude (char const * token);
 float rmc_parseLongitude(char const * token);

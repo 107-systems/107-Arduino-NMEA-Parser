@@ -26,6 +26,7 @@ set(TEST_SRCS
   src/test_checksum.cpp
   src/test_GxRMC.cpp
   src/test_main.cpp
+  src/test_rmc.cpp
 
   ../../src/nmea/util/checksum.cpp
   ../../src/nmea/util/rmc.cpp

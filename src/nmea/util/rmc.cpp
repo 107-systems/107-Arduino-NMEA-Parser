@@ -33,6 +33,26 @@ bool rmc_isGPRMC(char const * nmea)
   return (strncmp(nmea, "$GPRMC", 6) == 0);
 }
 
+bool rmc_isGLRMC(char const * nmea)
+{
+  return (strncmp(nmea, "$GLRMC", 6) == 0);
+}
+
+bool rmc_isGARMC(char const * nmea)
+{
+  return (strncmp(nmea, "$GARMC", 6) == 0);
+}
+
+bool rmc_isGNRMC(char const * nmea)
+{
+  return (strncmp(nmea, "$GNRMC", 6) == 0);
+}
+
+bool rmc_isGxRMC(char const * nmea)
+{
+  return (rmc_isGPRMC(nmea) || rmc_isGLRMC(nmea) || rmc_isGARMC(nmea) || rmc_isGNRMC(nmea));
+}
+
 void rmc_parseTime(char const * token, Time & time_utc)
 {
   char const hour_str       [] = {token[0], token[1], '\0'};
