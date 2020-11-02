@@ -41,7 +41,7 @@ TEST_CASE("No NMEA message received", "[Parser-01]")
 
   REQUIRE(parser.error()                              == ArduinoNmeaParser::Error::None);
   REQUIRE(parser.rmc().is_valid                       == false);
-  REQUIRE(parser.rmc().source                         == nmea::RmcSource::NoFix);
+  REQUIRE(parser.rmc().source                         == nmea::RmcSource::Unknown);
   REQUIRE(std::isnan(parser.rmc().latitude)           == true);
   REQUIRE(std::isnan(parser.rmc().longitude)          == true);
   REQUIRE(parser.rmc().time_utc.hour                  == -1);

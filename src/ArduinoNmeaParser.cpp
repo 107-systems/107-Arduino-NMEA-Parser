@@ -26,7 +26,7 @@ ArduinoNmeaParser::ArduinoNmeaParser(OnGprmcUpdateFunc on_rmc_update)
 : _error{Error::None}
 , _parser_state{ParserState::Synching}
 , _parser_buf{{0}, 0}
-, _rmc{false, nmea::RmcSource::NoFix, NAN, NAN, NAN, NAN, NAN, {-1, -1, -1, -1}, {-1, -1, -1}}
+, _rmc{false, nmea::RmcSource::Unknown, NAN, NAN, NAN, NAN, NAN, {-1, -1, -1, -1}, {-1, -1, -1}}
 , _on_gprmc_update{on_rmc_update}
 {
 
