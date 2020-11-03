@@ -32,6 +32,7 @@ set(TEST_SRCS
   ../../src/nmea/util/checksum.cpp
   ../../src/nmea/util/convert.cpp
   ../../src/nmea/util/rmc.cpp
+  ../../src/nmea/util/timegm.c
   ../../src/nmea/GxRMC.cpp
   ../../src/ArduinoNmeaParser.cpp
 )

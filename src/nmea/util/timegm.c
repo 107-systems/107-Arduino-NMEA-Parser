@@ -31,9 +31,7 @@
  * SUCH DAMAGE.
  */
 
-#include <config.h>
-
-#include "roken.h"
+#include "timegm.h"
 
 static int
 is_leap(unsigned y)
@@ -50,11 +48,11 @@ is_leap(unsigned y)
 time_t
 rk_timegm (struct tm *tm)
 {
-  static const unsigned ndays[2][12] ={
+  static const int ndays[2][12] ={
     {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
     {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}};
   time_t res = 0;
-  unsigned i;
+  int i;
 
   if (tm->tm_year < 0)
       return -1;

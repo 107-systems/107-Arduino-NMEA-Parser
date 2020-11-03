@@ -11,6 +11,8 @@
 
 #include "convert.h"
 
+#include "timegm.h"
+
 /**************************************************************************************
  * NAMESPACE
  **************************************************************************************/
@@ -38,11 +40,13 @@ time_t toPosixTimestamp(Date const & date, Time const & time)
     /* tm_wday   */ 0,
     /* tm_yday   */ 0,
     /* tm_isdst  */ 0,
+#ifdef HOST
     /* tm_gmtoff */ 0,
-    /* tm_zone   */ 0
+    /* tm_zone   */ 0,
+#endif
   };
 
-  return timegm(&tm);
+  return rk_timegm(&tm);
 }
 
 /**************************************************************************************
