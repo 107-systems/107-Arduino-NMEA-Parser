@@ -24,11 +24,13 @@ set(TEST_TARGET testNmeaParser)
 set(TEST_SRCS
   src/test_ArduinoNmeaParser.cpp
   src/test_checksum.cpp
+  src/test_convert.cpp
   src/test_GxRMC.cpp
   src/test_main.cpp
   src/test_rmc.cpp
 
   ../../src/nmea/util/checksum.cpp
+  ../../src/nmea/util/convert.cpp
   ../../src/nmea/util/rmc.cpp
   ../../src/nmea/GxRMC.cpp
   ../../src/ArduinoNmeaParser.cpp
