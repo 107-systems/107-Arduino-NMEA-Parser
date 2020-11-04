@@ -31,10 +31,9 @@
  * SUCH DAMAGE.
  */
 
-#include "timegm.h"
+#include <time.h>
 
-static int
-is_leap(unsigned y)
+static int is_leap(unsigned y)
 {
     y += 1900;
     return (y % 4) == 0 && ((y % 100) != 0 || (y % 400) == 0);
@@ -45,8 +44,7 @@ is_leap(unsigned y)
  * bounds values.
  */
 
-time_t
-rk_timegm (struct tm *tm)
+time_t rk_timegm (struct tm *tm)
 {
   static const int ndays[2][12] ={
     {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
