@@ -146,3 +146,21 @@ TEST_CASE("Extracted status indicates void ('V') position data", "[GxRMC-08]")
 
   REQUIRE(data.is_valid == false);
 }
+
+TEST_CASE("GxRMC message contains only date and time, but no location fix yet ", "[GxRMC-09]")
+{
+  std::string const GPRMC = ("$GPRMC,144602.00,V,,,,,,,011120,,,N*7B\r\n");
+
+  nmea::GxRMC::parse(GPRMC.c_str(), data);
+
+  /* RMC TIME = '144602.00' */
+  REQUIRE(data.time_utc.hour        == 14);
+  REQUIRE(data.time_utc.minute      == 46);
+  REQUIRE(data.time_utc.second      == 02);
+  REQUIRE(data.time_utc.microsecond == 0);
+
+  /* RMC DATE = '011120' */
+  REQUIRE(data.date.day             == 1);
+  REQUIRE(data.date.month           == 11);
+  REQUIRE(data.date.year            == 2020);
+}
