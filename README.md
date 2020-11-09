@@ -7,7 +7,7 @@
 [![General Formatting Checks](https://github.com/107-systems/107-Arduino-NMEA-Parser/workflows/General%20Formatting%20Checks/badge.svg)](https://github.com/107-systems/107-Arduino-NMEA-Parser/actions?workflow=General+Formatting+Checks)
 [![Spell Check](https://github.com/107-systems/107-Arduino-NMEA-Parser/workflows/Spell%20Check/badge.svg)](https://github.com/107-systems/107-Arduino-NMEA-Parser/actions?workflow=Spell+Check)
 
-Arduino library for interfacing with any GPS module and interpreting its NMEA messages.
+Arduino library for interfacing with any GPS, GLONASS, Galileo or GNSS module and interpreting its NMEA messages.
 
 <p align="center">
   <a href="https://github.com/107-systems/107-Arduino-Viper"><img src="extras/logo/viper-logo.jpg" width="40%"></a>
@@ -17,7 +17,7 @@ Arduino library for interfacing with any GPS module and interpreting its NMEA me
 ```C++
 #include <ArduinoNmeaParser.h>
 /* ... */
-void onGprmcUpdate(nmea::RmcData const rmc)
+void onRmcUpdate(nmea::RmcData const rmc)
 {
   Serial.print(rmc.time_utc.hour);
   Serial.print(":");
@@ -43,7 +43,7 @@ void onGprmcUpdate(nmea::RmcData const rmc)
   Serial.println();
 }
 /* ... */
-ArduinoNmeaParser parser(onGprmcUpdate);
+ArduinoNmeaParser parser(onRmcUpdate);
 /* ... */
 void setup() {
   Serial.begin(9600);

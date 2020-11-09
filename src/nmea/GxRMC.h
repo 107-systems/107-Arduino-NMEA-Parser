@@ -27,19 +27,17 @@ namespace nmea
  * CLASS DECLARATION
  **************************************************************************************/
 
-class GPRMC
+class GxRMC
 {
 
 public:
-
-  static bool isGPRMC(char const * nmea);
 
   static bool parse(char const * gprmc, RmcData & data);
 
 private:
 
-  GPRMC() { }
-  GPRMC(GPRMC const &) { }
+  GxRMC() { }
+  GxRMC(GxRMC const &) { }
 
   enum class ParserState : int
   {
@@ -60,7 +58,7 @@ private:
     Error
   };
 
-  static ParserState handle_MessadeId                (char const * token);
+  static ParserState handle_MessadeId                (char const * token, RmcSource & source);
   static ParserState handle_UTCPositionFix           (char const * token, Time & time_utc);
   static ParserState handle_Status                   (char const * token, bool & is_valid);
   static ParserState handle_LatitudeVal              (char const * token, float & latitude);

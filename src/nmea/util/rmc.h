@@ -28,10 +28,15 @@ namespace util
  * FUNCTION DECLARATION
  **************************************************************************************/
 
-void  gprmc_parseTime      (char const * token, Time & time_utc);
-float gprmc_parseLatitude  (char const * token);
-float gprmc_parseLongitude (char const * token);
-void  gprmc_parseDate      (char const * token, Date & date);
+bool  rmc_isGPRMC       (char const * nmea);
+bool  rmc_isGLRMC       (char const * nmea);
+bool  rmc_isGARMC       (char const * nmea);
+bool  rmc_isGNRMC       (char const * nmea);
+bool  rmc_isGxRMC       (char const * nmea);
+void  rmc_parseTime     (char const * token, Time & time_utc);
+float rmc_parseLatitude (char const * token);
+float rmc_parseLongitude(char const * token);
+void  rmc_parseDate     (char const * token, Date & date);
 
 /**************************************************************************************
  * NAMESPACE
