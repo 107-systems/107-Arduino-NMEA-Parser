@@ -45,7 +45,7 @@ public:
   inline const nmea::RmcData rmc() const { return _rmc; }
 
 
-  enum class Error { None, Checksum, RMC };
+  enum class Error { None, Checksum };
 
   inline void  clearerr()       { _error = Error::None; }
   inline Error error   () const { return _error; }
