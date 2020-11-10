@@ -5,15 +5,11 @@
  * Contributors: https://github.com/107-systems/107-Arduino-NMEA-Parser/graphs/contributors.
  */
 
-#ifndef ARDUINO_MTK3333_NMEA_TYPES_H_
-#define ARDUINO_MTK3333_NMEA_TYPES_H_
-
 /**************************************************************************************
  * INCLUDE
  **************************************************************************************/
 
-#include <time.h>
-#include <math.h>
+#include "Types.h"
 
 /**************************************************************************************
  * NAMESPACE
@@ -23,63 +19,65 @@ namespace nmea
 {
 
 /**************************************************************************************
- * TYPEDEF
+ * EXTERN FUNCTION DECLARATION
  **************************************************************************************/
 
-typedef struct
-{
-  int hour;
-  int minute;
-  int second;
-  int microsecond;
-} Time;
-
-typedef struct
-{
-  int day;
-  int month;
-  int year;
-} Date;
-
-enum class RmcSource
-{
-  Unknown, GPS, Galileo, GLONASS, GNSS
-};
-
-typedef struct
-{
-  bool is_valid;
-  RmcSource source;
-  float latitude;
-  float longitude;
-  float speed;
-  float course;
-  float magnetic_variation;
-  Time time_utc;
-  Date date;
-} RmcData;
+extern "C" time_t rk_timegm (struct tm *tm);
 
 /**************************************************************************************
- * CONST
+ * PUBLIC FUNCTION DEFINITION
  **************************************************************************************/
 
-Time    const INVALID_TIME = {-1, -1, -1, -1};
-Date    const INVALID_DATE = {-1, -1, -1};
-RmcData const INVALID_RMC  = {false, RmcSource::Unknown, NAN, NAN, NAN, NAN, NAN, INVALID_TIME, INVALID_DATE};
+bool isValid(Date const & date)
+{
+  if ((date.day   == INVALID_DATE.day)   ||
+      (date.month == INVALID_DATE.month) ||
+      (date.year  == INVALID_DATE.year))
+    return false;
+  else
+    return true;
+}
 
-/**************************************************************************************
- * FUNCTION DECLARATION
- **************************************************************************************/
+bool isValid(Time const & time)
+{
+  if ((time.hour        == INVALID_TIME.hour)         ||
+      (time.minute      == INVALID_TIME.minute)       ||
+      (time.second      == INVALID_TIME.second)       ||
+      (time.microsecond == INVALID_TIME.microsecond))
+    return false;
+  else
+    return true;
+}
 
-bool   isValid         (Date const & date);
-bool   isValid         (Time const & time);
-bool   isValid         (Date const & date, Time const & time);
-time_t toPosixTimestamp(Date const & date, Time const & time);
+bool isValid(Date const & date, Time const & time)
+{
+  return (isValid(date) && isValid(time));
+}
+
+time_t toPosixTimestamp(Date const & date, Time const & time)
+{
+  struct tm tm =
+  {
+    /* tm_sec    */ time.second + ((time.microsecond > 500) ? 1 : 0),
+    /* tm_min    */ time.minute,
+    /* tm_hour   */ time.hour,
+    /* tm_mday   */ date.day,
+    /* tm_mon    */ date.month - 1,
+    /* tm_year   */ date.year - 1900,
+    /* tm_wday   */ 0,
+    /* tm_yday   */ 0,
+    /* tm_isdst  */ 0,
+#ifdef HOST
+    /* tm_gmtoff */ 0,
+    /* tm_zone   */ 0,
+#endif
+  };
+
+  return rk_timegm(&tm);
+}
 
 /**************************************************************************************
  * NAMESPACE
  **************************************************************************************/
 
 } /* nmea */
-
-#endif /* ARDUINO_MTK3333_NMEA_TYPES_H_ */
