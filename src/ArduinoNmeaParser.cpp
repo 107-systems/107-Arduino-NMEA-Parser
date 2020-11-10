@@ -11,7 +11,6 @@
 
 #include "ArduinoNmeaParser.h"
 
-#include <math.h>
 #include <string.h>
 
 #include "nmea/GxRMC.h"
@@ -26,7 +25,7 @@ ArduinoNmeaParser::ArduinoNmeaParser(OnRmcUpdateFunc on_rmc_update)
 : _error{Error::None}
 , _parser_state{ParserState::Synching}
 , _parser_buf{{0}, 0}
-, _rmc{false, nmea::RmcSource::Unknown, NAN, NAN, NAN, NAN, NAN, {-1, -1, -1, -1}, {-1, -1, -1}}
+, _rmc{nmea::INVALID_RMC}
 , _on_rmc_update{on_rmc_update}
 {
 
