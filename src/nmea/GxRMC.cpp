@@ -34,7 +34,7 @@ constexpr float kts_to_m_per_s(float const v) { return (v / 1.9438444924574f); }
  * PUBLIC MEMBER FUNCTIONS
  **************************************************************************************/
 
-bool GxRMC::parse(char const * gprmc, RmcData & data)
+void GxRMC::parse(char const * gprmc, RmcData & data)
 {
   ParserState state = ParserState::MessadeId;
 
@@ -68,14 +68,11 @@ bool GxRMC::parse(char const * gprmc, RmcData & data)
     case ParserState::MagneticVariation:          next_state = handle_MagneticVariation        (token, data.magnetic_variation); break;
     case ParserState::MagneticVariationEastWest:  next_state = handle_MagneticVariationEastWest(token, data.magnetic_variation); break;
     case ParserState::Checksum:                   next_state = handle_Checksum                 (token);                          break;
-    case ParserState::Done:                       return true;                                                                   break;
-    case ParserState::Error:                      return false;                                                                  break;
+    case ParserState::Done:                                                                                                      break;
     };
 
     state = next_state;
   }
-
-  return (state == ParserState::Done);
 }
 
 /**************************************************************************************
@@ -84,9 +81,6 @@ bool GxRMC::parse(char const * gprmc, RmcData & data)
 
 GxRMC::ParserState GxRMC::handle_MessadeId(char const * token, RmcSource & source)
 {
-  if (!util::rmc_isGxRMC(token))
-    return ParserState::Error;
-
   if (util::rmc_isGPRMC(token))
     source = RmcSource::GPS;
   else if (util::rmc_isGLRMC(token))
@@ -116,20 +110,12 @@ GxRMC::ParserState GxRMC::handle_UTCPositionFix(char const * token, Time & time_
 
 GxRMC::ParserState GxRMC::handle_Status(char const * token, bool & is_valid)
 {
-  is_valid = false;
-
-  if (strlen(token) == 0)
-    return ParserState::Error;
-
-  if(!strncmp(token, "A", 1)) {
+  if(strlen(token) > 0 && !strncmp(token, "A", 1))
     is_valid = true;
-    return ParserState::LatitudeVal;
-  }
+  else
+    is_valid = false;
 
-  if(!strncmp(token, "V", 1))
-    return ParserState::Done;
-
-  return ParserState::Error;
+  return ParserState::LatitudeVal;
 }
 
 GxRMC::ParserState GxRMC::handle_LatitudeVal(char const * token, float & latitude)
@@ -144,18 +130,10 @@ GxRMC::ParserState GxRMC::handle_LatitudeVal(char const * token, float & latitud
 
 GxRMC::ParserState GxRMC::handle_LatitudeNS(char const * token, float & latitude)
 {
-  if (strlen(token))
-  {
-    if(!strncmp(token, "N", 1))
-      return ParserState::LongitudeVal;
+  if (strlen(token) > 0  && !strncmp(token, "S", 1))
+    latitude *= (-1.0f);
 
-    if(!strncmp(token, "S", 1)) {
-      latitude *= (-1.0f);
-      return ParserState::LongitudeVal;
-    }
-  }
-
-  return ParserState::Error;
+  return ParserState::LongitudeVal;
 }
 
 GxRMC::ParserState GxRMC::handle_LongitudeVal(char const * token, float & longitude)
@@ -170,18 +148,10 @@ GxRMC::ParserState GxRMC::handle_LongitudeVal(char const * token, float & longit
 
 GxRMC::ParserState GxRMC::handle_LongitudeEW(char const * token, float & longitude)
 {
-  if (strlen(token))
-  {
-    if(!strncmp(token, "E", 1))
-      return ParserState::SpeedOverGround;
+  if (strlen(token) > 0 && !strncmp(token, "W", 1))
+    longitude *= (-1.0f);
 
-    if(!strncmp(token, "W", 1)) {
-      longitude *= (-1.0f);
-      return ParserState::SpeedOverGround;
-    }
-  }
-
-  return ParserState::Error;
+  return ParserState::SpeedOverGround;
 }
 
 GxRMC::ParserState GxRMC::handle_SpeedOverGround(char const * token, float & speed)

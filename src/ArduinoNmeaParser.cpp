@@ -120,10 +120,8 @@ void ArduinoNmeaParser::terminateParserBuffer()
 
 void ArduinoNmeaParser::parseGxRMC()
 {
-  if (!nmea::GxRMC::parse(_parser_buf.buf, _rmc))
-    _error = Error::RMC;
-  else {
-    if (_on_rmc_update)
+  nmea::GxRMC::parse(_parser_buf.buf, _rmc);
+
+  if (_on_rmc_update)
       _on_rmc_update(_rmc);
-  }
 }

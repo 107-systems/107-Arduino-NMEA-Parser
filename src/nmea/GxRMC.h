@@ -32,7 +32,7 @@ class GxRMC
 
 public:
 
-  static bool parse(char const * gprmc, RmcData & data);
+  static void parse(char const * gprmc, RmcData & data);
 
 private:
 
@@ -54,8 +54,7 @@ private:
     MagneticVariation,
     MagneticVariationEastWest,
     Checksum,
-    Done,
-    Error
+    Done
   };
 
   static ParserState handle_MessadeId                (char const * token, RmcSource & source);
