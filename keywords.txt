@@ -7,6 +7,7 @@
 #######################################
 
 ArduinoNmeaParser	KEYWORD1
+nmea	KEYWORD1
 Error	KEYWORD1
 
 #######################################
