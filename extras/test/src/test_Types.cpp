@@ -11,28 +11,28 @@
 
 #include <catch.hpp>
 
-#include <nmea/util/convert.h>
+#include <nmea/Types.h>
 
 /**************************************************************************************
  * TEST CODE
  **************************************************************************************/
 
-TEST_CASE("Convert date/time to POSIX timestamp with time.microseconds > 500", "[convert-01]")
+TEST_CASE("Convert date/time to POSIX timestamp with time.microseconds > 500", "[toPosixTimestamp-01]")
 {
   nmea::Date const date = {29,10,2020};
   nmea::Time const time = {13,37,25,689};
 
-  time_t const posix_timestamp = nmea::util::toPosixTimestamp(date, time);
+  time_t const posix_timestamp = nmea::toPosixTimestamp(date, time);
 
   REQUIRE(posix_timestamp == 1603978646);
 }
 
-TEST_CASE("Convert date/time to POSIX timestamp with time.microseconds < 500", "[convert-02]")
+TEST_CASE("Convert date/time to POSIX timestamp with time.microseconds < 500", "[toPosixTimestamp-02]")
 {
   nmea::Date const date = {29,10,2020};
   nmea::Time const time = {13,37,25,322};
 
-  time_t const posix_timestamp = nmea::util::toPosixTimestamp(date, time);
+  time_t const posix_timestamp = nmea::toPosixTimestamp(date, time);
 
   REQUIRE(posix_timestamp == 1603978646 - 1);
 }
