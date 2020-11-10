@@ -71,6 +71,9 @@ RmcData const INVALID_RMC  = {false, RmcSource::Unknown, NAN, NAN, NAN, NAN, NAN
  * FUNCTION DECLARATION
  **************************************************************************************/
 
+bool   isValid         (Date const & date);
+bool   isValid         (Time const & time);
+bool   isValid         (Date const & date, Time const & time);
 time_t toPosixTimestamp(Date const & date, Time const & time);
 
 /**************************************************************************************

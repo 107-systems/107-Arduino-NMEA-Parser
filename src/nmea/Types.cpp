@@ -19,14 +19,40 @@ namespace nmea
 {
 
 /**************************************************************************************
- * FUNCTION DECLARATION
+ * EXTERN FUNCTION DECLARATION
  **************************************************************************************/
 
 extern "C" time_t rk_timegm (struct tm *tm);
 
 /**************************************************************************************
- * FUNCTION DEFINITION
+ * PUBLIC FUNCTION DEFINITION
  **************************************************************************************/
+
+bool isValid(Date const & date)
+{
+  if ((date.day   == INVALID_DATE.day)   ||
+      (date.month == INVALID_DATE.month) ||
+      (date.year  == INVALID_DATE.year))
+    return false;
+  else
+    return true;
+}
+
+bool isValid(Time const & time)
+{
+  if ((time.hour        == INVALID_TIME.hour)         ||
+      (time.minute      == INVALID_TIME.minute)       ||
+      (time.second      == INVALID_TIME.second)       ||
+      (time.microsecond == INVALID_TIME.microsecond))
+    return false;
+  else
+    return true;
+}
+
+bool isValid(Date const & date, Time const & time)
+{
+  return (isValid(date) && isValid(time));
+}
 
 time_t toPosixTimestamp(Date const & date, Time const & time)
 {
