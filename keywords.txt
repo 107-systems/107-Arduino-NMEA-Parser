@@ -6,21 +6,39 @@
 # Class (KEYWORD1)
 #######################################
 
+# class
 ArduinoNmeaParser	KEYWORD1
-nmea	KEYWORD1
+# struct
+Time	KEYWORD1
+Date	KEYWORD1
+RmcData	KEYWORD1
+# enum class
+RmcSource	KEYWORD1
 Error	KEYWORD1
+# namespace
+nmea	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
 
 encode	KEYWORD2
+rmc	KEYWORD2
 clearerr	KEYWORD2
 error	KEYWORD2
+isValid	KEYWORD2
+toPosixTimestamp	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
 #######################################
 
+# enum class Error
 None	LITERAL1
 Checksum	LITERAL1
+# enum class RmcSource
+Unknown	LITERAL1
+GPS	LITERAL1
+Galileo	LITERAL1
+GLONASS	LITERAL1
+GNSS	LITERAL1
