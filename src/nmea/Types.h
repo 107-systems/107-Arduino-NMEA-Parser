@@ -59,6 +59,36 @@ typedef struct
   Date date;
 } RmcData;
 
+enum class FixQuality
+{
+  Invalid, GPS_Fix, DGPS_Fix
+};
+
+typedef struct
+{
+  Time time_utc;
+  float latitude;
+  float longitude;
+  int num_satellites;
+  /* HDOP = Horizontal dilution of position */
+  float hdop;
+  /* Antenna altitude above/below mean sea level (Geoid). */
+  float altitude;
+  /* Geoidal separation N
+   *  where
+   *    h = N + H
+   *  and
+   *    h = height above ellipsoid
+   *    H = elevation, orthometric height
+   *    N = geoidal separation (some books call this the geoidal height)
+   */
+  float geoidal_separation;
+  /* Age in seconds since last update from differential reference station. */
+  int dgps_age;
+  /* DGPS station id - 4 bytes + 1 byte 0 termination. */
+  char dgps_id[5];
+} GgaData;
+
 /**************************************************************************************
  * CONST
  **************************************************************************************/
@@ -66,6 +96,7 @@ typedef struct
 Time    const INVALID_TIME = {-1, -1, -1, -1};
 Date    const INVALID_DATE = {-1, -1, -1};
 RmcData const INVALID_RMC  = {false, RmcSource::Unknown, NAN, NAN, NAN, NAN, NAN, INVALID_TIME, INVALID_DATE};
+GgaData const INVALID_GGA  = {INVALID_TIME, NAN, NAN, -1, NAN, NAN, NAN, -1, {0}};
 
 /**************************************************************************************
  * FUNCTION DECLARATION
