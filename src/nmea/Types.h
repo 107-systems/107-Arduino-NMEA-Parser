@@ -48,14 +48,14 @@ enum class RmcSource
 
 typedef struct
 {
-  bool is_valid;
   RmcSource source;
+  Time time_utc;
+  bool is_valid;
   float latitude;
   float longitude;
   float speed;
   float course;
   float magnetic_variation;
-  Time time_utc;
   Date date;
 } RmcData;
 
@@ -99,7 +99,7 @@ typedef struct
 
 Time    const INVALID_TIME = {-1, -1, -1, -1};
 Date    const INVALID_DATE = {-1, -1, -1};
-RmcData const INVALID_RMC  = {false, RmcSource::Unknown, NAN, NAN, NAN, NAN, NAN, INVALID_TIME, INVALID_DATE};
+RmcData const INVALID_RMC  = {RmcSource::Unknown, INVALID_TIME, false, NAN, NAN, NAN, NAN, NAN, INVALID_DATE};
 GgaData const INVALID_GGA  = {GgaSource::Unknown, INVALID_TIME, NAN, NAN, FixQuality::Invalid, -1, NAN, NAN, NAN, -1, {0}};
 
 /**************************************************************************************

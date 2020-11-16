@@ -23,6 +23,7 @@ set(TEST_TARGET testNmeaParser)
 
 set(TEST_SRCS
   src/ArduinoNmeaParser/test_OnGgaUpdateFunc.cpp
+  src/ArduinoNmeaParser/test_OnRmcUpdateFunc.cpp
   src/test_ArduinoNmeaParser.cpp
   src/test_checksum.cpp
   src/test_GxGGA.cpp
