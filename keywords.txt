@@ -12,8 +12,11 @@ ArduinoNmeaParser	KEYWORD1
 Time	KEYWORD1
 Date	KEYWORD1
 RmcData	KEYWORD1
+GgaData	KEYWORD1
 # enum class
 RmcSource	KEYWORD1
+GgaSource	KEYWORD1
+FixQuality	KEYWORD1
 Error	KEYWORD1
 # namespace
 nmea	KEYWORD1
@@ -36,9 +39,13 @@ toPosixTimestamp	KEYWORD2
 # enum class Error
 None	LITERAL1
 Checksum	LITERAL1
-# enum class RmcSource
+# enum class RmcSource/GgaSource
 Unknown	LITERAL1
 GPS	LITERAL1
 Galileo	LITERAL1
 GLONASS	LITERAL1
 GNSS	LITERAL1
+# enum class FixQuality
+Invalid	LITERAL1
+GPS_Fix	LITERAL1
+DGPS_Fix	LITERAL1
