@@ -98,12 +98,7 @@ GxRMC::ParserState GxRMC::handle_UTCPositionFix(char const * token, Time & time_
   if (strlen(token))
     util::rmc_parseTime(token, time_utc);
   else
-  {
-    time_utc.hour = -1;
-    time_utc.minute = -1;
-    time_utc.second = -1;
-    time_utc.microsecond = -1;
-  }
+    time_utc = INVALID_TIME;
 
   return ParserState::Status;
 }
@@ -179,11 +174,7 @@ GxRMC::ParserState GxRMC::handle_Date(char const * token, Date & date)
   if (strlen(token))
     util::rmc_parseDate(token, date);
   else
-  {
-    date.day = -1;
-    date.month = -1;
-    date.year = -1;
-  }
+    date = INVALID_DATE;
 
   return ParserState::MagneticVariation;
 }
