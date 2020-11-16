@@ -25,12 +25,13 @@
  **************************************************************************************/
 
 void onRmcUpdate(nmea::RmcData const);
+void onGgaUpdate(nmea::GgaData const);
 
 /**************************************************************************************
  * GLOBAL VARIABLES
  **************************************************************************************/
 
-ArduinoNmeaParser parser(onRmcUpdate);
+ArduinoNmeaParser parser(onRmcUpdate, onGgaUpdate);
 
 /**************************************************************************************
  * SETUP/LOOP
@@ -55,6 +56,8 @@ void loop()
 
 void onRmcUpdate(nmea::RmcData const rmc)
 {
+  Serial.print("RMC ");
+
   if      (rmc.source == nmea::RmcSource::GPS)     Serial.print("GPS");
   else if (rmc.source == nmea::RmcSource::GLONASS) Serial.print("GLONASS");
   else if (rmc.source == nmea::RmcSource::Galileo) Serial.print("Galileo");
@@ -80,6 +83,44 @@ void onRmcUpdate(nmea::RmcData const rmc)
     Serial.print(" m/s | HEADING ");
     Serial.print(rmc.course);
     Serial.print(" °");
+  }
+
+  Serial.println();
+}
+
+void onGgaUpdate(nmea::GgaData const gga)
+{
+  Serial.print("GGA ");
+
+  if      (gga.source == nmea::GgaSource::GPS)     Serial.print("GPS");
+  else if (gga.source == nmea::GgaSource::GLONASS) Serial.print("GLONASS");
+  else if (gga.source == nmea::GgaSource::Galileo) Serial.print("Galileo");
+  else if (gga.source == nmea::GgaSource::GNSS)    Serial.print("GNSS");
+
+  Serial.print(" ");
+  Serial.print(gga.time_utc.hour);
+  Serial.print(":");
+  Serial.print(gga.time_utc.minute);
+  Serial.print(":");
+  Serial.print(gga.time_utc.second);
+  Serial.print(".");
+  Serial.print(gga.time_utc.microsecond);
+
+  if (gga.fix_quality != nmea::FixQuality::Invalid)
+  {
+    Serial.print(" : LON ");
+    Serial.print(gga.longitude);
+    Serial.print(" ° | LAT ");
+    Serial.print(gga.latitude);
+    Serial.print(" ° | Num Sat. ");
+    Serial.print(gga.num_satellites);
+    Serial.print(" | HDOP =  ");
+    Serial.print(gga.hdop);
+    Serial.print(" m | Altitude ");
+    Serial.print(gga.altitude);
+    Serial.print(" m | Geoidal Separation ");
+    Serial.print(gga.geoidal_separation);
+    Serial.print(" m");
   }
 
   Serial.println();
