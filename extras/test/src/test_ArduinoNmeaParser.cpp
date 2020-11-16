@@ -21,7 +21,7 @@
  * FUNCTION DEFINITION
  **************************************************************************************/
 
-void encode(ArduinoNmeaParser & parser, std::string const & nmea)
+static void encode(ArduinoNmeaParser & parser, std::string const & nmea)
 {
   std::for_each(std::begin(nmea),
                 std::end(nmea),

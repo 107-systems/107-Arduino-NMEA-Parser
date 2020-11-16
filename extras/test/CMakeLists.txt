@@ -22,6 +22,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(TEST_TARGET testNmeaParser)
 
 set(TEST_SRCS
+  src/ArduinoNmeaParser/test_OnGgaUpdateFunc.cpp
   src/test_ArduinoNmeaParser.cpp
   src/test_checksum.cpp
   src/test_GxGGA.cpp
