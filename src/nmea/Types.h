@@ -64,11 +64,15 @@ enum class FixQuality
   Invalid, GPS_Fix, DGPS_Fix
 };
 
+typedef RmcSource GgaSource;
+
 typedef struct
 {
+  GgaSource source;
   Time time_utc;
   float latitude;
   float longitude;
+  FixQuality fix_quality;
   int num_satellites;
   /* HDOP = Horizontal dilution of position */
   float hdop;
@@ -85,8 +89,8 @@ typedef struct
   float geoidal_separation;
   /* Age in seconds since last update from differential reference station. */
   int dgps_age;
-  /* DGPS station id - 4 bytes + 1 byte 0 termination. */
-  char dgps_id[5];
+  /* DGPS station id - 4 bytes. */
+  char dgps_id[4];
 } GgaData;
 
 /**************************************************************************************
@@ -96,7 +100,7 @@ typedef struct
 Time    const INVALID_TIME = {-1, -1, -1, -1};
 Date    const INVALID_DATE = {-1, -1, -1};
 RmcData const INVALID_RMC  = {false, RmcSource::Unknown, NAN, NAN, NAN, NAN, NAN, INVALID_TIME, INVALID_DATE};
-GgaData const INVALID_GGA  = {INVALID_TIME, NAN, NAN, -1, NAN, NAN, NAN, -1, {0}};
+GgaData const INVALID_GGA  = {GgaSource::Unknown, INVALID_TIME, NAN, NAN, FixQuality::Invalid, -1, NAN, NAN, NAN, -1, {0}};
 
 /**************************************************************************************
  * FUNCTION DECLARATION

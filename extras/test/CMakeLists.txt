@@ -24,6 +24,7 @@ set(TEST_TARGET testNmeaParser)
 set(TEST_SRCS
   src/test_ArduinoNmeaParser.cpp
   src/test_checksum.cpp
+  src/test_GxGGA.cpp
   src/test_GxRMC.cpp
   src/test_Types.cpp
   src/test_main.cpp
@@ -31,9 +32,11 @@ set(TEST_SRCS
   src/test_rmc.cpp
 
   ../../src/nmea/util/checksum.cpp
+  ../../src/nmea/util/common.cpp
   ../../src/nmea/util/gga.cpp
   ../../src/nmea/util/rmc.cpp
   ../../src/nmea/util/timegm.c
+  ../../src/nmea/GxGGA.cpp
   ../../src/nmea/GxRMC.cpp
   ../../src/nmea/Types.cpp
   ../../src/ArduinoNmeaParser.cpp

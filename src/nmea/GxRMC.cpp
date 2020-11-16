@@ -15,6 +15,7 @@
 #include <string.h>
 
 #include "util/rmc.h"
+#include "util/common.h"
 #include "util/checksum.h"
 
 /**************************************************************************************
@@ -96,7 +97,7 @@ GxRMC::ParserState GxRMC::handle_MessadeId(char const * token, RmcSource & sourc
 GxRMC::ParserState GxRMC::handle_UTCPositionFix(char const * token, Time & time_utc)
 {
   if (strlen(token))
-    util::rmc_parseTime(token, time_utc);
+    util::parseTime(token, time_utc);
   else
     time_utc = INVALID_TIME;
 
@@ -116,7 +117,7 @@ GxRMC::ParserState GxRMC::handle_Status(char const * token, bool & is_valid)
 GxRMC::ParserState GxRMC::handle_LatitudeVal(char const * token, float & latitude)
 {
   if (strlen(token))
-    latitude = util::rmc_parseLatitude(token);
+    latitude = util::parseLatitude(token);
   else
     latitude = NAN;
 
@@ -134,7 +135,7 @@ GxRMC::ParserState GxRMC::handle_LatitudeNS(char const * token, float & latitude
 GxRMC::ParserState GxRMC::handle_LongitudeVal(char const * token, float & longitude)
 {
   if (strlen(token))
-    longitude = util::rmc_parseLongitude(token);
+    longitude = util::parseLongitude(token);
   else
     longitude = NAN;
 
