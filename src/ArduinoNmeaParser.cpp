@@ -14,19 +14,24 @@
 #include <string.h>
 
 #include "nmea/GxRMC.h"
+#include "nmea/GxGGA.h"
 #include "nmea/util/rmc.h"
+#include "nmea/util/gga.h"
 #include "nmea/util/checksum.h"
 
 /**************************************************************************************
  * CTOR/DTOR
  **************************************************************************************/
 
-ArduinoNmeaParser::ArduinoNmeaParser(OnRmcUpdateFunc on_rmc_update)
+ArduinoNmeaParser::ArduinoNmeaParser(OnRmcUpdateFunc on_rmc_update,
+                                     OnGgaUpdateFunc on_gga_update)
 : _error{Error::None}
 , _parser_state{ParserState::Synching}
 , _parser_buf{{0}, 0}
 , _rmc{nmea::INVALID_RMC}
+, _gga{nmea::INVALID_GGA}
 , _on_rmc_update{on_rmc_update}
+, _on_gga_update{on_gga_update}
 {
 
 }
@@ -72,7 +77,8 @@ void ArduinoNmeaParser::encode(char const c)
   }
 
   /* Parse the various NMEA messages. */
-  if (nmea::util::rmc_isGxRMC(_parser_buf.buf)) parseGxRMC();
+  if      (nmea::util::rmc_isGxRMC(_parser_buf.buf)) parseGxRMC();
+  else if (nmea::util::rmc_isGxGGA(_parser_buf.buf)) parseGxGGA();
 
   /* The NMEA message has been fully processed and all
    * values updates so its time to flush the parser
@@ -122,5 +128,13 @@ void ArduinoNmeaParser::parseGxRMC()
   nmea::GxRMC::parse(_parser_buf.buf, _rmc);
 
   if (_on_rmc_update)
-      _on_rmc_update(_rmc);
+    _on_rmc_update(_rmc);
+}
+
+void ArduinoNmeaParser::parseGxGGA()
+{
+  nmea::GxGGA::parse(_parser_buf.buf, _gga);
+
+  if (_on_gga_update)
+    _on_gga_update(_gga);
 }
