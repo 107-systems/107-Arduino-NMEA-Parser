@@ -21,7 +21,7 @@
  * FUNCTION DEFINITION
  **************************************************************************************/
 
-void encode(ArduinoNmeaParser & parser, std::string const & nmea)
+static void encode(ArduinoNmeaParser & parser, std::string const & nmea)
 {
   std::for_each(std::begin(nmea),
                 std::end(nmea),
@@ -37,7 +37,7 @@ void encode(ArduinoNmeaParser & parser, std::string const & nmea)
 
 TEST_CASE("No NMEA message received", "[Parser-01]")
 {
-  ArduinoNmeaParser parser(nullptr);
+  ArduinoNmeaParser parser(nullptr, nullptr);
 
   REQUIRE(parser.error()                              == ArduinoNmeaParser::Error::None);
   REQUIRE(parser.rmc().is_valid                       == false);
@@ -58,7 +58,7 @@ TEST_CASE("No NMEA message received", "[Parser-01]")
 
 TEST_CASE("RMC message after startup, no satellites", "[Parser-02]")
 {
-  ArduinoNmeaParser parser(nullptr);
+  ArduinoNmeaParser parser(nullptr, nullptr);
 
   std::string const GPRMC = ("$GPRMC,,V,,,,,,,,,,N*53\r\n");
 
@@ -83,7 +83,7 @@ TEST_CASE("RMC message after startup, no satellites", "[Parser-02]")
 
 TEST_CASE("RMC message after startup, time fix available", "[Parser-03]")
 {
-  ArduinoNmeaParser parser(nullptr);
+  ArduinoNmeaParser parser(nullptr, nullptr);
 
   std::string const GPRMC = ("$GPRMC,141928.00,V,,,,,,,,,,N*7A\r\n");
 
@@ -108,7 +108,7 @@ TEST_CASE("RMC message after startup, time fix available", "[Parser-03]")
 
 TEST_CASE("Decoding starts mid-message", "[Parser-04]")
 {
-  ArduinoNmeaParser parser(nullptr);
+  ArduinoNmeaParser parser(nullptr, nullptr);
 
   std::string const GPRMC = "077.0,023.5,080720,000.0,W*79\r\n$GPRMC,052852.105,A,5230.868,N,01320.958,E,077.0,023.5,080720,000.0,W*79\r\n";
 
@@ -128,7 +128,7 @@ TEST_CASE("Decoding starts mid-message", "[Parser-04]")
 
 TEST_CASE("NMEA message with data corruption (checksum mismatch) received", "[Parser-05]")
 {
-  ArduinoNmeaParser parser(nullptr);
+  ArduinoNmeaParser parser(nullptr, nullptr);
 
   std::string const GPRMC = "$GPXXX,052852.105,A,5230.868,N,01320.958,E,077.0,023.5,080720,000.0,W*79\r\n";
 
@@ -139,7 +139,7 @@ TEST_CASE("NMEA message with data corruption (checksum mismatch) received", "[Pa
 
 TEST_CASE("Multiple NMEA messages received", "[Parser-06]")
 {
-  ArduinoNmeaParser parser(nullptr);
+  ArduinoNmeaParser parser(nullptr, nullptr);
 
   std::vector<std::string> const GPRMC =
   {

@@ -5,8 +5,8 @@
  * Contributors: https://github.com/107-systems/107-Arduino-NMEA-Parser/graphs/contributors.
  */
 
-#ifndef ARDUINO_NMEA_UTIL_RMC_H_
-#define ARDUINO_NMEA_UTIL_RMC_H_
+#ifndef ARDUINO_NMEA_UTIL_GGA_H_
+#define ARDUINO_NMEA_UTIL_GGA_H_
 
 /**************************************************************************************
  * INCLUDES
@@ -28,12 +28,11 @@ namespace util
  * FUNCTION DECLARATION
  **************************************************************************************/
 
-bool  rmc_isGPRMC       (char const * nmea);
-bool  rmc_isGLRMC       (char const * nmea);
-bool  rmc_isGARMC       (char const * nmea);
-bool  rmc_isGNRMC       (char const * nmea);
-bool  rmc_isGxRMC       (char const * nmea);
-void  rmc_parseDate     (char const * token, Date & date);
+bool  rmc_isGPGGA(char const * nmea);
+bool  rmc_isGLGGA(char const * nmea);
+bool  rmc_isGAGGA(char const * nmea);
+bool  rmc_isGNGGA(char const * nmea);
+bool  rmc_isGxGGA(char const * nmea);
 
 /**************************************************************************************
  * NAMESPACE
@@ -43,4 +42,4 @@ void  rmc_parseDate     (char const * token, Date & date);
 
 } /* nmea */
 
-#endif /* ARDUINO_NMEA_UTIL_RMC_H_ */
+#endif /* ARDUINO_NMEA_UTIL_GGA_H_ */

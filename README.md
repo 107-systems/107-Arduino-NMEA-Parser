@@ -43,7 +43,7 @@ void onRmcUpdate(nmea::RmcData const rmc)
   Serial.println();
 }
 /* ... */
-ArduinoNmeaParser parser(onRmcUpdate);
+ArduinoNmeaParser parser(onRmcUpdate, nullptr);
 /* ... */
 void setup() {
   Serial.begin(9600);
