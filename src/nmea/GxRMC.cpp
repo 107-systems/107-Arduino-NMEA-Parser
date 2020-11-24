@@ -35,7 +35,7 @@ constexpr float kts_to_m_per_s(float const v) { return (v / 1.9438444924574f); }
  * PUBLIC MEMBER FUNCTIONS
  **************************************************************************************/
 
-void GxRMC::parse(char const * gprmc, RmcData & data)
+void GxRMC::parse(char const * gxrmc, RmcData & data)
 {
   ParserState state = ParserState::MessadeId;
 
@@ -43,11 +43,11 @@ void GxRMC::parse(char const * gprmc, RmcData & data)
    * with a ',' in order to be able to tokenize all elements
    * including the one before the checksum.
    */
-  *strchr((char *)gprmc, '*') = ',';
+  *strchr((char *)gxrmc, '*') = ',';
 
-  for (char * token = strsep((char **)&gprmc, ",");
+  for (char * token = strsep((char **)&gxrmc, ",");
        token != nullptr;
-       token = strsep((char **)&gprmc, ","))
+       token = strsep((char **)&gxrmc, ","))
   {
     ParserState next_state = state;
 
