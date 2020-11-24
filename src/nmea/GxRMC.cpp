@@ -39,6 +39,12 @@ void GxRMC::parse(char const * gprmc, RmcData & data)
 {
   ParserState state = ParserState::MessadeId;
 
+  /* Replace the '*' sign denoting the start of the checksum
+   * with a ',' in order to be able to tokenize all elements
+   * including the one before the checksum.
+   */
+  *strchr((char *)gprmc, '*') = ',';
+
   for (char * token = strsep((char **)&gprmc, ",");
        token != nullptr;
        token = strsep((char **)&gprmc, ","))
