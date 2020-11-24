@@ -32,7 +32,7 @@ class GxRMC
 
 public:
 
-  static void parse(char const * gxrmc, RmcData & data);
+  static void parse(char * gxrmc, RmcData & data);
 
 private:
 
