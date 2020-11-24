@@ -28,7 +28,7 @@ namespace nmea
  * PUBLIC MEMBER FUNCTIONS
  **************************************************************************************/
 
-void GxGGA::parse(char const * gxgga, GgaData & data)
+void GxGGA::parse(char * gxgga, GgaData & data)
 {
   ParserState state = ParserState::MessadeId;
 
@@ -36,11 +36,11 @@ void GxGGA::parse(char const * gxgga, GgaData & data)
    * with a ',' in order to be able to tokenize all elements
    * including the one before the checksum.
    */
-  *strchr((char *)gxgga, '*') = ',';
+  *strchr(gxgga, '*') = ',';
 
-  for (char * token = strsep((char **)&gxgga, ",");
+  for (char * token = strsep(&gxgga, ",");
        token != nullptr;
-       token = strsep((char **)&gxgga, ","))
+       token = strsep(&gxgga, ","))
   {
     ParserState next_state = state;
 
