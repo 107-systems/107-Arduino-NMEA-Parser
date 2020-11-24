@@ -49,15 +49,6 @@ void GxRMC::parse(char const * gprmc, RmcData & data)
        token != nullptr;
        token = strsep((char **)&gprmc, ","))
   {
-    /* All GPS receivers should at least implement the the fields: UTC Position Fix,
-     * Status, Latitude, Longitude, Speed over ground, Track Angle. All other fields
-     * are optional. Therefore we are checking in the following if statement if the
-     * current token is a checksum token. If that's the case we are directly jumping
-     * to ParserState::Checksum.
-     */
-    if (util::isChecksumToken(token))
-      state = ParserState::Checksum;
-
     ParserState next_state = state;
 
     switch(state)
