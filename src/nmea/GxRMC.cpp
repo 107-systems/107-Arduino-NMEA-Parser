@@ -35,23 +35,20 @@ constexpr float kts_to_m_per_s(float const v) { return (v / 1.9438444924574f); }
  * PUBLIC MEMBER FUNCTIONS
  **************************************************************************************/
 
-void GxRMC::parse(char const * gprmc, RmcData & data)
+void GxRMC::parse(char * gxrmc, RmcData & data)
 {
   ParserState state = ParserState::MessadeId;
 
-  for (char * token = strsep((char **)&gprmc, ",");
-       token != nullptr;
-       token = strsep((char **)&gprmc, ","))
-  {
-    /* All GPS receivers should at least implement the the fields: UTC Position Fix,
-     * Status, Latitude, Longitude, Speed over ground, Track Angle. All other fields
-     * are optional. Therefore we are checking in the following if statement if the
-     * current token is a checksum token. If that's the case we are directly jumping
-     * to ParserState::Checksum.
-     */
-    if (util::isChecksumToken(token))
-      state = ParserState::Checksum;
+  /* Replace the '*' sign denoting the start of the checksum
+   * with a ',' in order to be able to tokenize all elements
+   * including the one before the checksum.
+   */
+  *strchr(gxrmc, '*') = ',';
 
+  for (char * token = strsep(&gxrmc, ",");
+       token != nullptr;
+       token = strsep(&gxrmc, ","))
+  {
     ParserState next_state = state;
 
     switch(state)

@@ -32,7 +32,7 @@ class GxGGA
 
 public:
 
-  static void parse(char const * gxgga, GgaData & data);
+  static void parse(char * gxgga, GgaData & data);
 
 private:
 
