@@ -26,7 +26,8 @@
 ArduinoNmeaParser::ArduinoNmeaParser(OnRmcUpdateFunc on_rmc_update,
                                      OnGgaUpdateFunc on_gga_update)
 : _error{Error::None}
-, _parser_buf{{0}, 0}
+, _parser_buf{0}
+, _parser_buf_elems{0}
 , _rmc{nmea::INVALID_RMC}
 , _gga{nmea::INVALID_GGA}
 , _on_rmc_update{on_rmc_update}
@@ -66,15 +67,15 @@ void ArduinoNmeaParser::encode(char const c)
   terminateParserBuffer();
 
   /* Verify if the checksum of the NMEA message is correct. */
-  if (!nmea::util::isChecksumOk(_parser_buf.buf)) {
+  if (!nmea::util::isChecksumOk(_parser_buf)) {
     _error = Error::Checksum;
     flushParserBuffer();
     return;
   }
 
   /* Parse the various NMEA messages. */
-  if      (nmea::util::rmc_isGxRMC(_parser_buf.buf)) parseGxRMC();
-  else if (nmea::util::rmc_isGxGGA(_parser_buf.buf)) parseGxGGA();
+  if      (nmea::util::rmc_isGxRMC(_parser_buf)) parseGxRMC();
+  else if (nmea::util::rmc_isGxGGA(_parser_buf)) parseGxGGA();
 
   /* The NMEA message has been fully processed and all
    * values updates so its time to flush the parser
@@ -89,24 +90,24 @@ void ArduinoNmeaParser::encode(char const c)
 
 bool ArduinoNmeaParser::isParseBufferFull()
 {
-  return (_parser_buf.elems_in_buf >= (NMEA_PARSE_BUFFER_SIZE - 1));
+  return (_parser_buf_elems >= (NMEA_PARSE_BUFFER_SIZE - 1));
 }
 
 void ArduinoNmeaParser::addToParserBuffer(char const c)
 {
-  _parser_buf.buf[_parser_buf.elems_in_buf] = c;
-  _parser_buf.elems_in_buf++;
+  _parser_buf[_parser_buf_elems] = c;
+  _parser_buf_elems++;
 }
 
 void ArduinoNmeaParser::flushParserBuffer()
 {
-  _parser_buf.elems_in_buf = 0;
+  _parser_buf_elems = 0;
 }
 
 bool ArduinoNmeaParser::isCompleteNmeaMessageInParserBuffer()
 {
-  char const prev_last = _parser_buf.buf[_parser_buf.elems_in_buf - 2];
-  char const      last = _parser_buf.buf[_parser_buf.elems_in_buf - 1];
+  char const prev_last = _parser_buf[_parser_buf_elems - 2];
+  char const      last = _parser_buf[_parser_buf_elems - 1];
 
   return ((prev_last == '\r') && (last == '\n'));
 }
@@ -118,7 +119,7 @@ void ArduinoNmeaParser::terminateParserBuffer()
 
 void ArduinoNmeaParser::parseGxRMC()
 {
-  nmea::GxRMC::parse(_parser_buf.buf, _rmc);
+  nmea::GxRMC::parse(_parser_buf, _rmc);
 
   if (_on_rmc_update)
     _on_rmc_update(_rmc);
@@ -126,7 +127,7 @@ void ArduinoNmeaParser::parseGxRMC()
 
 void ArduinoNmeaParser::parseGxGGA()
 {
-  nmea::GxGGA::parse(_parser_buf.buf, _gga);
+  nmea::GxGGA::parse(_parser_buf, _gga);
 
   if (_on_gga_update)
     _on_gga_update(_gga);
