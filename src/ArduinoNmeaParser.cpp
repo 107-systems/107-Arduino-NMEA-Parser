@@ -41,7 +41,7 @@ ArduinoNmeaParser::ArduinoNmeaParser(OnRmcUpdateFunc on_rmc_update,
 
 void ArduinoNmeaParser::encode(char const c)
 {
-  /* Flash the whole parser buffer everytime we encounter
+  /* Flash the whole parser buffer every time we encounter
    * a '$' sign. This way the parser buffer always starts
    * with a valid NMEA message.
    */
