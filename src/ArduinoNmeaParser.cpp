@@ -26,7 +26,6 @@
 ArduinoNmeaParser::ArduinoNmeaParser(OnRmcUpdateFunc on_rmc_update,
                                      OnGgaUpdateFunc on_gga_update)
 : _error{Error::None}
-, _parser_state{ParserState::Synching}
 , _parser_buf{{0}, 0}
 , _rmc{nmea::INVALID_RMC}
 , _gga{nmea::INVALID_GGA}
@@ -42,15 +41,12 @@ ArduinoNmeaParser::ArduinoNmeaParser(OnRmcUpdateFunc on_rmc_update,
 
 void ArduinoNmeaParser::encode(char const c)
 {
-  /* Wait for the first '$' to be received which
-   * indicates the start of a NMEA message.
+  /* Flash the whole parser buffer everytime we encounter
+   * a '$' sign. This way the parser buffer always starts
+   * with a valid NMEA message.
    */
-  if (_parser_state == ParserState::Synching) {
-    if (c == '$')
-      _parser_state = ParserState::Synced;
-    else
-      return;
-  }
+  if (c == '$')
+    flushParserBuffer();
 
   if (!isParseBufferFull())
     addToParserBuffer(c);

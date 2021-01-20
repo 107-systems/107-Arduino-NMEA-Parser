@@ -64,13 +64,7 @@ private:
     size_t elems_in_buf;
   } ParserBuffer;
 
-  enum class ParserState
-  {
-    Synching, Synced
-  };
-
   Error _error;
-  ParserState _parser_state;
   ParserBuffer _parser_buf;
   nmea::RmcData _rmc;
   nmea::GgaData _gga;
