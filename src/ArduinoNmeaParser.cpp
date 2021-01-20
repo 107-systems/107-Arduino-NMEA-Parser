@@ -106,13 +106,34 @@ void ArduinoNmeaParser::flushParserBuffer()
 
 bool ArduinoNmeaParser::isCompleteNmeaMessageInParserBuffer()
 {
-  if (_parser_buf_elems < 2)
+  /* Temporarily terminate string with a '\0' terminator in
+   * order to be able to use string library functions.
+   */
+  _parser_buf[_parser_buf_elems] = '\0';
+
+  /* Determine whether or not there exists a '$' marking
+   * the start of a NMEA message.
+   */
+  char const * nmea_start = strchr(_parser_buf, '$');
+  if (!nmea_start)
     return false;
 
-  char const prev_last = _parser_buf[_parser_buf_elems - 2];
-  char const      last = _parser_buf[_parser_buf_elems - 1];
+  /* Now that we've got a '$' marking the start of a NMEA
+   * message it is time to check if there's also an end
+   * to it.
+   */
+  char const * nmea_stop_cr = strchr(nmea_start, '\r');
+  if (!nmea_stop_cr)
+    return false;
 
-  return ((prev_last == '\r') && (last == '\n'));
+  char const * nmea_stop_lf = strchr(nmea_start, '\n');
+  if (!nmea_stop_lf)
+    return false;
+
+  /* Lastly: check if the LF is really directly following
+   * the CR within the NMEA message.
+   */
+  return ((nmea_stop_cr + 1) == nmea_stop_lf);
 }
 
 void ArduinoNmeaParser::terminateParserBuffer()
