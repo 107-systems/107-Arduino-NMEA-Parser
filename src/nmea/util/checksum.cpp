@@ -49,11 +49,6 @@ bool isChecksumOk(char const * const nmea_str)
   return (calcChecksum(nmea_str) == extractChecksum(nmea_str));
 }
 
-bool isChecksumToken(char const * token)
-{
-  return (strchr(token, '*') != nullptr);
-}
-
 /**************************************************************************************
  * INTERNAL FUNCTION DEFINITION
  **************************************************************************************/

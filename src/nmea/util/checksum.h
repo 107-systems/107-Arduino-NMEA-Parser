@@ -22,8 +22,7 @@ namespace util
  * FUNCTION DECLARATION
  **************************************************************************************/
 
-bool isChecksumOk   (char const * const nmea_str);
-bool isChecksumToken(char const * token);
+bool isChecksumOk(char const * const nmea_str);
 
 /**************************************************************************************
  * NAMESPACE
