@@ -105,9 +105,6 @@ void ArduinoNmeaParser::flushParserBuffer()
 
 bool ArduinoNmeaParser::isCompleteNmeaMessageInParserBuffer()
 {
-  if (_parser_buf.elems_in_buf < 8) /* $GPxxx\r\n = 8 */
-    return false;
-
   char const prev_last = _parser_buf.buf[_parser_buf.elems_in_buf - 2];
   char const      last = _parser_buf.buf[_parser_buf.elems_in_buf - 1];
 
