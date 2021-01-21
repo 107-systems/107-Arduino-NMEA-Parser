@@ -58,20 +58,9 @@ private:
 
   static size_t constexpr NMEA_PARSE_BUFFER_SIZE = 82 + 1; /* Leave space for the '\0' terminator */
 
-  typedef struct
-  {
-    char buf[NMEA_PARSE_BUFFER_SIZE];
-    size_t elems_in_buf;
-  } ParserBuffer;
-
-  enum class ParserState
-  {
-    Synching, Synced
-  };
-
   Error _error;
-  ParserState _parser_state;
-  ParserBuffer _parser_buf;
+  char _parser_buf[NMEA_PARSE_BUFFER_SIZE];
+  size_t _parser_buf_elems;
   nmea::RmcData _rmc;
   nmea::GgaData _gga;
   OnRmcUpdateFunc _on_rmc_update;
