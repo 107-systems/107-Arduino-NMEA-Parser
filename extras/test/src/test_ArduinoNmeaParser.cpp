@@ -238,3 +238,10 @@ TEST_CASE("Multiple NMEA messages received", "[Parser-06]")
 
   REQUIRE(parser.error() == ArduinoNmeaParser::Error::None);
 }
+
+TEST_CASE("NMEA message with no checksum received", "[Parser-07]")
+{
+  ArduinoNmeaParser parser(nullptr, nullptr);
+  std::string const GPRMC = "79\r\n"; /* This should not lead to a segmentation violation. */
+  encode(parser, GPRMC);
+}
