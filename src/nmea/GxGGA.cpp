@@ -13,6 +13,10 @@
 
 #include <string.h>
 
+#ifdef ARDUINO_ARCH_ESP32
+#  include <stdlib_noniso.h>
+#endif
+
 #include "util/gga.h"
 #include "util/common.h"
 #include "util/checksum.h"
