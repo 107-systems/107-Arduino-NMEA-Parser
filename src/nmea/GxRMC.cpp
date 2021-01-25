@@ -11,8 +11,11 @@
 
 #include "GxRMC.h"
 
-#include <math.h>
 #include <string.h>
+
+#ifdef ARDUINO_ARCH_ESP32
+#  include <stdlib_noniso.h>
+#endif
 
 #include "util/rmc.h"
 #include "util/common.h"
