@@ -75,7 +75,7 @@ void ArduinoNmeaParser::encode(char const c)
 
   /* Parse the various NMEA messages. */
   if      (nmea::util::rmc_isGxRMC(_parser_buf)) parseGxRMC();
-  else if (nmea::util::rmc_isGxGGA(_parser_buf)) parseGxGGA();
+  else if (nmea::util::gga_isGxGGA(_parser_buf)) parseGxGGA();
 
   /* The NMEA message has been fully processed and all
    * values updates so its time to flush the parser
