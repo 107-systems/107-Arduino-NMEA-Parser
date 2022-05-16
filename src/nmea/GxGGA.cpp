@@ -34,7 +34,7 @@ namespace nmea
 
 void GxGGA::parse(char * gxgga, GgaData & data)
 {
-  ParserState state = ParserState::MessadeId;
+  ParserState state = ParserState::MessageId;
 
   /* Replace the '*' sign denoting the start of the checksum
    * with a ',' in order to be able to tokenize all elements
@@ -50,7 +50,7 @@ void GxGGA::parse(char * gxgga, GgaData & data)
 
     switch(state)
     {
-    case ParserState::MessadeId:                     next_state = handle_MessadeId                    (token, data.source);             break;
+    case ParserState::MessageId:                     next_state = handle_MessageId                    (token, data.source);             break;
     case ParserState::UTCPositionFix:                next_state = handle_UTCPositionFix               (token, data.time_utc);           break;
     case ParserState::LatitudeVal:                   next_state = handle_LatitudeVal                  (token, data.latitude);           break;
     case ParserState::LatitudeNS:                    next_state = handle_LatitudeNS                   (token, data.latitude);           break;
@@ -77,7 +77,7 @@ void GxGGA::parse(char * gxgga, GgaData & data)
  * PRIVATE MEMBER FUNCTIONS
  **************************************************************************************/
 
-GxGGA::ParserState GxGGA::handle_MessadeId(char const * token, GgaSource & source)
+GxGGA::ParserState GxGGA::handle_MessageId(char const * token, GgaSource & source)
 {
   if (util::gga_isGPGGA(token))
     source = GgaSource::GPS;

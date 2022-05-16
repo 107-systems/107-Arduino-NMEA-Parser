@@ -41,7 +41,7 @@ private:
 
   enum class ParserState : int
   {
-    MessadeId,
+    MessageId,
     UTCPositionFix,
     Status,
     LatitudeVal,
@@ -57,7 +57,7 @@ private:
     Done
   };
 
-  static ParserState handle_MessadeId                (char const * token, RmcSource & source);
+  static ParserState handle_MessageId                (char const * token, RmcSource & source);
   static ParserState handle_UTCPositionFix           (char const * token, Time & time_utc);
   static ParserState handle_Status                   (char const * token, bool & is_valid);
   static ParserState handle_LatitudeVal              (char const * token, float & latitude);
