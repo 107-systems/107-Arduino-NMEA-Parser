@@ -79,13 +79,13 @@ void GxGGA::parse(char * gxgga, GgaData & data)
 
 GxGGA::ParserState GxGGA::handle_MessadeId(char const * token, GgaSource & source)
 {
-  if (util::rmc_isGPGGA(token))
+  if (util::gga_isGPGGA(token))
     source = GgaSource::GPS;
-  else if (util::rmc_isGLGGA(token))
+  else if (util::gga_isGLGGA(token))
     source = GgaSource::GLONASS;
-  else if (util::rmc_isGAGGA(token))
+  else if (util::gga_isGAGGA(token))
     source = GgaSource::Galileo;
-  else if (util::rmc_isGNGGA(token))
+  else if (util::gga_isGNGGA(token))
     source = GgaSource::GNSS;
 
   return ParserState::UTCPositionFix;

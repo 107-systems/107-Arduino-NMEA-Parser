@@ -28,29 +28,29 @@ namespace util
  * FUNCTION DEFINITION
  **************************************************************************************/
 
-bool rmc_isGPGGA(char const * nmea)
+bool gga_isGPGGA(char const * nmea)
 {
   return (strncmp(nmea, "$GPGGA", 6) == 0);
 }
 
-bool rmc_isGLGGA(char const * nmea)
+bool gga_isGLGGA(char const * nmea)
 {
   return (strncmp(nmea, "$GLGGA", 6) == 0);
 }
 
-bool rmc_isGAGGA(char const * nmea)
+bool gga_isGAGGA(char const * nmea)
 {
   return (strncmp(nmea, "$GAGGA", 6) == 0);
 }
 
-bool rmc_isGNGGA(char const * nmea)
+bool gga_isGNGGA(char const * nmea)
 {
   return (strncmp(nmea, "$GNGGA", 6) == 0);
 }
 
-bool rmc_isGxGGA(char const * nmea)
+bool gga_isGxGGA(char const * nmea)
 {
-  return (rmc_isGPGGA(nmea) || rmc_isGLGGA(nmea) || rmc_isGAGGA(nmea) || rmc_isGNGGA(nmea));
+  return (gga_isGPGGA(nmea) || gga_isGLGGA(nmea) || gga_isGAGGA(nmea) || gga_isGNGGA(nmea));
 }
 
 /**************************************************************************************

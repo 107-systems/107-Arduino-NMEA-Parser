@@ -28,11 +28,11 @@ namespace util
  * FUNCTION DECLARATION
  **************************************************************************************/
 
-bool  rmc_isGPGGA(char const * nmea);
-bool  rmc_isGLGGA(char const * nmea);
-bool  rmc_isGAGGA(char const * nmea);
-bool  rmc_isGNGGA(char const * nmea);
-bool  rmc_isGxGGA(char const * nmea);
+bool  gga_isGPGGA(char const * nmea);
+bool  gga_isGLGGA(char const * nmea);
+bool  gga_isGAGGA(char const * nmea);
+bool  gga_isGNGGA(char const * nmea);
+bool  gga_isGxGGA(char const * nmea);
 
 /**************************************************************************************
  * NAMESPACE
