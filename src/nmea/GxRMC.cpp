@@ -40,7 +40,7 @@ constexpr float kts_to_m_per_s(float const v) { return (v / 1.9438444924574f); }
 
 void GxRMC::parse(char * gxrmc, RmcData & data)
 {
-  ParserState state = ParserState::MessadeId;
+  ParserState state = ParserState::MessageId;
 
   /* Replace the '*' sign denoting the start of the checksum
    * with a ',' in order to be able to tokenize all elements
@@ -56,7 +56,7 @@ void GxRMC::parse(char * gxrmc, RmcData & data)
 
     switch(state)
     {
-    case ParserState::MessadeId:                  next_state = handle_MessadeId                (token, data.source);             break;
+    case ParserState::MessageId:                  next_state = handle_MessageId                (token, data.source);             break;
     case ParserState::UTCPositionFix:             next_state = handle_UTCPositionFix           (token, data.time_utc);           break;
     case ParserState::Status:                     next_state = handle_Status                   (token, data.is_valid);           break;
     case ParserState::LatitudeVal:                next_state = handle_LatitudeVal              (token, data.latitude);           break;
@@ -80,7 +80,7 @@ void GxRMC::parse(char * gxrmc, RmcData & data)
  * PRIVATE MEMBER FUNCTIONS
  **************************************************************************************/
 
-GxRMC::ParserState GxRMC::handle_MessadeId(char const * token, RmcSource & source)
+GxRMC::ParserState GxRMC::handle_MessageId(char const * token, RmcSource & source)
 {
   if (util::rmc_isGPRMC(token))
     source = RmcSource::GPS;
