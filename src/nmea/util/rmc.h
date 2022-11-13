@@ -32,6 +32,7 @@ bool  rmc_isGPRMC       (char const * nmea);
 bool  rmc_isGLRMC       (char const * nmea);
 bool  rmc_isGARMC       (char const * nmea);
 bool  rmc_isGNRMC       (char const * nmea);
+bool  rmc_isBDRMC       (char const * nmea);
 bool  rmc_isGxRMC       (char const * nmea);
 void  rmc_parseDate     (char const * token, Date & date);
 

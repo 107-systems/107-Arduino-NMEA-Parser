@@ -32,6 +32,7 @@ bool  gga_isGPGGA(char const * nmea);
 bool  gga_isGLGGA(char const * nmea);
 bool  gga_isGAGGA(char const * nmea);
 bool  gga_isGNGGA(char const * nmea);
+bool  rmc_isBDGGA(char const * nmea);
 bool  gga_isGxGGA(char const * nmea);
 
 /**************************************************************************************

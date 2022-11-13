@@ -43,7 +43,7 @@ typedef struct
 
 enum class RmcSource
 {
-  Unknown, GPS, Galileo, GLONASS, GNSS
+  Unknown, GPS, Galileo, GLONASS, GNSS, BeiDou
 };
 
 typedef struct

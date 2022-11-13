@@ -48,9 +48,14 @@ bool rmc_isGNRMC(char const * nmea)
   return (strncmp(nmea, "$GNRMC", 6) == 0);
 }
 
+bool rmc_isBDRMC(char const * nmea)
+{
+  return (strncmp(nmea, "$BDRMC", 6) == 0);
+}
+
 bool rmc_isGxRMC(char const * nmea)
 {
-  return (rmc_isGPRMC(nmea) || rmc_isGLRMC(nmea) || rmc_isGARMC(nmea) || rmc_isGNRMC(nmea));
+  return (rmc_isGPRMC(nmea) || rmc_isGLRMC(nmea) || rmc_isGARMC(nmea) || rmc_isGNRMC(nmea) || rmc_isBDRMC(nmea));
 }
 
 void rmc_parseDate(char const * token, Date & date)
