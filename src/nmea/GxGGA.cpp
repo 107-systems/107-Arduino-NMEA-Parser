@@ -88,7 +88,7 @@ GxGGA::ParserState GxGGA::handle_MessageId(char const * token, GgaSource & sourc
   else if (util::gga_isGNGGA(token))
     source = GgaSource::GNSS;
   else if (util::rmc_isBDGGA(token))
-    source = GgaSource::BeiDou;
+    source = GgaSource::BDS;
 
   return ParserState::UTCPositionFix;
 }

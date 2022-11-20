@@ -91,7 +91,7 @@ GxRMC::ParserState GxRMC::handle_MessageId(char const * token, RmcSource & sourc
   else if (util::rmc_isGNRMC(token))
     source = RmcSource::GNSS;
   else if (util::rmc_isBDRMC(token))
-    source = RmcSource::BeiDou;
+    source = RmcSource::BDS;
 
   return ParserState::UTCPositionFix;
 }

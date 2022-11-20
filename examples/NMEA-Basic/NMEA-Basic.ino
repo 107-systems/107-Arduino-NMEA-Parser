@@ -62,7 +62,7 @@ void onRmcUpdate(nmea::RmcData const rmc)
   else if (rmc.source == nmea::RmcSource::GLONASS) Serial.print("GLONASS");
   else if (rmc.source == nmea::RmcSource::Galileo) Serial.print("Galileo");
   else if (rmc.source == nmea::RmcSource::GNSS)    Serial.print("GNSS");
-  else if (rmc.source == nmea::RmcSource::BeiDou)    Serial.print("BeiDou");
+  else if (rmc.source == nmea::RmcSource::BDS)    Serial.print("BDS");
 
   Serial.print(" ");
   Serial.print(rmc.time_utc.hour);
@@ -97,7 +97,7 @@ void onGgaUpdate(nmea::GgaData const gga)
   else if (gga.source == nmea::GgaSource::GLONASS) Serial.print("GLONASS");
   else if (gga.source == nmea::GgaSource::Galileo) Serial.print("Galileo");
   else if (gga.source == nmea::GgaSource::GNSS)    Serial.print("GNSS");
-  else if (gga.source == nmea::GgaSource::BeiDou)    Serial.print("BeiDou");
+  else if (gga.source == nmea::GgaSource::BDS)    Serial.print("BDS");
 
   Serial.print(" ");
   Serial.print(gga.time_utc.hour);
