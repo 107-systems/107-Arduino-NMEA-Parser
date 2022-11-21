@@ -90,6 +90,8 @@ GxRMC::ParserState GxRMC::handle_MessageId(char const * token, RmcSource & sourc
     source = RmcSource::Galileo;
   else if (util::rmc_isGNRMC(token))
     source = RmcSource::GNSS;
+  else if (util::rmc_isBDRMC(token))
+    source = RmcSource::BDS;
 
   return ParserState::UTCPositionFix;
 }

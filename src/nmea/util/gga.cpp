@@ -48,9 +48,15 @@ bool gga_isGNGGA(char const * nmea)
   return (strncmp(nmea, "$GNGGA", 6) == 0);
 }
 
+bool rmc_isBDGGA(char const * nmea)
+{
+  return (strncmp(nmea, "$BDGGA", 6) == 0);
+}
+
+
 bool gga_isGxGGA(char const * nmea)
 {
-  return (gga_isGPGGA(nmea) || gga_isGLGGA(nmea) || gga_isGAGGA(nmea) || gga_isGNGGA(nmea));
+  return (gga_isGPGGA(nmea) || gga_isGLGGA(nmea) || gga_isGAGGA(nmea) || gga_isGNGGA(nmea) || rmc_isBDGGA(nmea));
 }
 
 /**************************************************************************************
