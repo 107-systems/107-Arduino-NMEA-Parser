@@ -17,6 +17,10 @@
 #  include <stdlib_noniso.h>
 #endif
 
+#ifdef ARDUINO_ARCH_RENESAS
+extern "C" char * _EXFUN(strsep,(char **, const char *));
+#endif
+
 #include "util/gga.h"
 #include "util/common.h"
 #include "util/checksum.h"
