@@ -30,3 +30,6 @@ jobs:
         with:
           runtime-path: extras/test/build/bin/testNmeaParser
           coverage-data-path: ${{ env.COVERAGE_DATA_PATH }}
+          coverage-exclude-paths: |
+            - '*/extras/test/*'
+            - '/usr/*'
