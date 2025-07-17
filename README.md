@@ -3,7 +3,6 @@
 =========================
 [![Arduino Library Badge](https://www.ardu-badge.com/badge/107-Arduino-NMEA-Parser.svg?)](https://www.ardu-badge.com/107-Arduino-NMEA-Parser)
 [![Unit Tests Status](https://github.com/107-systems/107-Arduino-NMEA-Parser/workflows/Unit%20Tests/badge.svg)](https://github.com/107-systems/107-Arduino-NMEA-Parser/actions?workflow=Unit+Tests)
-[![codecov](https://codecov.io/gh/107-systems/107-Arduino-NMEA-Parser/branch/master/graph/badge.svg)](https://codecov.io/gh/107-systems/107-Arduino-NMEA-Parser)
 [![Compile Examples](https://github.com/107-systems/107-Arduino-NMEA-Parser/workflows/Compile%20Examples/badge.svg)](https://github.com/107-systems/107-Arduino-NMEA-Parser/actions?workflow=Compile+Examples)
 [![Check Arduino](https://github.com/107-systems/107-Arduino-NMEA-Parser/actions/workflows/check-arduino.yml/badge.svg)](https://github.com/107-systems/107-Arduino-NMEA-Parser/actions/workflows/check-arduino.yml)
 [![Check keywords.txt](https://github.com/107-systems/107-Arduino-NMEA-Parser/actions/workflows/check-keywords-txt.yml/badge.svg)](https://github.com/107-systems/107-Arduino-NMEA-Parser/actions/workflows/check-keywords-txt.yml)
